@@ -1,0 +1,3916 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>מידע והגעה לציון רבי דוד ומשה זיע"א</title>
+    <meta name="description" content="הצדיק רבי דוד ומשה זיע"א  - מידע והגעה לציון רבי דוד ומשה זיע"א">
+    <meta name="keywords" content="">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: 'bdb690bc-9c36-4110-b9de-d9903ca6fbec',
+    apiUrl: 'https://qaapi.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="מידע והגעה לציון רבי דוד ומשה זיע"א">
+    <meta property="og:description" content="הצדיק רבי דוד ומשה זיע"א  - מידע והגעה לציון רבי דוד ומשה זיע"א">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="מידע והגעה לציון רבי דוד ומשה זיע"א">
+    <meta name="twitter:description" content="הצדיק רבי דוד ומשה זיע"א  - מידע והגעה לציון רבי דוד ומשה זיע"א">
+    <style id="zappy-cta-mobile-style">
+            /* Hide CTA list item on desktop (tablets and up) */
+            @media (min-width: 769px) {
+              .nav-cta-item-mobile {
+                display: none !important;
+              }
+            }
+            /* Show CTA list item on mobile */
+            @media (max-width: 768px) {
+              .nav-cta-item-mobile {
+                display: list-item !important;
+              }
+            }
+          </style>
+        
+          <style id="zappy-nested-menu-style">
+            /* Desktop only: vertically center nav items */
+            @media (min-width: 769px) {
+              .nav-menu,
+              #navMenu {
+                align-items: center !important;
+              }
+            }
+            
+            /* Menu Group styling (non-clickable parent) - TOP LEVEL ONLY with ultra-specific selector */
+            .nav-menu > li > .menu-group-title,
+            #navMenu > li > .menu-group-title {
+              display: inline-block !important;
+              padding: 0.5rem 1rem !important;
+              color: var(--nav-color) !important;
+              font-weight: 500 !important;
+              line-height: 1.7 !important;
+              cursor: default !important;
+              user-select: none !important;
+              vertical-align: middle !important;
+              text-decoration: none !important;
+              margin: 0 !important;
+              transition: color 0.3s ease !important;
+            }
+            
+            .nav-menu > li > .menu-group-title:hover,
+            #navMenu > li > .menu-group-title:hover {
+              color: var(--nav-hover-color) !important;
+            }
+            
+            /* Desktop: show submenu on Menu Group hover */
+            li:has(.menu-group-title):hover > .sub-menu {
+              opacity: 1 !important;
+              visibility: visible !important;
+              transform: translateY(0) !important;
+              pointer-events: auto !important; /* Enable interaction when hovering */
+            }
+            
+            /* Hide menu items marked as hidden (overrides hover states) */
+            .zappy-hidden-menu-item,
+            li:has(.menu-group-title):hover > .sub-menu .zappy-hidden-menu-item {
+              display: none !important;
+              opacity: 0 !important;
+              visibility: hidden !important;
+              pointer-events: none !important;
+            }
+            
+            /* Keep submenu visible when hovering over the submenu itself */
+            .sub-menu:hover {
+              opacity: 1 !important;
+              visibility: visible !important;
+              pointer-events: auto !important;
+            }
+            
+            /* Nested dropdown menu styles - using more specific selectors */
+            .nav-menu .sub-menu,
+            nav .sub-menu,
+            .navbar .sub-menu {
+              display: block !important; /* Ensure submenu is in the DOM */
+              position: absolute !important;
+              top: 100%;
+              left: 0;
+              right: auto;
+              min-width: 200px;
+              background: white;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+              border-radius: 8px;
+              padding: 8px 0;
+              margin-top: 0px; /* Remove gap to prevent hover loss */
+              opacity: 0 !important;
+              visibility: hidden !important;
+              transform: translateY(-10px);
+              transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+              z-index: 1000;
+              list-style: none;
+              pointer-events: none; /* Prevent interaction when hidden */
+            }
+            
+            /* RTL (Hebrew/Arabic) submenu positioning - align to right instead of left */
+            [dir="rtl"] .nav-menu .sub-menu,
+            [dir="rtl"] nav .sub-menu,
+            [dir="rtl"] .navbar .sub-menu,
+            html[lang="he"] .nav-menu .sub-menu,
+            html[lang="he"] nav .sub-menu,
+            html[lang="he"] .navbar .sub-menu,
+            html[lang="ar"] .nav-menu .sub-menu,
+            html[lang="ar"] nav .sub-menu,
+            html[lang="ar"] .navbar .sub-menu {
+              left: auto;
+              right: 0;
+            }
+            
+            /* Show submenu on parent hover - more specific selectors */
+            .nav-menu li:hover > .sub-menu,
+            nav li:hover > .sub-menu,
+            .navbar li:hover > .sub-menu {
+              opacity: 1 !important;
+              visibility: visible !important;
+              transform: translateY(0) !important;
+              pointer-events: auto !important; /* Enable interaction when visible */
+            }
+            
+            /* Parent item must be relatively positioned */
+            .nav-menu li:has(.sub-menu),
+            nav li:has(.sub-menu),
+            .navbar li:has(.sub-menu) {
+              position: relative;
+            }
+            
+            /* Style for submenu items */
+            .sub-menu li {
+              list-style: none;
+              margin: 0;
+              padding: 0;
+            }
+            
+            .sub-menu a,
+            .sub-menu .menu-group-title {
+              display: block !important;
+              padding: 10px 12px !important;
+              color: #333 !important;
+              font-weight: 600 !important;
+              text-decoration: none;
+              transition: background-color 0.2s;
+              white-space: nowrap;
+              cursor: default;
+            }
+            
+            .sub-menu a:hover {
+              background-color: #f5f5f5;
+            }
+            
+            /* CRITICAL: Override submenu styles for TOP-LEVEL Menu Groups only - must come AFTER submenu styles */
+            .nav-menu > li > .menu-group-title,
+            #navMenu > li > .menu-group-title {
+              display: inline-block !important;
+              padding: 0.5rem 1rem !important;
+              color: var(--nav-color) !important;
+              font-weight: 500 !important;
+              line-height: 1.7 !important;
+              cursor: default !important;
+              user-select: none !important;
+              vertical-align: middle !important;
+              text-decoration: none !important;
+              margin: 0 !important;
+              transition: color 0.3s ease !important;
+            }
+            
+            .nav-menu > li > .menu-group-title:hover,
+            #navMenu > li > .menu-group-title:hover {
+              color: var(--nav-hover-color) !important;
+              background-color: transparent !important;
+            }
+            
+            /* On mobile, show nested menus as expandable accordion */
+            @media (max-width: 768px) {
+              /* Mobile submenu styling */
+              .nav-menu .sub-menu,
+              nav .sub-menu,
+              .navbar .sub-menu {
+                position: static !important;
+                transform: none !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                margin-top: 0 !important;
+                max-height: 0;
+                overflow: hidden;
+                opacity: 0;
+                visibility: hidden;
+                transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, padding 0.3s ease;
+                padding: 0 !important;
+                border-radius: 0 !important;
+              }
+              
+              /* Expanded state — no internal scroll; parent navMenu scrolls */
+              .sub-menu.mobile-expanded {
+                max-height: none !important;
+                overflow-y: visible !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                padding: 8px 0 8px 16px !important;
+              }
+              
+              /* RTL padding adjustment */
+              [dir="rtl"] .sub-menu.mobile-expanded,
+              html[lang="he"] .sub-menu.mobile-expanded,
+              html[lang="ar"] .sub-menu.mobile-expanded {
+                padding: 8px 16px 8px 0 !important;
+              }
+              
+              /* Disable hover behavior on mobile */
+              .nav-menu li:hover > .sub-menu,
+              nav li:hover > .sub-menu,
+              .navbar li:hover > .sub-menu {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+              }
+              
+              /* Enable visibility for expanded submenus */
+              .nav-menu li > .sub-menu.mobile-expanded,
+              nav li > .sub-menu.mobile-expanded,
+              .navbar li > .sub-menu.mobile-expanded {
+                opacity: 1 !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
+              }
+              
+              .sub-menu a {
+                padding: 10px 0 !important;
+                display: block !important;
+                font-size: 14px !important;
+                white-space: normal !important;
+              }
+              
+              .sub-menu a:hover {
+                background-color: transparent !important;
+              }
+              
+              /* Parent item wrapper - flex layout with relative positioning for absolute toggle */
+              .nav-menu li:has(.sub-menu),
+              nav li:has(.sub-menu),
+              .navbar li:has(.sub-menu) {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                align-items: center !important;
+                position: relative !important;
+                min-height: 44px !important;
+              }
+              
+              /* Parent link - takes full width since toggle is absolute (not a flex child) */
+              .nav-menu li:has(.sub-menu) > a,
+              nav li:has(.sub-menu) > a,
+              .navbar li:has(.sub-menu) > a,
+              .nav-menu > li > .menu-group-title,
+              #navMenu > li > .menu-group-title {
+                flex: 1 !important;
+                min-width: 0 !important;
+              }
+              
+              /* Normalize menu-group-title in mobile nav to match link alignment */
+              .nav-menu > li > .menu-group-title,
+              #navMenu > li > .menu-group-title {
+                padding: 0 !important;
+                line-height: inherit !important;
+              }
+              
+              /* Submenu takes full width below parent */
+              .nav-menu li:has(.sub-menu) > .sub-menu,
+              nav li:has(.sub-menu) > .sub-menu,
+              .navbar li:has(.sub-menu) > .sub-menu {
+                flex-basis: 100% !important;
+                width: 100% !important;
+              }
+              
+              /* HIDE EXISTING CHEVRONS/ARROWS from cloned sites to prevent duplicates */
+              .nav-menu li:has(.sub-menu) > a .fa-chevron-down,
+              .nav-menu li:has(.sub-menu) > a .fa-angle-down,
+              .nav-menu li:has(.sub-menu) > a [class*="chevron"],
+              .nav-menu li:has(.sub-menu) > a [class*="arrow"],
+              nav li:has(.sub-menu) > a [class*="chevron"],
+              nav li:has(.sub-menu) > a [class*="arrow"],
+              #navMenu li:has(.sub-menu) > a [class*="chevron"],
+              #navMenu li:has(.sub-menu) > a [class*="arrow"] {
+                display: none !important;
+                visibility: hidden !important;
+              }
+              
+              /* Toggle arrow button - flex child that stretches to match nav-link height */
+              .mobile-submenu-toggle {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 44px !important;
+                height: auto !important;
+                background: transparent !important;
+                border: none !important;
+                cursor: pointer !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                position: static !important;
+                flex-shrink: 0 !important;
+                align-self: stretch !important;
+                z-index: 2 !important;
+                -webkit-tap-highlight-color: transparent;
+              }
+              
+              .mobile-submenu-toggle::after {
+                content: '' !important;
+                display: block !important;
+                width: 0 !important;
+                height: 0 !important;
+                border-left: 6px solid transparent !important;
+                border-right: 6px solid transparent !important;
+                border-top: 7px solid currentColor !important;
+                transition: transform 0.3s ease !important;
+              }
+              
+              /* Rotate arrow when expanded */
+              .mobile-submenu-toggle.expanded::after {
+                transform: rotate(180deg) !important;
+              }
+            }
+            
+            /* Hide toggle button on desktop */
+            @media (min-width: 769px) {
+              .mobile-submenu-toggle {
+                display: none !important;
+              }
+            }
+          </style>
+          
+          <script id="zappy-mobile-menu-script">
+            // Mobile menu toggle for nested submenus (including Menu Groups)
+            // Uses separate toggle button - link navigates, arrow toggles submenu
+            (function() {
+              function initMobileMenuToggles() {
+                // Only run on mobile
+                if (window.innerWidth > 768) {
+                  // Remove any toggle buttons on desktop
+                  document.querySelectorAll('.mobile-submenu-toggle').forEach(btn => btn.remove());
+                  document.querySelectorAll('.sub-menu.mobile-expanded').forEach(menu => {
+                    menu.classList.remove('mobile-expanded');
+                  });
+                  console.log('[MOBILE MENU] Desktop mode - cleanup done');
+                  return;
+                }
+                
+                console.log('[MOBILE MENU] Initializing mobile menu toggles...');
+                
+                // Find all parent menu items (items with .sub-menu)
+                const menuItemsWithSubmenus = document.querySelectorAll(
+                  '.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)'
+                );
+                
+                console.log('[MOBILE MENU] Found', menuItemsWithSubmenus.length, 'items with submenus');
+                
+                menuItemsWithSubmenus.forEach(function(li) {
+                  // Skip if already has toggle button
+                  if (li.querySelector('.mobile-submenu-toggle')) {
+                    return;
+                  }
+                  
+                  const submenu = li.querySelector('.sub-menu');
+                  const parentLink = li.querySelector(':scope > a') || li.querySelector(':scope > .menu-group-title');
+                  
+                  if (!submenu || !parentLink) return;
+                  
+                  // Create toggle button
+                  const toggleBtn = document.createElement('button');
+                  toggleBtn.className = 'mobile-submenu-toggle';
+                  toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+                  toggleBtn.setAttribute('type', 'button');
+
+                  // Insert toggle button after the link
+                  parentLink.insertAdjacentElement('afterend', toggleBtn);
+                  
+                  console.log('[MOBILE MENU] Created toggle button for:', parentLink.textContent?.trim());
+                  
+                  // Handle toggle button click - only toggles submenu
+                  toggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const isExpanded = submenu.classList.contains('mobile-expanded');
+                    
+                    // Close all other submenus first
+                    document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+                      if (menu !== submenu) {
+                        menu.classList.remove('mobile-expanded');
+                        const otherToggle = menu.parentElement.querySelector('.mobile-submenu-toggle');
+                        if (otherToggle) otherToggle.classList.remove('expanded');
+                      }
+                    });
+                    
+                    // Toggle this submenu
+                    submenu.classList.toggle('mobile-expanded');
+                    toggleBtn.classList.toggle('expanded');
+                    
+                    console.log('[MOBILE MENU] Toggled submenu:', !isExpanded ? 'expanded' : 'collapsed');
+                  });
+                  
+                  // Parent link navigates normally - no preventDefault
+                });
+              }
+              
+              // Initialize on DOM load
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initMobileMenuToggles);
+              } else {
+                initMobileMenuToggles();
+              }
+              
+              // Re-initialize on window resize (but use debounce to avoid too many calls)
+              let resizeTimer;
+              window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(initMobileMenuToggles, 250);
+              });
+              
+              // Also initialize when mobile menu becomes visible
+              // This handles cases where the mobile menu is hidden initially
+              const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                  if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const target = mutation.target;
+                    if (target.classList.contains('active') || target.style.display !== 'none') {
+                      console.log('[MOBILE MENU] Mobile menu became visible, re-initializing...');
+                      setTimeout(initMobileMenuToggles, 100);
+                    }
+                  }
+                });
+              });
+              
+              // Observe mobile menu containers
+              const mobileMenus = document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu');
+              mobileMenus.forEach(function(menu) {
+                observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+              });
+            })();
+          </script>
+        
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:type" content="article">
+    
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:alt" content="מידע והגעה לציון רבי דוד ומשה זיע&quot;א">
+    <meta property="og:locale" content="en_US">
+    <!-- Twitter Card Meta Tags -->
+    
+    
+    
+    
+    <meta name="twitter:image:alt" content="מידע והגעה לציון רבי דוד ומשה זיע&quot;א"><style id="zappy-ai-page-styles">.directions-hero-section {
+  position: relative;
+  width: 100%;
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow: visible;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  padding-bottom: 48px;
+  direction: rtl;
+}
+
+/* Background Image */
+.directions-hero-section .directions-hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.directions-hero-section .directions-hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  display: block;
+}
+
+/* Scrim Overlay */
+.directions-hero-section .directions-hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to left, rgba(20,10,6,0.92) 0%, rgba(20,10,6,0.78) 40%, rgba(20,10,6,0.38) 75%, rgba(20,10,6,0.12) 100%),
+    linear-gradient(to top, rgba(20,10,6,0.75) 0%, rgba(20,10,6,0.0) 55%);
+}
+
+/* Manuscript Texture Overlay */
+.directions-hero-section .directions-hero-texture {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='140' height='140' fill='transparent'/%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+}
+
+/* Frame Strip at top */
+.directions-hero-section .directions-hero-frame-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 3;
+  pointer-events: none;
+  line-height: 0;
+}
+
+.directions-hero-section .directions-hero-frame-strip svg {
+  display: block;
+  width: 100%;
+}
+
+/* Main Container */
+.directions-hero-section .directions-hero-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 32px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+/* Content Column — right-aligned narrow column */
+.directions-hero-section .directions-hero-content {
+  width: 100%;
+  max-width: 540px;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+/* Ornament */
+.directions-hero-section .directions-hero-ornament {
+  margin-bottom: 18px;
+  line-height: 0;
+}
+
+.directions-hero-section .directions-hero-ornament svg {
+  display: block;
+}
+
+/* Label */
+.directions-hero-section .directions-hero-label {
+  font-family: 'Noto Serif', serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 14px 0;
+  text-align: right;
+  width: 100%;
+  text-shadow: 0 1px 3px rgba(20,10,6,0.5);
+}
+
+/* H1 */
+.directions-hero-section .directions-hero-h1 {font-family: 'Cormorant Garamond', serif;
+  font-size: 62px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #f8e8b8;
+  margin: 0 0 20px 0;
+  text-align: right;
+  width: 100%;}
+
+/* Subtitle H3 */
+.directions-hero-section .directions-hero-subtitle {
+  font-family: 'Noto Serif', serif;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: #f8e8b8;
+  text-shadow: 0 1px 2px rgba(58,32,24,0.35);
+  margin: 0 0 32px 0;
+  text-align: right;
+  width: 100%;
+  opacity: 0.92;
+}
+
+/* Navigation Info Cards */
+.directions-hero-section .directions-hero-nav-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.directions-hero-section .directions-hero-nav-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  background: rgba(30,14,8,0.62);
+  border: 1px solid rgba(216,155,43,0.28);
+  border-radius: 2px;
+  padding: 12px 14px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  direction: rtl;
+}
+
+.directions-hero-section .directions-hero-nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--accent);
+  width: 28px;
+  height: 28px;
+}
+
+.directions-hero-section .directions-hero-nav-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: right;
+  flex: 1;
+  min-width: 0;
+}
+
+.directions-hero-section .directions-hero-nav-card-label {
+  font-family: 'Noto Serif', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: block;
+}
+
+.directions-hero-section .directions-hero-nav-card-value {
+  font-family: 'Noto Serif', serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text-light);
+  display: block;
+}
+
+/* CTA Buttons */
+.directions-hero-section .directions-hero-ctas {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.directions-hero-section .directions-hero-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Noto Serif', serif;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  background: linear-gradient(180deg, #a72d16 0%, #7a180f 100%);
+  color: #f8e8b8;
+  padding: 11px 28px;
+  border-radius: 2px;
+  border: 1px solid #d4b27a;
+  box-shadow: 0 2px 0 #5f2012, 0 4px 10px rgba(58,32,24,0.25);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.directions-hero-section .directions-hero-btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 4px #5f2012, 0 8px 18px rgba(58,32,24,0.35);
+  color: #f8e8b8;
+}
+
+.directions-hero-section .directions-hero-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Noto Serif', serif;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  background: transparent;
+  color: #f8e8b8;
+  padding: 10px 22px;
+  border-radius: 2px;
+  border: 1px solid rgba(216,155,43,0.55);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.directions-hero-section .directions-hero-btn-secondary:hover {
+  background: rgba(216,155,43,0.12);
+  border-color: rgba(216,155,43,0.85);
+  transform: translateY(-3px);
+  color: #f8e8b8;
+}
+
+/* Route Bar at bottom */
+.directions-hero-section .directions-hero-route-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 48px;
+  z-index: 5;
+  pointer-events: none;
+  line-height: 0;
+}
+
+.directions-hero-section .directions-hero-route-bar svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ===================== RESPONSIVE ===================== */
+
+@media (max-width: 900px) {
+  .directions-hero-section .directions-hero-nav-cards {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .directions-hero-section .directions-hero-content {
+    max-width: 100%;
+  }
+
+  .directions-hero-section .directions-hero-h1 {
+    font-size: 44px;
+  }
+}
+
+@media (max-width: 768px) {
+  .directions-hero-section {
+    min-height: 70vh;
+  }
+
+  .directions-hero-section .directions-hero-container {
+    padding: 100px 16px 20px;
+  }
+
+  .directions-hero-section .directions-hero-content {
+    max-width: 100%;
+  }
+
+  .directions-hero-section .directions-hero-h1 {
+    font-size: 36px;
+    line-height: 1.15;
+  }
+
+  .directions-hero-section .directions-hero-subtitle {
+    font-size: 15px;
+    margin-bottom: 22px;
+  }
+
+  .directions-hero-section .directions-hero-nav-cards {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+
+  .directions-hero-section .directions-hero-nav-card {
+    padding: 10px 12px;
+  }
+
+  .directions-hero-section .directions-hero-ctas {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .directions-hero-section .directions-hero-btn-primary,
+  .directions-hero-section .directions-hero-btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .directions-hero-section .directions-hero-scrim {
+    background-image:
+      linear-gradient(to left, rgba(20,10,6,0.95) 0%, rgba(20,10,6,0.88) 60%, rgba(20,10,6,0.55) 100%),
+      linear-gradient(to top, rgba(20,10,6,0.8) 0%, rgba(20,10,6,0.0) 55%);
+  }
+}
+
+@media (min-width: 1200px) {
+  .directions-hero-section .directions-hero-content {
+    max-width: 520px;
+  }
+
+  .directions-hero-section .directions-hero-h1 {
+    font-size: 68px;
+  }
+}
+/* ZAPPY_POSTGEN_GUARD_HERO_FONT_CAP:directions-hero */
+.hero h1, .hero-section h1, [class*="hero-"] h1, [class~="hero"] h1, .hero .hero-title, .hero-title { font-size: 48px !important; line-height: 1.2 !important; }
+@media (max-width: 1024px) {
+  .hero h1, .hero-section h1, [class*="hero-"] h1, [class~="hero"] h1, .hero .hero-title, .hero-title { font-size: 36px !important; }
+}
+@media (max-width: 768px) {
+  .hero h1, .hero-section h1, [class*="hero-"] h1, [class~="hero"] h1, .hero .hero-title, .hero-title { font-size: 28px !important; }
+}
+
+/* ZAPPY_POSTGEN_GUARD_HERO_TYPO:מידע והגעה לציון רבי דוד ומשה זיע"א-hero (directions-hero) — stripped 1 jarring hero headline effect(s) */
+
+
+.directions-route-map-section {
+  direction: rtl;
+  position: relative;
+  overflow: visible;
+  background-color: #f2dfb8;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='140' height='140' fill='%23f2dfb8'/%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
+  color: var(--text-dark);
+  padding: 80px 24px 72px;
+  font-family: 'Noto Serif', serif;
+}
+
+/* Ornament strips */
+.directions-route-map-section .drm-ornament-strip,
+.directions-route-map-section .drm-bottom-ornament {
+  width: 100%;
+  pointer-events: none;
+  color: var(--primary);
+  line-height: 0;
+}
+
+.directions-route-map-section .drm-ornament-strip {
+  margin-bottom: 16px;
+}
+
+.directions-route-map-section .drm-bottom-ornament {
+  margin-top: 20px;
+}
+
+.directions-route-map-section .drm-ornament-strip svg,
+.directions-route-map-section .drm-bottom-ornament svg {
+  display: block;
+  width: 100%;
+  height: 18px;
+}
+
+/* Background route decoration */
+.directions-route-map-section .drm-bg-route {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.directions-route-map-section .drm-bg-route svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Container */
+.directions-route-map-section .drm-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Section Header */
+.directions-route-map-section .drm-header {
+  text-align: right;
+  margin-bottom: 48px;
+  max-width: 680px;
+  margin-inline-start: 0;
+  margin-inline-end: auto;
+}
+
+.directions-route-map-section .drm-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--primary);
+  margin: 0 0 14px 0;
+  letter-spacing: 0.01em;
+}
+
+.directions-route-map-section .drm-subtitle {
+  font-family: 'Noto Serif', serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-dark);
+  margin: 0 0 24px 0;
+}
+
+/* Divider */
+.directions-route-map-section .drm-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  direction: rtl;
+}
+
+.directions-route-map-section .drm-divider-line {
+  flex: 1;
+  height: 1px;
+  background-color: var(--primary);
+  opacity: 0.4;
+  max-width: 120px;
+}
+
+/* Grid */
+.directions-route-map-section .drm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  direction: rtl;
+  margin-bottom: 36px;
+}
+
+/* Cards */
+.directions-route-map-section .drm-card {
+  background: #fdf6e7;
+  border: 1px solid var(--border-light);
+  border-radius: 0;
+  box-shadow: 0 4px 10px rgba(58,32,24,0.12);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.3s ease;
+}
+
+.directions-route-map-section .drm-card:hover {
+  box-shadow: 0 8px 20px rgba(58,32,24,0.18);
+}
+
+/* Card Header */
+.directions-route-map-section .drm-card-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border-light);
+  direction: rtl;
+}
+
+.directions-route-map-section .drm-card-icon {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(180deg, #f5e6c6 0%, #edd8ad 100%);
+  border: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.directions-route-map-section .drm-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--primary);
+  margin: 0;
+  text-align: right;
+}
+
+/* Map Area */
+.directions-route-map-section .drm-map-area {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #e8d9b8 0%, #d6c49a 100%);
+}
+
+.directions-route-map-section .drm-map-area img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.directions-route-map-section .drm-map-badge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(253, 246, 231, 0.92);
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  padding: 5px 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Noto Serif', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+  box-shadow: 0 2px 6px rgba(58,32,24,0.15);
+}
+
+.directions-route-map-section .drm-map-badge--accent {
+  color: var(--text-dark);
+}
+
+/* Card Info */
+.directions-route-map-section .drm-card-info {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Info List */
+.directions-route-map-section .drm-info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.directions-route-map-section .drm-info-list li {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  direction: rtl;
+  text-align: right;
+}
+
+.directions-route-map-section .drm-info-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  margin-top: 1px;
+}
+
+.directions-route-map-section .drm-info-list li span:last-child {
+  font-family: 'Noto Serif', serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-dark);
+  text-align: right;
+}
+
+.directions-route-map-section .drm-info-list li strong {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* Map Button */
+.directions-route-map-section .drm-map-btn {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  direction: rtl;
+  background: linear-gradient(180deg, #a72d16 0%, #7a180f 100%);
+  color: #f8e8b8;
+  padding: 10px 22px;
+  border-radius: 2px;
+  border: 1px solid #d4b27a;
+  box-shadow: 0 2px 0 #5f2012, 0 4px 10px rgba(58,32,24,0.2);
+  font-family: 'Noto Serif', serif;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  transition: box-shadow 0.25s ease, transform 0.2s ease;
+  margin-top: auto;
+}
+
+.directions-route-map-section .drm-map-btn:hover {
+  box-shadow: 0 4px 2px #5f2012, 0 8px 18px rgba(58,32,24,0.28);
+  transform: translateY(-1px);
+  color: #f8e8b8;
+}
+
+.directions-route-map-section .drm-map-btn--secondary {
+  background: linear-gradient(180deg, #345983 0%, #1f385d 100%);
+  border: 1px solid #8ea6bf;
+  box-shadow: 0 2px 0 #1a2f4d, 0 4px 10px rgba(36,69,111,0.25);
+}
+
+.directions-route-map-section .drm-map-btn--secondary:hover {
+  box-shadow: 0 4px 2px #1a2f4d, 0 8px 18px rgba(36,69,111,0.32);
+  color: #f8e8b8;
+}
+
+/* Footer Note */
+.directions-route-map-section .drm-footer-note {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  direction: rtl;
+  text-align: right;
+  background: rgba(214, 194, 163, 0.35);
+  border: 1px solid var(--border-light);
+  border-inline-start: 3px solid var(--accent);
+  padding: 14px 16px;
+  border-radius: 0;
+  margin-top: 8px;
+}
+
+.directions-route-map-section .drm-note-icon {
+  flex-shrink: 0;
+  color: var(--accent);
+  margin-top: 1px;
+}
+
+.directions-route-map-section .drm-footer-note small {
+  font-family: 'Noto Serif', serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .directions-route-map-section .drm-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .directions-route-map-section .drm-map-area {
+    height: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .directions-route-map-section {
+    padding: 56px 16px 56px;
+  }
+  .directions-route-map-section .drm-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px;
+  }
+  .directions-route-map-section .drm-header {
+    margin-bottom: 32px;
+    max-width: 100%;
+  }
+  .directions-route-map-section .drm-title {
+    font-size: 26px;
+  }
+  .directions-route-map-section .drm-map-area {
+    height: 220px;
+  }
+  .directions-route-map-section .drm-card-header {
+    padding: 14px 16px 12px;
+  }
+  .directions-route-map-section .drm-card-title {
+    font-size: 18px;
+  }
+  .directions-route-map-section .drm-card-info {
+    padding: 16px;
+  }
+  .directions-route-map-section .drm-footer-note {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .directions-route-map-section .drm-map-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.directions-story-section {
+  position: relative;
+  overflow: visible;
+  background-color: #f5e6c6;
+  background-image:
+    radial-gradient(ellipse at 80% 20%, rgba(216,155,43,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse at 10% 80%, rgba(122,31,43,0.05) 0%, transparent 50%),
+    linear-gradient(180deg, #f5e6c6 0%, #edd8ad 100%);
+  color: var(--text-dark);
+  padding: 80px 0 70px;
+  direction: rtl;
+}
+
+/* Archival map texture background */
+.directions-story-section .directions-story-map-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.35' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0.55 0 1 0 0 0.38 0 0 1 0 0.18 0 0 0 0.055 0'/%3E%3C/filter%3E%3Crect width='600' height='600' fill='transparent'/%3E%3Crect width='600' height='600' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 320px 320px;
+  opacity: 0.18;
+}
+
+/* Ornamental frame strip */
+.directions-story-section .directions-story-frame-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 1;
+  line-height: 0;
+}
+
+/* Container */
+.directions-story-section .directions-story-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* 2-column grid: text 5 parts, image 7 parts */
+.directions-story-section .directions-story-grid {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 56px;
+  align-items: start;
+  direction: rtl;
+}
+
+/* TEXT COLUMN (right) */
+.directions-story-section .directions-story-text-col {
+  position: relative;
+  z-index: 2;
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+}
+
+/* H2 */
+.directions-story-section .directions-story-h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 29px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--primary);
+  margin: 0 0 20px 0;
+  text-align: right;
+  letter-spacing: 0.01em;
+}
+
+/* Intro paragraph */
+.directions-story-section .directions-story-intro {
+  font-family: 'Noto Serif', serif;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text-dark);
+  text-align: right;
+  margin: 0 0 24px 0;
+  max-width: 560px;
+}
+
+/* Saffron divider */
+.directions-story-section .directions-story-divider {
+  margin: 0 0 22px 0;
+  display: flex;
+  justify-content: flex-end;
+  line-height: 0;
+}
+
+/* Step blocks */
+.directions-story-section .directions-story-step {
+  margin-bottom: 8px;
+}
+
+/* H3 */
+.directions-story-section .directions-story-h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--primary);
+  margin: 0 0 10px 0;
+  text-align: right;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-direction: row;
+}
+
+/* Step number badge */
+.directions-story-section .directions-story-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  background: linear-gradient(180deg, #a72d16 0%, #7a180f 100%);
+  color: #f8e8b8;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 50%;
+  border: 1px solid #d4b27a;
+  box-shadow: 0 2px 6px rgba(122,31,43,0.22);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+/* Step paragraph */
+.directions-story-section .directions-story-step p {
+  font-family: 'Noto Serif', serif;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text-dark);
+  text-align: right;
+  margin: 0 0 20px 0;
+  max-width: 560px;
+}
+
+/* IMAGE COLUMN (left) */
+.directions-story-section .directions-story-img-col {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* Image frame */
+.directions-story-section .directions-story-img-frame {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: #f2dfb8;
+  border: 1px solid #d4b27a;
+  padding: 10px 10px 40px 10px;
+  box-shadow: 0 8px 28px rgba(58,32,24,0.18);
+}
+
+/* Grain overlay on image frame */
+.directions-story-section .directions-story-img-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='140' height='140' fill='%23f2dfb8'/%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+}
+
+/* Image itself */
+.directions-story-section .directions-story-img-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 380px;
+  object-fit: cover;
+  position: relative;
+  z-index: 2;
+  filter: sepia(0.12) contrast(1.04);
+}
+
+/* Caption */
+.directions-story-section .directions-story-img-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+}
+
+.directions-story-section .directions-story-img-caption span {
+  font-family: 'Noto Serif', serif;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: 0.03em;
+  font-style: italic;
+}
+
+/* Route divider at bottom */
+.directions-story-section .directions-story-route-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  pointer-events: none;
+  z-index: 5;
+  line-height: 0;
+}
+
+.directions-story-section .directions-story-route-divider svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .directions-story-section .directions-story-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .directions-story-section .directions-story-img-col {
+    justify-content: center;
+    order: -1;
+  }
+
+  .directions-story-section .directions-story-img-frame {
+    max-width: 100%;
+    padding: 8px 8px 36px 8px;
+  }
+
+  .directions-story-section .directions-story-img-frame img {
+    min-height: 260px;
+  }
+
+  .directions-story-section .directions-story-intro,
+  .directions-story-section .directions-story-step p {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .directions-story-section {
+    padding: 48px 0 70px;
+  }
+
+  .directions-story-section .directions-story-container {
+    padding: 0 16px;
+  }
+
+  .directions-story-section .directions-story-h2 {
+    font-size: 24px;
+  }
+
+  .directions-story-section .directions-story-h3 {
+    font-size: 18px;
+  }
+
+  .directions-story-section .directions-story-grid {
+    gap: 24px;
+  }
+
+  .directions-story-section .directions-story-divider {
+    margin-bottom: 16px;
+  }
+}
+
+.directions-heritage-notes-section {
+  direction: rtl;
+  position: relative;
+  overflow: visible;
+  background-color: #2a160f;
+  background-image:
+    radial-gradient(ellipse at 15% 20%, rgba(108,51,23,0.55) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 80%, rgba(53,92,125,0.18) 0%, transparent 50%),
+    linear-gradient(180deg, #6c3317 0%, #2a160f 100%);
+  color: var(--text-light);
+  padding: 72px 24px 64px;
+  font-family: 'Noto Serif', serif;
+}
+
+/* Ornamental strips */
+.directions-heritage-notes-section .dhn-ornament-strip {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+  margin-bottom: 8px;
+  pointer-events: none;
+}
+.directions-heritage-notes-section .dhn-ornament-bottom {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+/* Container */
+.directions-heritage-notes-section .dhn-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.directions-heritage-notes-section .dhn-header {
+  text-align: right;
+  margin-bottom: 52px;
+}
+
+.directions-heritage-notes-section .dhn-header-flourish {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 18px;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.directions-heritage-notes-section .dhn-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text-light);
+  margin: 0 0 20px 0;
+  letter-spacing: 0.01em;
+  text-align: right;
+}
+
+.directions-heritage-notes-section .dhn-intro {
+  font-family: 'Noto Serif', serif;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text-light);
+  opacity: 0.88;
+  max-width: 780px;
+  margin: 0;
+  text-align: right;
+}
+
+/* Cards Grid */
+.directions-heritage-notes-section .dhn-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  direction: rtl;
+}
+
+@media (min-width: 768px) {
+  .directions-heritage-notes-section .dhn-cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+}
+
+/* Individual Card */
+.directions-heritage-notes-section .dhn-card {
+  background: #f2dfb8;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  padding: 32px 28px 28px;
+  box-shadow: 0 4px 10px rgba(58,32,24,0.12), 0 1px 0 rgba(216,155,43,0.18) inset;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.25s ease, transform 0.22s ease;
+  direction: rtl;
+  text-align: right;
+  min-width: 0;
+}
+
+.directions-heritage-notes-section .dhn-card:hover {
+  box-shadow: 0 8px 24px rgba(58,32,24,0.22), 0 0 0 1px rgba(216,155,43,0.35);
+  transform: translateY(-3px);
+}
+
+/* Accent bar at top of card */
+.directions-heritage-notes-section .dhn-card-accent-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent) 40%, rgba(216,155,43,0.4) 100%);
+  border-radius: 4px 4px 0 0;
+  pointer-events: none;
+}
+
+/* Card Title */
+.directions-heritage-notes-section .dhn-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #7a1f2b;
+  margin: 0 0 14px 0;
+  text-align: right;
+}
+
+/* Card Description */
+.directions-heritage-notes-section .dhn-card-desc {
+  font-family: 'Noto Serif', serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: #4b2718;
+  margin: 0 0 20px 0;
+  text-align: right;
+}
+
+/* Card List */
+.directions-heritage-notes-section .dhn-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: right;
+}
+
+.directions-heritage-notes-section .dhn-list li {
+  font-family: 'Noto Serif', serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #4b2718;
+  padding-inline-end: 0;
+  padding-inline-start: 0;
+  border-bottom: 1px solid rgba(212,178,122,0.45);
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  text-align: right;
+}
+
+.directions-heritage-notes-section .dhn-list li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.directions-heritage-notes-section .dhn-list li::before {
+  content: '◆';
+  color: var(--accent);
+  font-size: 9px;
+  flex-shrink: 0;
+  margin-top: 5px;
+  opacity: 0.75;
+}
+
+/* Footer note */
+.directions-heritage-notes-section .dhn-footer-note {
+  margin-top: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  text-align: center;
+  padding: 24px 32px;
+  border: 1px solid rgba(216,155,43,0.25);
+  border-radius: 2px;
+  background: rgba(216,155,43,0.07);
+  position: relative;
+}
+
+.directions-heritage-notes-section .dhn-footer-ornament {
+  color: var(--accent);
+  font-size: 18px;
+  opacity: 0.7;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.directions-heritage-notes-section .dhn-footer-text {
+  font-family: 'Noto Serif', serif;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text-light);
+  margin: 0;
+  text-align: center;
+  max-width: 680px;
+}
+
+.directions-heritage-notes-section .dhn-footer-text strong {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── Mobile Overrides ── */
+@media (max-width: 767px) {
+  .directions-heritage-notes-section {
+    padding: 48px 16px 48px;
+  }
+
+  .directions-heritage-notes-section .dhn-title {
+    font-size: 26px;
+  }
+
+  .directions-heritage-notes-section .dhn-header {
+    margin-bottom: 36px;
+  }
+
+  .directions-heritage-notes-section .dhn-cards-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+  }
+
+  .directions-heritage-notes-section .dhn-card {
+    padding: 24px 18px 20px;
+  }
+
+  .directions-heritage-notes-section .dhn-footer-note {
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px 16px;
+    margin-top: 36px;
+  }
+
+  .directions-heritage-notes-section .dhn-footer-ornament {
+    display: none;
+  }
+
+  .directions-heritage-notes-section .dhn-header-flourish {
+    justify-content: center;
+  }
+}
+
+.directions-faq-section {
+  direction: rtl;
+  background-color: #f2dfb8;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='140' height='140' fill='%23f2dfb8'/%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
+  color: var(--text-dark);
+  padding: 80px 24px 72px;
+  position: relative;
+  overflow: visible;
+  font-family: 'Noto Serif', serif;
+}
+
+.directions-faq-section .faq-ornament-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 18px;
+  color: var(--primary);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.directions-faq-section .faq-ornament-strip svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.directions-faq-section .faq-container {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Header ── */
+.directions-faq-section .faq-header {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.directions-faq-section .faq-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--primary);
+  margin: 0 0 18px 0;
+  letter-spacing: 0.01em;
+}
+
+.directions-faq-section .faq-intro {
+  font-family: 'Noto Serif', serif;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text-dark);
+  max-width: 720px;
+  margin: 0 auto 28px;
+  text-align: center;
+}
+
+/* ── Flourish ── */
+.directions-faq-section .faq-flourish {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+  color: var(--primary);
+  pointer-events: none;
+}
+
+.directions-faq-section .faq-flourish svg {
+  display: block;
+}
+
+.directions-faq-section .faq-flourish-bottom {
+  margin-top: 40px;
+  margin-bottom: 32px;
+}
+
+/* ── FAQ List ── */
+.directions-faq-section .faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── FAQ Item ── */
+.directions-faq-section .faq-item {
+  padding: 32px 0 0 0;
+  position: relative;
+}
+
+.directions-faq-section .faq-question {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--primary);
+  margin: 0 0 14px 0;
+  text-align: right;
+  padding-inline-end: 0;
+}
+
+.directions-faq-section .faq-answer {
+  font-family: 'Noto Serif', serif;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text-dark);
+  margin: 0 0 28px 0;
+  text-align: right;
+}
+
+/* ── Divider between items ── */
+.directions-faq-section .faq-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to left, var(--primary), transparent 80%);
+  opacity: 0.28;
+  margin-bottom: 0;
+  border: none;
+}
+
+/* ── CTA ── */
+.directions-faq-section .faq-cta {
+  text-align: center;
+  margin-top: 8px;
+}
+
+.directions-faq-section .faq-cta-text {
+  font-family: 'Noto Serif', serif;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin: 0;
+  text-align: center;
+}
+
+.directions-faq-section .faq-cta-link {
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.directions-faq-section .faq-cta-link:hover {
+  color: var(--accent);
+  opacity: 0.9;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .directions-faq-section {
+    padding: 60px 16px 56px;
+  }
+
+  .directions-faq-section .faq-title {
+    font-size: 26px;
+  }
+
+  .directions-faq-section .faq-intro {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+
+  .directions-faq-section .faq-flourish {
+    margin-bottom: 28px;
+  }
+
+  .directions-faq-section .faq-question {
+    font-size: 19px;
+  }
+
+  .directions-faq-section .faq-item {
+    padding-top: 24px;
+  }
+
+  .directions-faq-section .faq-answer {
+    margin-bottom: 20px;
+  }
+}
+
+@media (min-width: 769px) {
+  .directions-faq-section {
+    padding: 80px 40px 80px;
+  }
+
+  .directions-faq-section .faq-item:hover .faq-question {
+    color: var(--accent);
+    transition: color 0.2s ease;
+  }
+}
+
+.directions-contact-section {
+  position: relative;
+  background-color: #f5e6c6;
+  background-image: linear-gradient(180deg, #f5e6c6 0%, #edd8ad 100%);
+  color: var(--text-dark);
+  padding: 80px 24px 64px;
+  direction: rtl;
+  overflow: visible;
+}
+
+/* Top strip */
+.directions-contact-section .dcs-top-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 12px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.directions-contact-section .dcs-top-strip svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Container */
+.directions-contact-section .dcs-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Section header */
+.directions-contact-section .dcs-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.directions-contact-section .dcs-main-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--primary);
+  margin: 0 0 14px;
+  letter-spacing: 0.02em;
+}
+
+.directions-contact-section .dcs-ornament {
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.directions-contact-section .dcs-ornament svg {
+  display: block;
+}
+
+/* Two-column grid */
+.directions-contact-section .dcs-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  direction: rtl;
+}
+
+@media (min-width: 768px) {
+  .directions-contact-section .dcs-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+}
+
+/* Info column */
+.directions-contact-section .dcs-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.directions-contact-section .dcs-info-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 29px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #8f1f12;
+  margin: 0;
+}
+
+.directions-contact-section .dcs-info-intro {
+  font-family: 'Noto Serif', serif;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text-dark);
+  margin: 0;
+  text-align: right;
+}
+
+.directions-contact-section .dcs-info-sub {
+  font-family: 'Noto Serif', serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text-muted);
+  margin: 0;
+  text-align: right;
+}
+
+/* Contact list */
+.directions-contact-section .dcs-contact-list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--border-light);
+}
+
+.directions-contact-section .dcs-contact-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-light);
+  text-align: right;
+}
+
+.directions-contact-section .dcs-contact-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(122, 31, 43, 0.08);
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.directions-contact-section .dcs-contact-icon svg {
+  display: block;
+}
+
+.directions-contact-section .dcs-contact-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.directions-contact-section .dcs-contact-label {
+  font-family: 'Noto Serif', serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  text-align: right;
+}
+
+.directions-contact-section .dcs-contact-value {
+  font-family: 'Noto Serif', serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-dark);
+  text-decoration: none;
+  text-align: right;
+  display: block;
+  word-break: break-word;
+}
+
+.directions-contact-section .dcs-contact-value:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+/* Map button */
+.directions-contact-section .dcs-map-btn-wrap {
+  margin-top: 8px;
+}
+
+.directions-contact-section .dcs-map-btn {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Noto Serif', serif;
+  font-size: 14px;
+  font-weight: 700;
+  background: transparent;
+  color: #8f1f12;
+  border: 1px solid #8f1f12;
+  padding: 10px 22px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+}
+
+.directions-contact-section .dcs-map-btn:hover {
+  background: rgba(122, 31, 43, 0.08);
+  color: var(--primary);
+}
+
+/* Form column */
+.directions-contact-section .dcs-form-col {
+  position: relative;
+}
+
+/* Form card */
+.directions-contact-section .dcs-form-card {
+  background: #f2dfb8;
+  border-radius: 0;
+  box-shadow: 0 8px 20px rgba(58, 32, 24, 0.18);
+  padding: 36px 32px;
+  border: 1px solid #d4b27a;
+  position: relative;
+}
+
+.directions-contact-section .dcs-form-card::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  bottom: 6px;
+  left: 6px;
+  border: 1px solid rgba(212, 178, 122, 0.35);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.directions-contact-section .dcs-form-header {
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
+}
+
+.directions-contact-section .dcs-form-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #8f1f12;
+  margin: 0 0 6px;
+  text-align: right;
+}
+
+.directions-contact-section .dcs-form-subtitle {
+  font-family: 'Noto Serif', serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  margin: 0;
+  text-align: right;
+}
+
+/* Form */
+.directions-contact-section .dcs-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.directions-contact-section .dcs-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.directions-contact-section .dcs-label {
+  font-family: 'Noto Serif', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-align: right;
+  display: block;
+}
+
+.directions-contact-section .dcs-input,
+.directions-contact-section .dcs-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Noto Serif', serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-dark);
+  background: rgba(255, 248, 230, 0.75);
+  border: 1px solid #d4b27a;
+  border-radius: 2px;
+  padding: 11px 14px;
+  text-align: right;
+  direction: rtl;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: inset 0 1px 4px rgba(58, 32, 24, 0.08);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.directions-contact-section .dcs-input::placeholder,
+.directions-contact-section .dcs-textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+.directions-contact-section .dcs-input:focus,
+.directions-contact-section .dcs-textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(122, 31, 43, 0.12), inset 0 1px 4px rgba(58, 32, 24, 0.08);
+}
+
+.directions-contact-section .dcs-textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+/* Privacy consent */
+.directions-contact-section .dcs-privacy {
+  margin-top: 4px;
+}
+
+.directions-contact-section .dcs-privacy .privacy-consent-label {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  text-align: right;
+}
+
+.directions-contact-section .dcs-privacy .privacy-consent-checkbox {
+  margin-top: 3px;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.directions-contact-section .dcs-privacy .privacy-consent-label span {
+  font-family: 'Noto Serif', serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-dark);
+  text-align: right;
+}
+
+.directions-contact-section .dcs-privacy .privacy-consent-label span a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.directions-contact-section .dcs-privacy .privacy-consent-label span a:hover {
+  color: var(--accent);
+}
+
+/* Submit button */
+.directions-contact-section .dcs-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: linear-gradient(180deg, #a72d16 0%, #7a180f 100%);
+  color: #f8e8b8;
+  padding: 14px 28px;
+  border-radius: 2px;
+  border: 1px solid #d4b27a;
+  box-shadow: 0 2px 0 #5f2012, 0 4px 10px rgba(58, 32, 24, 0.2);
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: opacity 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+  margin-top: 4px;
+}
+
+.directions-contact-section .dcs-submit-btn:hover {
+  opacity: 0.92;
+  box-shadow: 0 4px 0 #5f2012, 0 8px 18px rgba(58, 32, 24, 0.28);
+  transform: translateY(-1px);
+}
+
+.directions-contact-section .dcs-submit-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 0 #5f2012, 0 2px 6px rgba(58, 32, 24, 0.15);
+}
+
+/* Footer note */
+.directions-contact-section .dcs-footer-note {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 52px;
+  padding: 18px 22px;
+  background: rgba(212, 178, 122, 0.18);
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  border-inline-start: 3px solid var(--accent);
+  text-align: right;
+  color: var(--text-muted);
+}
+
+.directions-contact-section .dcs-footer-note svg {
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.directions-contact-section .dcs-footer-note span {
+  font-family: 'Noto Serif', serif;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* ── Mobile ── */
+@media (max-width: 767px) {
+  .directions-contact-section {
+    padding: 60px 16px 48px;
+  }
+
+  .directions-contact-section .dcs-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px;
+  }
+
+  .directions-contact-section .dcs-main-title {
+    font-size: 26px;
+  }
+
+  .directions-contact-section .dcs-info-title {
+    font-size: 22px;
+  }
+
+  .directions-contact-section .dcs-form-card {
+    padding: 24px 18px;
+  }
+
+  .directions-contact-section .dcs-form-card::before {
+    top: 4px;
+    right: 4px;
+    bottom: 4px;
+    left: 4px;
+  }
+
+  .directions-contact-section .dcs-footer-note {
+    margin-top: 36px;
+    padding: 14px 16px;
+  }
+
+  .directions-contact-section .dcs-header {
+    margin-bottom: 32px;
+  }
+}</style>
+    <link rel="stylesheet" href="/styles.css">
+    <script>window.ZAPPY_WEBSITE_ID = "bdb690bc-9c36-4110-b9de-d9903ca6fbec"; window.ZAPPY_API_BASE = "https://qaapi.zappy5.com";</script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style id="zappy-widget-visibility">
+      html[dir="rtl"] .whatsapp-float { right: 20px !important; left: auto !important; }
+      html[dir="ltr"] .whatsapp-float, html:not([dir]) .whatsapp-float { left: 20px !important; right: auto !important; }
+      html[dir="rtl"] #mic-access-tool-general-button, html[dir="rtl"] .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="rtl"] ._access-icon { left: 20px !important; right: auto !important; }
+      html[dir="ltr"] #mic-access-tool-general-button, html[dir="ltr"] .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="ltr"] ._access-icon,
+      html:not([dir]) #mic-access-tool-general-button, html:not([dir]) .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool #mic-access-tool-general-button,
+      html:not([dir]) ._access-icon { right: 20px !important; left: auto !important; }
+      @media (max-width: 768px) { .whatsapp-float { display: flex !important; } }
+      @media (min-width: 769px) { .whatsapp-float { display: flex !important; } }
+      @media (max-width: 768px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+      @media (min-width: 769px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+    </style>
+</head>
+<body>
+<nav class="navbar" dir="rtl"> <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"> <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"> <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path> </svg> <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display: none;"> <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path> </svg> </button> <button class="phone-header-btn" data-phone="+972506841740" aria-label="Call"> <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"> <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path> </svg> </button> <div class="nav-container"> <div class="nav-right-group"> <div class="nav-brand"> <a href="/" class="logo-link" style="display:flex;align-items:center;gap:10px;text-decoration:none;"> <img src="/assets/logo-remove_background-1777198266148-moy2qd.png?v=1777198266148" alt="רבי דוד ומשה זיע&quot;א" class="logo"> </a> </div><ul class="nav-menu" id="navMenu"><li><a href="/">בית</a></li><li><a href="/gallery">גלריה</a></li><li><a href="/candles">נרות נשמה</a></li><li><a href="/additional-information">מידע נוסף</a></li><li><a href="/directions" class="nav-link">הגעה</a></li><li><a href="/righteous-book" class="nav-link">ספר הצדיק</a></li><li><a href="/prayer-at-tzadiks-grave" class="nav-link">תפילה על ציון הצדיק</a></li></ul></div> </div> </nav>
+<script>
+
+// Navbar Mobile Menu Toggle and Contrast Fix
+(function() {
+  // Use 'load' event instead of 'DOMContentLoaded' to ensure we run AFTER all other scripts
+  window.addEventListener('load', function() {
+    
+    // FIX MOBILE BUTTON CONTRAST
+    // Detect navbar background color and apply contrasting color to mobile buttons
+    const navbar = document.querySelector('.navbar, nav, header');
+    if (!navbar) {
+      console.log('[Navbar] Navbar element not found');
+      return;
+    }
+    
+    // DECLARE VARIABLES EARLY to avoid Temporal Dead Zone errors
+    // These are used in multiple places below
+    let mobileToggle = document.getElementById('mobileToggle') ||
+                       document.querySelector('.mobile-toggle') ||
+                       document.querySelector('.hamburger') ||
+                       document.querySelector('.hamburger-menu') ||
+                       document.querySelector('.menu-toggle') ||
+                       document.querySelector('.burger-menu') ||
+                       document.querySelector('[aria-label="Menu"]') ||
+                       document.querySelector('[aria-label="תפריט"]');
+    
+    const phoneBtn = document.querySelector('.phone-header-btn');
+    
+    const computedStyle = window.getComputedStyle(navbar);
+    let bgColor = computedStyle.backgroundColor;
+    
+    console.log('[Navbar] Initial navbar background:', bgColor);
+    
+    // Check if background is transparent or rgba with 0 alpha
+    const isTransparent = bgColor === 'transparent' || 
+                         bgColor === 'rgba(0, 0, 0, 0)' ||
+                         (bgColor.startsWith('rgba') && bgColor.includes(', 0)'));
+    
+    if (isTransparent) {
+      // Check for background-image or gradient
+      const bgImage = computedStyle.backgroundImage;
+      if (bgImage && bgImage !== 'none') {
+        console.log('[Navbar] Navbar has background image/gradient, using dark text');
+        bgColor = 'rgb(240, 240, 240)'; // Assume light background
+      } else {
+        // Transparent navbar - check body background
+        const bodyBg = window.getComputedStyle(document.body).backgroundColor;
+        console.log('[Navbar] Navbar transparent, using body background:', bodyBg);
+        bgColor = bodyBg;
+      }
+    }
+    
+    // Calculate luminance to determine if background is light or dark
+    const rgb = bgColor.match(/\d+/g);
+    if (rgb && rgb.length >= 3) {
+      const r = parseInt(rgb[0]);
+      const g = parseInt(rgb[1]);
+      const b = parseInt(rgb[2]);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      
+      // Mobile button colors are set by Claude's AI-generated CSS (same as .nav-menu a)
+      // No dynamic color overrides needed - colors come from the generated navbar CSS
+      console.log('[Navbar] Mobile button colors preserved from Claude CSS (luminance:', luminance.toFixed(2) + ')');
+      
+      // FIX ICON SIZES - Ensure SVGs are properly sized and visible
+      // INJECT CRITICAL CSS TO OVERRIDE ANY CONFLICTING RULES
+      const criticalCSS = document.createElement('style');
+      criticalCSS.id = 'zappy-mobile-nav-fix';
+      const htmlLang = document.documentElement.lang || 'en';
+      const htmlDir = document.documentElement.dir || 'ltr';
+      // Check both dir attribute AND lang for RTL detection
+      // dir="rtl" is the most reliable indicator
+      const isRTL = htmlDir === 'rtl' || htmlLang === 'he' || htmlLang === 'ar';
+      
+      criticalCSS.textContent = `
+        /* Hide mobile buttons on desktop, show only on mobile */
+        @media (min-width: 769px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            display: none !important;
+          }
+        }
+        
+        /* Show and position mobile buttons correctly on mobile */
+        @media (max-width: 768px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 1001 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 50% !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 6px !important;
+            background: none !important;
+            color: var(--nav-text, var(--text-light)) !important;
+          }
+          
+          /* LTR positioning (default): hamburger LEFT, phone RIGHT */
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .mobile-toggle,
+          html[dir="ltr"] .mobile-toggle {
+            left: 12px !important;
+            right: auto !important;
+          }
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .phone-header-btn,
+          html[dir="ltr"] .phone-header-btn {
+            right: 12px !important;
+            left: auto !important;
+          }
+          
+          /* RTL positioning: hamburger RIGHT, phone LEFT */
+          html[dir="rtl"] .mobile-toggle,
+          html[lang="he"] .mobile-toggle,
+          html[lang="ar"] .mobile-toggle {
+            right: 12px !important;
+            left: auto !important;
+          }
+          html[dir="rtl"] .phone-header-btn,
+          html[lang="he"] .phone-header-btn,
+          html[lang="ar"] .phone-header-btn {
+            left: 12px !important;
+            right: auto !important;
+          }
+          
+          /* CRITICAL: Ensure nav-container has min-height on mobile */
+          /* All children are positioned absolutely/fixed on mobile, so height:auto collapses to 0 */
+          .nav-container {
+            min-height: 70px !important;
+            position: relative !important;
+          }
+          
+          /* Ensure SVG icons are properly sized and inherit color */
+          .mobile-toggle svg,
+          .phone-header-btn svg {
+            width: 24px !important;
+            height: 24px !important;
+            /* Don't force display - let JavaScript control hamburger/close toggle */
+          }
+          
+          /* Reset nav-cta-container on mobile - remove desktop box-shadow/padding */
+          /* that creates a visible ghost box when CTA button is hidden */
+          .nav-cta-container {
+            box-shadow: none !important;
+            padding: 0 !important;
+          }
+          
+          /* Hide nav-cta-container entirely on mobile when there's no lang-switcher */
+          /* (only the CTA button is inside, and it's hidden on mobile) */
+          .nav-cta-container:not(:has(.lang-switcher)) {
+            display: none !important;
+          }
+          
+          /* CRITICAL: Prevent hero image fade gradient from bleeding over headline text */
+          /* The .image-fade-gradient has bottom: -30px (extends below parent) */
+          /* On mobile stacked layout, this overlaps the h1 text below the image */
+          .hero-image-column {
+            overflow: hidden !important;
+          }
+          .image-fade-gradient {
+            bottom: 0 !important;
+          }
+          
+          /* Hide desktop language switcher on mobile - hamburger menu handles it */
+          /* High specificity to override stored CSS */
+          .lang-switcher,
+          .nav-cta-container .lang-switcher,
+          .nav-container .lang-switcher,
+          .navbar .lang-switcher,
+          .navbar .nav-cta-container .lang-switcher {
+            display: none !important;
+          }
+        }
+      `;
+      
+      // Remove existing fix if present and inject new one
+      const existing = document.getElementById('zappy-mobile-nav-fix');
+      if (existing) existing.remove();
+      document.head.appendChild(criticalCSS);
+      
+      console.log('[Navbar] Critical CSS injected for mobile nav positioning');
+      
+      // ONLY apply inline positioning styles on mobile viewport
+      // On desktop, the CSS handles hiding these buttons with display: none
+      // Inline styles were breaking desktop layout by overriding CSS
+      const isMobileViewport = window.innerWidth <= 768;
+      
+      if (mobileToggle) {
+        // Icon sizing applies to all viewports for consistency
+        const hamburgerIcon = mobileToggle.querySelector('.hamburger-icon');
+        const closeIcon = mobileToggle.querySelector('.close-icon');
+        
+        if (hamburgerIcon) {
+          hamburgerIcon.style.setProperty('width', '24px', 'important');
+          hamburgerIcon.style.setProperty('height', '24px', 'important');
+          hamburgerIcon.style.setProperty('display', 'block', 'important'); // Show hamburger by default
+        }
+        if (closeIcon) {
+          closeIcon.style.setProperty('width', '24px', 'important');
+          closeIcon.style.setProperty('height', '24px', 'important');
+          closeIcon.style.setProperty('display', 'none', 'important'); // Hide close icon by default
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          mobileToggle.style.setProperty('position', 'absolute', 'important');
+          mobileToggle.style.setProperty('top', '50%', 'important');
+          mobileToggle.style.setProperty('transform', 'translateY(-50%)', 'important');
+          mobileToggle.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          
+          console.log('[Navbar] Mobile toggle positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          mobileToggle.style.removeProperty('position');
+          mobileToggle.style.removeProperty('top');
+          mobileToggle.style.removeProperty('transform');
+          mobileToggle.style.removeProperty('z-index');
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared mobile toggle inline positioning');
+        }
+      }
+      
+      if (phoneBtn) {
+        // Icon sizing applies to all viewports
+        const phoneIcon = phoneBtn.querySelector('svg');
+        if (phoneIcon) {
+          phoneIcon.style.width = '24px';
+          phoneIcon.style.height = '24px';
+          phoneIcon.setAttribute('width', '24');
+          phoneIcon.setAttribute('height', '24');
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          phoneBtn.style.setProperty('position', 'absolute', 'important');
+          phoneBtn.style.setProperty('top', '50%', 'important');
+          phoneBtn.style.setProperty('transform', 'translateY(-50%)', 'important');
+          phoneBtn.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          
+          console.log('[Navbar] Phone button positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          phoneBtn.style.removeProperty('position');
+          phoneBtn.style.removeProperty('top');
+          phoneBtn.style.removeProperty('transform');
+          phoneBtn.style.removeProperty('z-index');
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared phone button inline positioning');
+        }
+      }
+    } else {
+      console.log('[Navbar] Could not parse background color:', bgColor);
+    }
+    
+    // MOBILE MENU TOGGLE
+    // Re-query in case DOM changed (mobileToggle already declared at top of function)
+    mobileToggle = document.getElementById('mobileToggle') ||
+                   document.querySelector('.mobile-toggle') ||
+                   document.querySelector('.hamburger') ||
+                   document.querySelector('.hamburger-menu') ||
+                   document.querySelector('.menu-toggle') ||
+                   document.querySelector('.burger-menu') ||
+                   document.querySelector('[aria-label="Menu"]') ||
+                   document.querySelector('[aria-label="תפריט"]');
+    
+    // EXPANDED SEARCH: Find nav menu by ID or class
+    const navMenu = document.getElementById('navMenu') ||
+                  document.querySelector('.nav-menu') ||
+                  document.querySelector('.nav-links') ||
+                  document.querySelector('nav ul:not(.submenu)');
+    
+    if (!mobileToggle || !navMenu) {
+      console.log('[Navbar] Mobile toggle or menu not found:', { toggle: !!mobileToggle, menu: !!navMenu });
+      return;
+    }
+    
+    // Ensure navMenu has ID for CSS targeting
+    if (!navMenu.id) {
+      navMenu.id = 'navMenu';
+    }
+    
+    console.log('[Navbar] Initializing mobile menu...');
+    
+    // Remove any existing event listeners by cloning the button
+    const newToggle = mobileToggle.cloneNode(true);
+    mobileToggle.parentNode.replaceChild(newToggle, mobileToggle);
+    
+    // Toggle menu on button click - use newToggle now
+    newToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const hamburgerIcon = this.querySelector('.hamburger-icon');
+      const closeIcon = this.querySelector('.close-icon');
+      const isActive = navMenu.classList.contains('active');
+      
+      if (isActive) {
+        // Close menu
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed');
+      } else {
+        // Open menu
+        navMenu.classList.add('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'none', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'block', 'important');
+        document.body.style.overflow = 'hidden';
+        console.log('[Navbar] Menu opened');
+      }
+    });
+    
+    // Close menu when clicking nav links (but NOT dropdown toggles)
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        // Don't close if it's a dropdown child (unless it's a real navigation link)
+        if (this.getAttribute('href') === '#') return;
+        
+        const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+        const closeIcon = newToggle.querySelector('.close-icon');
+        
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed (link clicked)');
+      });
+    });
+    
+    // DROPDOWN MENU TOGGLE (for mobile and touch devices)
+    var dropdownToggles = navMenu.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(function(toggle) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var parent = this.closest('.nav-dropdown');
+        if (!parent) return;
+        
+        // Close other open dropdowns at the same level
+        var siblings = parent.parentNode.querySelectorAll('.nav-dropdown.open');
+        siblings.forEach(function(sib) {
+          if (sib !== parent) sib.classList.remove('open');
+        });
+        
+        parent.classList.toggle('open');
+        console.log('[Navbar] Dropdown toggled:', parent.classList.contains('open') ? 'open' : 'closed');
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-dropdown')) {
+        var openDropdowns = document.querySelectorAll('.nav-dropdown.open');
+        openDropdowns.forEach(function(dd) { dd.classList.remove('open'); });
+      }
+    });
+    
+    console.log('[Navbar] Dropdown handlers initialized for ' + dropdownToggles.length + ' dropdowns');
+    
+    // Phone button functionality (phoneBtn already declared at top of function)
+    if (phoneBtn) {
+      phoneBtn.addEventListener('click', function() {
+        // Get phone number from placeholder in page or use default
+        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+        const phoneNumber = phoneLinks.length > 0 
+          ? phoneLinks[0].getAttribute('href').replace('tel:', '')
+          : '+972506841740';
+        
+        window.location.href = 'tel:' + phoneNumber;
+        console.log('[Navbar] Phone button clicked');
+      });
+    }
+    
+    console.log('[Navbar] Mobile menu initialized successfully');
+    
+    // WhatsApp visibility is now controlled via CSS (siteSettings)
+  });
+})();
+
+</script>
+  
+  <main class="blog-page ai-generated-page"><section class="directions-hero-section" data-layout-spec="מידע והגעה לציון רבי דוד ומשה זיע&quot;א-hero" dir="rtl" data-hero-type="fullscreen-scrim" id="directions-hero-section">
+  <!-- Background Image Layer -->
+  <div class="directions-hero-bg">
+    <div data-zappy-zoom-wrapper="true" data-element-id="img-1779690093111-u7rif00yx" data-element-type="image" data-zappy-zoom-wrapper-width-mode="full" style="position: absolute !important; top: 0px !important; left: 0px !important; width: 100% !important; height: 100% !important; max-width: none !important; margin-left: 0px !important; margin-right: 0px !important; display: block !important; z-index: 1 !important; overflow: hidden !important;" data-zappy-zoom-clip="true" data-zappy-wrapper-margins-applied="true"><img data-hero-bg="true" data-context="Panoramic aerial view of the Atlas Mountains in Morocco, winding mountain road leading to a traditional Jewish shrine/tomb (tzion) nestled among rugged terracotta peaks and sparse green valleys, dramatic golden-hour light, ancient stone structures, pilgrimage route atmosphere, sacred and majestic landscape photography" width="1200" height="700" src="/assets/section-hero-directions-hero-image-1.webp" alt="נוף הרי האטלס והדרך לציון רבי דוד ומשה זיע&quot;א במרוקו" data-hero-background="true" data-element-type="image" data-element-id="img-1779690093111-u7rif00yx" style="object-position: 50% 40%; margin: 0px !important; position: absolute !important; left: 0% !important; top: 0% !important; width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important; display: block !important; object-fit: cover !important" data-zappy-zoom="1"></div>
+  </div>
+
+  <!-- Scrim Overlay -->
+  <div class="directions-hero-scrim" aria-hidden="true"></div>
+
+  <!-- Manuscript Texture Overlay -->
+  <div class="directions-hero-texture" aria-hidden="true"></div>
+
+  <!-- Decorative Ornamental Frame Strip -->
+  <div class="directions-hero-frame-strip" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 12" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="12">
+      <rect width="1200" height="1" y="0" fill="rgba(216,155,43,0.35)"></rect>
+      <rect width="1200" height="1" y="3" fill="rgba(216,155,43,0.18)"></rect>
+      <rect width="1200" height="1" y="11" fill="rgba(216,155,43,0.35)"></rect>
+      <rect width="1200" height="1" y="8" fill="rgba(216,155,43,0.18)"></rect>
+      <g fill="rgba(216,155,43,0.28)">
+        <polygon points="0,6 8,2 16,6 8,10"></polygon>
+        <polygon points="24,6 32,2 40,6 32,10"></polygon>
+        <polygon points="48,6 56,2 64,6 56,10"></polygon>
+        <polygon points="72,6 80,2 88,6 80,10"></polygon>
+        <polygon points="96,6 104,2 112,6 104,10"></polygon>
+        <polygon points="120,6 128,2 136,6 128,10"></polygon>
+        <polygon points="144,6 152,2 160,6 152,10"></polygon>
+        <polygon points="168,6 176,2 184,6 176,10"></polygon>
+        <polygon points="192,6 200,2 208,6 200,10"></polygon>
+        <polygon points="216,6 224,2 232,6 224,10"></polygon>
+        <polygon points="240,6 248,2 256,6 248,10"></polygon>
+        <polygon points="264,6 272,2 280,6 272,10"></polygon>
+        <polygon points="288,6 296,2 304,6 296,10"></polygon>
+        <polygon points="312,6 320,2 328,6 320,10"></polygon>
+        <polygon points="336,6 344,2 352,6 344,10"></polygon>
+        <polygon points="360,6 368,2 376,6 368,10"></polygon>
+        <polygon points="384,6 392,2 400,6 392,10"></polygon>
+        <polygon points="408,6 416,2 424,6 416,10"></polygon>
+        <polygon points="432,6 440,2 448,6 440,10"></polygon>
+        <polygon points="456,6 464,2 472,6 464,10"></polygon>
+        <polygon points="480,6 488,2 496,6 488,10"></polygon>
+        <polygon points="504,6 512,2 520,6 512,10"></polygon>
+        <polygon points="528,6 536,2 544,6 536,10"></polygon>
+        <polygon points="552,6 560,2 568,6 560,10"></polygon>
+        <polygon points="576,6 584,2 592,6 584,10"></polygon>
+        <polygon points="600,6 608,2 616,6 608,10"></polygon>
+        <polygon points="624,6 632,2 640,6 632,10"></polygon>
+        <polygon points="648,6 656,2 664,6 656,10"></polygon>
+        <polygon points="672,6 680,2 688,6 680,10"></polygon>
+        <polygon points="696,6 704,2 712,6 704,10"></polygon>
+        <polygon points="720,6 728,2 736,6 728,10"></polygon>
+        <polygon points="744,6 752,2 760,6 752,10"></polygon>
+        <polygon points="768,6 776,2 784,6 776,10"></polygon>
+        <polygon points="792,6 800,2 808,6 800,10"></polygon>
+        <polygon points="816,6 824,2 832,6 824,10"></polygon>
+        <polygon points="840,6 848,2 856,6 848,10"></polygon>
+        <polygon points="864,6 872,2 880,6 872,10"></polygon>
+        <polygon points="888,6 896,2 904,6 896,10"></polygon>
+        <polygon points="912,6 920,2 928,6 920,10"></polygon>
+        <polygon points="936,6 944,2 952,6 944,10"></polygon>
+        <polygon points="960,6 968,2 976,6 968,10"></polygon>
+        <polygon points="984,6 992,2 1000,6 992,10"></polygon>
+        <polygon points="1008,6 1016,2 1024,6 1016,10"></polygon>
+        <polygon points="1032,6 1040,2 1048,6 1040,10"></polygon>
+        <polygon points="1056,6 1064,2 1072,6 1064,10"></polygon>
+        <polygon points="1080,6 1088,2 1096,6 1088,10"></polygon>
+        <polygon points="1104,6 1112,2 1120,6 1112,10"></polygon>
+        <polygon points="1128,6 1136,2 1144,6 1136,10"></polygon>
+        <polygon points="1152,6 1160,2 1168,6 1160,10"></polygon>
+        <polygon points="1176,6 1184,2 1192,6 1184,10"></polygon>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Main Content Container -->
+  <div class="directions-hero-container">
+    <div class="directions-hero-content">
+
+      <!-- Ornamental flourish above heading -->
+      <div class="directions-hero-ornament" aria-hidden="true">
+        <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 220 18" xmlns="http://www.w3.org/2000/svg" width="220" height="18">
+          <line x1="0" y1="9" x2="80" y2="9" stroke="rgba(216,155,43,0.55)" stroke-width="1"></line>
+          <circle cx="90" cy="9" r="3" fill="rgba(216,155,43,0.6)"></circle>
+          <circle cx="110" cy="9" r="5" fill="none" stroke="rgba(216,155,43,0.7)" stroke-width="1.5"></circle>
+          <circle cx="110" cy="9" r="2" fill="rgba(216,155,43,0.7)"></circle>
+          <circle cx="130" cy="9" r="3" fill="rgba(216,155,43,0.6)"></circle>
+          <line x1="140" y1="9" x2="220" y2="9" stroke="rgba(216,155,43,0.55)" stroke-width="1"></line>
+        </svg>
+      </div>
+
+      <!-- Label -->
+      <p class="directions-hero-label">מידע והגעה לציון</p>
+
+      <!-- H1 -->
+      <h1 class="directions-hero-h1">הצדיק<br>רבי דוד ומשה זיע״א</h1>
+
+      <!-- Subtitle -->
+      <h3 class="directions-hero-subtitle">ציון קדוש בלב הרי האטלס במרוקו — מקום עלייה לרגל ומקור ברכה לדורות</h3>
+
+      <!-- Navigation Info Cards -->
+      <div class="directions-hero-nav-cards">
+        <div class="directions-hero-nav-card">
+          <span class="directions-hero-nav-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>
+          </span>
+          <div class="directions-hero-nav-card-content">
+            <span class="directions-hero-nav-card-label">מיקום</span>
+            <span class="directions-hero-nav-card-value">הרי האטלס, מרוקו</span>
+          </div>
+        </div>
+        <div class="directions-hero-nav-card">
+          <span class="directions-hero-nav-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </span>
+          <div class="directions-hero-nav-card-content">
+            <span class="directions-hero-nav-card-label">מרחק ממרקש</span>
+            <span class="directions-hero-nav-card-value">כ־120 ק״מ — כ־2.5 שעות נסיעה</span>
+          </div>
+        </div>
+        <div class="directions-hero-nav-card">
+          <span class="directions-hero-nav-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
+          </span>
+          <div class="directions-hero-nav-card-content">
+            <span class="directions-hero-nav-card-label">הדרך לציון</span>
+            <span class="directions-hero-nav-card-value">ציר מרקש–ורززאת, כביש P2017</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="directions-hero-ctas">
+        <a href="/contact" class="directions-hero-btn-primary" data-element-type="button" data-element-id="btn-1779690093108-3bk85y7fw" data-native-element="true">צרו קשר</a>
+        <a href="/additional-information" class="directions-hero-btn-secondary btn btn-primary" data-element-type="button" data-element-id="btn-1779690093108-8wj8klv2g" data-native-element="true" style="outline: none; border-color: rgb(216, 155, 43) !important; color: rgb(255, 255, 255) !important; background-color: rgb(216, 155, 43) !important; background-image: none !important;">מידע נוסף</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom Accent Route Bar -->
+  <div class="directions-hero-route-bar" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="48">
+      <!-- Dark fill for next section transition -->
+      <path d="M0,48 L0,28 Q60,18 120,26 T240,22 Q300,28 360,20 T480,24 Q540,18 600,22 T720,20 Q780,26 840,18 T960,22 Q1020,28 1080,20 T1200,24 L1200,48 Z" fill="var(--bg-dark)"></path>
+      <!-- Accent route line -->
+      <path d="M0,32 Q60,22 120,30 T240,26 Q300,32 360,24 T480,28 Q540,22 600,26 T720,24 Q780,30 840,22 T960,26 Q1020,32 1080,24 T1200,28" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity="0.55"></path>
+      <!-- Small route dots -->
+      <circle cx="120" cy="30" r="2.5" fill="var(--accent)" opacity="0.7"></circle>
+      <circle cx="360" cy="24" r="2.5" fill="var(--accent)" opacity="0.7"></circle>
+      <circle cx="600" cy="26" r="2.5" fill="var(--accent)" opacity="0.7"></circle>
+      <circle cx="840" cy="22" r="2.5" fill="var(--accent)" opacity="0.7"></circle>
+      <circle cx="1080" cy="24" r="2.5" fill="var(--accent)" opacity="0.7"></circle>
+    </svg>
+  </div>
+
+</section>
+
+<section class="directions-route-map-section" data-layout-spec="מידע והגעה לציון רבי דוד ומשה זיע&quot;א-route-map" dir="rtl" id="directions-route-map-section">
+
+  <!-- Decorative top ornamental strip -->
+  <div class="drm-ornament-strip" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 18" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,9 Q60,2 120,9 T240,9 T360,9 T480,9 T600,9 T720,9 T840,9 T960,9 T1080,9 T1200,9" stroke="currentColor" stroke-width="1" fill="none" opacity="0.18"></path>
+      <circle cx="60" cy="9" r="3" fill="currentColor" opacity="0.22"></circle>
+      <circle cx="180" cy="9" r="2" fill="currentColor" opacity="0.18"></circle>
+      <circle cx="300" cy="9" r="3" fill="currentColor" opacity="0.22"></circle>
+      <circle cx="420" cy="9" r="2" fill="currentColor" opacity="0.18"></circle>
+      <circle cx="540" cy="9" r="3" fill="currentColor" opacity="0.22"></circle>
+      <circle cx="660" cy="9" r="2" fill="currentColor" opacity="0.18"></circle>
+      <circle cx="780" cy="9" r="3" fill="currentColor" opacity="0.22"></circle>
+      <circle cx="900" cy="9" r="2" fill="currentColor" opacity="0.18"></circle>
+      <circle cx="1020" cy="9" r="3" fill="currentColor" opacity="0.22"></circle>
+      <circle cx="1140" cy="9" r="2" fill="currentColor" opacity="0.18"></circle>
+      <path d="M570,4 L600,9 L630,4 L600,0 Z" fill="currentColor" opacity="0.3"></path>
+    </svg>
+  </div>
+
+  <!-- Background route line decoration -->
+  <div class="drm-bg-route" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M100,50 Q300,120 500,200 T900,350 T1100,450" stroke="var(--secondary)" stroke-width="1.5" fill="none" stroke-dasharray="8,6" opacity="0.12"></path>
+      <circle cx="100" cy="50" r="6" fill="var(--accent)" opacity="0.18"></circle>
+      <circle cx="400" cy="165" r="5" fill="var(--accent)" opacity="0.15"></circle>
+      <circle cx="700" cy="285" r="6" fill="var(--accent)" opacity="0.18"></circle>
+      <circle cx="1000" cy="400" r="5" fill="var(--accent)" opacity="0.15"></circle>
+    </svg>
+  </div>
+
+  <div class="drm-container">
+
+    <!-- Section Header -->
+    <div class="drm-header">
+      <h2 class="drm-title">מסלול ההגעה לציון הקדוש</h2>
+      <p class="drm-subtitle">ציון רבי דוד ומשה זיע״א שוכן בלב הרי האטלס במרוקו, על הדרך מהעיר מראכש לעיר וארזאזאת. להלן מפות מפורטות ומידע מעשי שיסייעו לכם לתכנן את עלייתכם לרגל בבטחה ובנחת.</p>
+      <div class="drm-divider" aria-hidden="true">
+        <span class="drm-divider-line"></span>
+        <svg data-no-icon-edit="true" aria-hidden="true" width="28" height="18" viewBox="0 0 28 18" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14,1 L17,8 L26,8 L19,13 L22,18 L14,14 L6,18 L9,13 L2,8 L11,8 Z" fill="var(--accent)" opacity="0.75"></path>
+        </svg>
+        <span class="drm-divider-line"></span>
+      </div>
+    </div>
+
+    <!-- Map Cards Grid -->
+    <div class="drm-grid zappy-preserve-css-grid" id="zappy-auto-grid-1779693589677-t6fmr7" data-zappy-auto-grid="true" data-original-item-width="584" data-original-gap="32px" style="display: grid; --zappy-grid-cols: repeat(2, minmax(0, 1fr)); grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch !important;" data-zappy-explicit-columns="true">
+
+      <!-- Card 1: Overview Map -->
+      <article class="drm-card" data-grid-item-index="0">
+        <div class="drm-card-header">
+          <div class="drm-card-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+            </svg>
+          </div>
+          <h3 class="drm-card-title">מפת מסלול כללי — ממראכש לציון</h3>
+        </div>
+
+        <div class="drm-map-area">
+<iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d442386.8!2d-8.109!3d31.209!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m5!1s0xdafee8d96179e51d%3A0x5950b6534f87adb8!2sMarrakech%2C+Morocco!3m2!1d31.6294723!2d-7.9810845!4m5!1s0xd9f6a8f9a0b0b0b%3A0x0!2sTimzrite%2C+Morocco!3m2!1d31.2093!2d-8.1094!5e0!3m2!1siw!2sil!4v1" width="100%" height="300" style="border:0; display:block; width:100%; height:300px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="מסלול מרקש לציון רבי דוד ומשה — גוגל מפס"></iframe>
+<div class="drm-map-badge" aria-hidden="true">
+  <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="var(--primary)" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path>
+  </svg>
+  <span>ציון קדוש</span>
+</div>
+</div>
+
+        <div class="drm-card-info">
+          <ul class="drm-info-list">
+            <li>
+              <span class="drm-info-icon" aria-hidden="true">
+                <svg data-element-type="icon" data-icon-type="svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+              </span>
+              <span><strong>כביש ראשי:</strong> כביש N9 — מראכש לוארזאזאת דרך מעבר טיזי נ׳תישקה</span>
+            </li>
+            <li>
+              <span class="drm-info-icon" aria-hidden="true">
+                <svg data-element-type="icon" data-icon-type="svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              </span>
+              <span><strong>זמן נסיעה:</strong> כ-3 שעות ממראכש (כ-180 ק״מ)</span>
+            </li>
+            <li>
+              <span class="drm-info-icon" aria-hidden="true">
+                <svg data-element-type="icon" data-icon-type="svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+              </span>
+              <span><strong>יישובים בדרך:</strong> אימינטנוט, אית׳ בנהדו, תדרת</span>
+            </li>
+            <li>
+              <span class="drm-info-icon" aria-hidden="true">
+                <svg data-element-type="icon" data-icon-type="svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              </span>
+              <span><strong>סימן דרך עיקרי:</strong> כפר אמלאל — פנייה לציון</span>
+            </li>
+          </ul>
+          <p class="zappy-editable"><a href="https://maps.google.com/?q=Rabbi+David+Oumoshe+Tomb+Morocco" target="_blank" rel="noopener noreferrer" class="drm-map-btn" data-element-type="button" data-element-id="btn-1779693589601-dp8ifxf5d" data-native-element="true">
+            <svg data-element-type="icon" data-icon-type="svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            פתח ב-Google Maps
+          </a>
+        </p></div>
+      </article>
+
+      <!-- Card 2: Detailed Approach Map -->
+      <article class="drm-card" data-grid-item-index="1" style="overflow: hidden !important;">
+        <div class="drm-card-header">
+          <div class="drm-card-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line>
+            </svg>
+          </div>
+          <h3 class="drm-card-title">מפת גישה מפורטת — סביבות הציון</h3>
+        </div>
+
+        <div class="drm-map-area">
+          <div data-zappy-zoom-wrapper="true" data-element-id="img-1779693589606-hscfp0pd5" data-element-type="image" data-zappy-zoom-wrapper-width="582px" data-zappy-zoom-wrapper-height="300px" data-zappy-zoom-wrapper-width-mode="px" data-zappy-zoom-wrapper-align="center" style="position: relative !important; overflow: hidden !important; width: 582px !important; max-width: 100% !important; margin-left: auto !important; margin-right: auto !important; height: 300px !important; display: block !important;" data-zappy-zoom-clip="true" data-zappy-wrapper-margins-applied="true"><img data-context="A close-up detailed map of the immediate area around the tomb of Rabbi David U-Moshe in the Atlas Mountains of Morocco, showing the local mountain village, the road from the main highway, the sacred tomb building, parking area, and surrounding landscape. Traditional Moroccan architecture, mountain paths, warm earthy tones, pilgrimage site markers." width="600" height="360" src="/assets/section-route-map-directions-route-map-image-2-1779693637598-etsbz6.webp?v=1779693639671" alt="מפת גישה מפורטת לסביבות ציון רבי דוד ומשה בהרי האטלס" data-element-type="image" data-element-id="img-1779693589606-hscfp0pd5" style="display: block; object-position: 50% 50% !important; width: 582.4px !important; height: 300px !important; object-fit: cover !important; max-width: 100% !important; margin-top: 0px !important; margin-bottom: 0px !important;" data-zappy-original-width="582.4000244140625" data-zappy-original-height="300" data-zappy-object-position="50% 50%" data-zappy-zoom="1"></div>
+          <div class="drm-map-badge drm-map-badge--accent" aria-hidden="true">
+            <svg data-no-icon-icon="true" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="var(--accent)" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path>
+            </svg>
+            <span>קרוב לציון</span>
+          </div>
+        </div>
+
+        <div class="drm-card-info">
+          <ul class="drm-info-list">
+            <li>
+              <span class="drm-info-icon" aria-hidden="true">
+                <svg data-element-type="icon" data-icon-type="svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+              </span>
+              <span><strong>גישה מקומית:</strong> דרך עפר מסומנת מהכביש הראשי, כ-4 ק״מ</span>
+            </li>
+            <li>
+              <span class="drm-info-icon" aria-hidden="true">
+                <svg data-element-type="icon" data-icon-type="svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+              </span>
+              <span><strong>חניה:</strong> ישנה חניה בצמוד לציון המיועדת לעולי רגל</span>
+            </li>
+            <li>
+              <span class="drm-info-icon" aria-hidden="true">
+                <svg data-element-type="icon" data-icon-type="svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              </span>
+              <span><strong>יישוב סמוך:</strong> כפר אמלאל — ניתן לקבל הכוונה מהתושבים</span>
+            </li>
+            <li>
+              <span class="drm-info-icon" aria-hidden="true">
+                <svg data-element-type="icon" data-icon-type="svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              </span>
+              <span><strong>שמירה:</strong> השומר המקומי נמצא בסמוך ומסייע לעולי רגל</span>
+            </li>
+          </ul>
+          <p class="zappy-editable"><a href="https://maps.google.com/?q=31.3826,+-7.3828" target="_blank" rel="noopener noreferrer" class="drm-map-btn drm-map-btn--secondary" data-element-type="button" data-element-id="btn-1779693589601-uizrgljy6" data-native-element="true">
+            <svg data-element-type="icon" data-icon-type="svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            נווט לציון
+          </a>
+        </p></div>
+      </article>
+
+    </div>
+    <!-- End Grid -->
+
+    <!-- Footer note -->
+    <div class="drm-footer-note">
+      <span class="drm-note-icon" aria-hidden="true">
+        <svg data-element-type="icon" data-icon-type="svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      </span>
+      <small>מומלץ לבדוק את תנאי הדרך ומצב הכבישים לפני היציאה לנסיעה, במיוחד בחודשי החורף שבהם עשויים להיות שלגים בהרי האטלס. מסע בטוח ועלייה לרגל מבורכת.</small>
+    </div>
+
+  </div>
+  <!-- End Container -->
+
+  <!-- Bottom ornamental divider -->
+  <div class="drm-bottom-ornament" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 18" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,9 Q60,16 120,9 T240,9 T360,9 T480,9 T600,9 T720,9 T840,9 T960,9 T1080,9 T1200,9" stroke="currentColor" stroke-width="1" fill="none" opacity="0.18"></path>
+      <circle cx="600" cy="9" r="4" fill="currentColor" opacity="0.3"></circle>
+      <circle cx="580" cy="9" r="2" fill="currentColor" opacity="0.2"></circle>
+      <circle cx="620" cy="9" r="2" fill="currentColor" opacity="0.2"></circle>
+    </svg>
+  </div>
+
+</section>
+
+<section class="directions-story-section" data-layout-spec="מידע והגעה לציון רבי דוד ומשה זיע&quot;א-story" dir="rtl">
+
+  <!-- Archival map texture background layer -->
+  <div class="directions-story-map-bg" aria-hidden="true"></div>
+
+  <!-- Ornamental frame strip top -->
+  <div class="directions-story-frame-strip" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" width="100%" height="18" viewBox="0 0 1200 18" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="1" y="0" fill="#D89B2B" opacity="0.18"></rect>
+      <g fill="#D89B2B" opacity="0.13">
+        <rect x="0" y="3" width="1200" height="1"></rect>
+        <rect x="0" y="6" width="1200" height="1"></rect>
+        <circle cx="20" cy="9" r="2"></circle><circle cx="60" cy="9" r="2"></circle><circle cx="100" cy="9" r="2"></circle>
+        <circle cx="140" cy="9" r="2"></circle><circle cx="180" cy="9" r="2"></circle><circle cx="220" cy="9" r="2"></circle>
+        <circle cx="260" cy="9" r="2"></circle><circle cx="300" cy="9" r="2"></circle><circle cx="340" cy="9" r="2"></circle>
+        <circle cx="380" cy="9" r="2"></circle><circle cx="420" cy="9" r="2"></circle><circle cx="460" cy="9" r="2"></circle>
+        <circle cx="500" cy="9" r="2"></circle><circle cx="540" cy="9" r="2"></circle><circle cx="580" cy="9" r="2"></circle>
+        <circle cx="620" cy="9" r="2"></circle><circle cx="660" cy="9" r="2"></circle><circle cx="700" cy="9" r="2"></circle>
+        <circle cx="740" cy="9" r="2"></circle><circle cx="780" cy="9" r="2"></circle><circle cx="820" cy="9" r="2"></circle>
+        <circle cx="860" cy="9" r="2"></circle><circle cx="900" cy="9" r="2"></circle><circle cx="940" cy="9" r="2"></circle>
+        <circle cx="980" cy="9" r="2"></circle><circle cx="1020" cy="9" r="2"></circle><circle cx="1060" cy="9" r="2"></circle>
+        <circle cx="1100" cy="9" r="2"></circle><circle cx="1140" cy="9" r="2"></circle><circle cx="1180" cy="9" r="2"></circle>
+        <rect x="0" y="12" width="1200" height="1"></rect>
+        <rect x="0" y="15" width="1200" height="1"></rect>
+      </g>
+    </svg>
+  </div>
+
+  <div class="directions-story-container">
+    <div class="directions-story-grid">
+
+      <!-- RIGHT COLUMN: Text block -->
+      <div class="directions-story-text-col">
+
+        <h2 class="directions-story-h2">המסע אל הציון — הדרך להר הקדוש</h2>
+
+        <p class="directions-story-intro">ציון רבי דוד ומשה זיע"א שוכן בלב הרי האטלס, בדרך הנשגבת המחברת בין מרקש לוורזאזאת. המסע אל הציון הוא עצמו חלק מן הפלגות — נתיב ארוך ומרגש בין שמי מרוקו, כפרים ברברים עתיקים ונוף הרים מרהיב. להלן שלבי הדרך המומלצת לעולי הרגל.</p>
+
+        <!-- Saffron divider -->
+        <div class="directions-story-divider" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" width="220" height="8" viewBox="0 0 220 8" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="4" x2="220" y2="4" stroke="#D89B2B" stroke-width="1" opacity="0.55"></line>
+            <circle cx="110" cy="4" r="3" fill="#D89B2B" opacity="0.7"></circle>
+            <circle cx="90" cy="4" r="1.5" fill="#D89B2B" opacity="0.5"></circle>
+            <circle cx="130" cy="4" r="1.5" fill="#D89B2B" opacity="0.5"></circle>
+          </svg>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="directions-story-step">
+          <h3 class="directions-story-h3">
+            <span class="directions-story-step-num">א׳</span>
+            יציאה ממרקש — שער המסע
+          </h3>
+          <p>המסע מתחיל בעיר מרקש, ממנה יוצאים לכיוון דרום-מזרח בכביש הלאומי N9. ניתן לנסוע ברכב פרטי, במיניבוס שכור, או עם קבוצות עלייה לרגל המאורגנות. מרקש מציעה שפע של בתי מלון ומקומות לינה, ומומלץ להתחיל את הדרך בשעות הבוקר המוקדמות כדי להגיע בשעת יום.</p>
+        </div>
+
+        <!-- Saffron divider -->
+        <div class="directions-story-divider" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" width="220" height="8" viewBox="0 0 220 8" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="4" x2="220" y2="4" stroke="#D89B2B" stroke-width="1" opacity="0.55"></line>
+            <circle cx="110" cy="4" r="3" fill="#D89B2B" opacity="0.7"></circle>
+            <circle cx="90" cy="4" r="1.5" fill="#D89B2B" opacity="0.5"></circle>
+            <circle cx="130" cy="4" r="1.5" fill="#D89B2B" opacity="0.5"></circle>
+          </svg>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="directions-story-step">
+          <h3 class="directions-story-h3">
+            <span class="directions-story-step-num">ב׳</span>
+            דרך כבישי ההר — לב הרי האטלס
+          </h3>
+          <p>לאחר כשעה של נסיעה עוברים את מעברי הרי האטלס הגדול דרך כביש טיזי נ-טישקה — אחד המעברים הגבוהים בצפון אפריקה. הנוף משתנה בהדרגה: עמקים ירוקים, כפרים של אבן אדומה, ועצי אַרְגַּן הנשקפים מן המדרונות. בדרך עוברים ליד הכפר אית-בן-חדו, אתר מורשת עולמית של אונסקו.</p>
+        </div>
+
+        <!-- Saffron divider -->
+        <div class="directions-story-divider" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" width="220" height="8" viewBox="0 0 220 8" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="4" x2="220" y2="4" stroke="#D89B2B" stroke-width="1" opacity="0.55"></line>
+            <circle cx="110" cy="4" r="3" fill="#D89B2B" opacity="0.7"></circle>
+            <circle cx="90" cy="4" r="1.5" fill="#D89B2B" opacity="0.5"></circle>
+            <circle cx="130" cy="4" r="1.5" fill="#D89B2B" opacity="0.5"></circle>
+          </svg>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="directions-story-step">
+          <h3 class="directions-story-h3">
+            <span class="directions-story-step-num">ג׳</span>
+            ההגעה לציון — כניסה למקום הקדוש
+          </h3>
+          <p>לאחר כשעתיים וחצי נסיעה מגיעים לאזור אימינטנוּת, שם מתנשא הציון הקדוש בין הסלעים. שלט הכניסה לאתר מסמן את שער הכניסה לציון. מגרש חנייה מרווח ממוקם בסמוך. ביקור בציון מומלץ בשעות אחר הצהריים כאשר האור הנמוך מאיר את הסלעים ויוצר אווירה מיוחדת של קדושה ושלווה.</p>
+        </div>
+
+      </div>
+      <!-- END text col -->
+
+      <!-- LEFT COLUMN: Image -->
+      <div class="directions-story-img-col">
+        <div class="directions-story-img-frame">
+          <div class="directions-story-img-grain" aria-hidden="true"></div>
+          <img data-context="A vertical documentary photograph of the road leading to the tomb of Rabbi David U-Moshe in the Atlas Mountains of Morocco. The winding mountain road cuts through dramatic rocky terrain with reddish-brown stone walls and ancient gates. The image evokes pilgrimage, sacred journey, and Moroccan Jewish heritage. Warm golden afternoon light, documentary style, vertical orientation, showing the entrance gate or path to the holy shrine surrounded by Atlas Mountain landscape." width="480" height="680" src="/assets/section-story-directions-story-image-1.webp" alt="הדרך המובילה לציון רבי דוד ומשה בהרי האטלס, מרוקו">
+          <div class="directions-story-img-caption">
+            <span>שער הכניסה לציון — הרי האטלס, מרוקו</span>
+          </div>
+        </div>
+      </div>
+      <!-- END image col -->
+
+    </div>
+  </div>
+
+  <!-- Bottom decorative route transition -->
+  <div class="directions-story-route-divider" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Dashed route path -->
+      <path d="M0,30 Q150,18 300,28 T600,22 T900,26 T1200,20" stroke="#D89B2B" stroke-width="2" stroke-dasharray="10,8" fill="none" opacity="0.45"></path>
+      <!-- Filled bottom shape for next section -->
+      <path d="M0,70 L0,45 Q200,38 400,44 T800,40 T1200,43 L1200,70 Z" fill="#F1DFC2"></path>
+      <!-- Small circle markers along the route -->
+      <circle cx="300" cy="28" r="4" fill="#D89B2B" opacity="0.6"></circle>
+      <circle cx="600" cy="22" r="4" fill="#D89B2B" opacity="0.6"></circle>
+      <circle cx="900" cy="26" r="4" fill="#D89B2B" opacity="0.6"></circle>
+      <circle cx="1200" cy="20" r="5" fill="#7A1F2B" opacity="0.7"></circle>
+    </svg>
+  </div>
+
+</section>
+
+<section class="directions-heritage-notes-section" data-layout-spec="מידע והגעה לציון רבי דוד ומשה זיע&quot;א-heritage-notes" dir="rtl">
+  <!-- Decorative top ornamental strip -->
+  <div class="dhn-ornament-strip" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" width="100%" height="18" viewBox="0 0 1200 18" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,9 Q60,2 120,9 T240,9 T360,9 T480,9 T600,9 T720,9 T840,9 T960,9 T1080,9 T1200,9" stroke="rgba(216,155,43,0.28)" stroke-width="1.5" fill="none"></path>
+      <path d="M0,13 Q60,6 120,13 T240,13 T360,13 T480,13 T600,13 T720,13 T840,13 T960,13 T1080,13 T1200,13" stroke="rgba(216,155,43,0.14)" stroke-width="1" fill="none"></path>
+    </svg>
+  </div>
+
+  <div class="dhn-container">
+    <!-- Section Header -->
+    <header class="bulletin-card-header">
+          <span class="bulletin-card-badge">
+            <i class="fas fa-music" aria-hidden="true" data-element-type="icon" data-element-id="icon-1779690599473-zxewprn8b" data-icon-type="fontawesome"></i>
+          </span>
+          <div class="bulletin-card-meta">
+            <span class="bulletin-card-date">חשוון תשפ"ה</span>
+            <span class="bulletin-card-category">שיר הצדיק</span>
+          </div>
+        </header>
+
+    <!-- Cards Grid -->
+    <div class="dhn-cards-grid">
+
+      <!-- Card 1: Arrival Times -->
+      <article class="dhn-card">
+        <div class="dhn-card-accent-bar" aria-hidden="true"></div>
+        <h3 class="dhn-card-title">זמני הגעה מומלצים</h3>
+        <p class="dhn-card-desc">כדי להבטיח ביקור שקט ומכובד, מומלץ לתכנן את ההגעה בשעות הבוקר המוקדמות, ולהימנע מהגעה בשעות השיא של הצהריים.</p>
+        <ul class="dhn-list">
+          <li>הגעה מומלצת: בין השעות 07:00–10:00 בבוקר</li>
+          <li>ימי חמישי ושישי עמוסים יותר — הגיעו מוקדם</li>
+          <li>בימי ההילולה — צפו לעומס רב ותכננו בהתאם</li>
+          <li>עונת הקיץ: הגיעו לפני 09:00 להימנע מחום כבד</li>
+          <li>בחורף: בדקו מצב הכבישים בהרים לפני היציאה</li>
+          <li>ניתן לשהות בציון עד שעות אחר הצהריים המאוחרות</li>
+        </ul>
+      </article>
+
+      <!-- Card 2: Before You Go -->
+      <article class="dhn-card">
+        <div class="dhn-card-accent-bar" aria-hidden="true"></div>
+        <h3 class="dhn-card-title">מה חשוב לדעת לפני העלייה</h3>
+        <p class="dhn-card-desc">הכנה מוקדמת תסייע לכם להגיע בשלום ולהתחבר אל קדושת המקום בלב שלם ובנחת הנפש הראויה.</p>
+        <ul class="dhn-list">
+          <li>הדרך מ­מרקש לציון אורכת כשעתיים–שלוש בנסיעה</li>
+          <li>מומלץ לנסוע ברכב גבוה בשל מסלולי ההרים</li>
+          <li>הכינו מים, מזון קל ותרופות הכרחיות לדרך</li>
+          <li>אין תחנות דלק בסמוך לציון — מלאו מיכל לפני</li>
+          <li>שירות סלולרי מוגבל — הורידו מפות לשימוש אופליין</li>
+          <li>ניתן לשכור מדריך מקומי המכיר את האזור היטב</li>
+        </ul>
+      </article>
+
+      <!-- Card 3: Conduct & Respect -->
+      <article class="dhn-card">
+        <div class="dhn-card-accent-bar" aria-hidden="true"></div>
+        <h3 class="dhn-card-title">הנחיות כבוד המקום הקדוש</h3>
+        <p class="dhn-card-desc">ציון הצדיק הוא מקום קדושה ותפילה. שמירה על הנהגות הראויות מבטאת כבוד לרבי, לציון ולכלל המבקרים.</p>
+        <ul class="dhn-list">
+          <li>יש ללבוש לבוש צנוע — כיסוי ראש חובה לגברים</li>
+          <li>נשים מתבקשות לכסות כתפיים וברכיים</li>
+          <li>שמרו על שקט ודממה באזור הציון הפנימי</li>
+          <li>אין לצלם בתוך חדר הציון ללא רשות</li>
+          <li>אין להכניס מזון או משקאות לחדר הציון</li>
+          <li>השאירו את המקום נקי — אספו פסולת אחריכם</li>
+        </ul>
+      </article>
+
+    </div>
+
+    <!-- Bottom CTA text -->
+    <div class="dhn-footer-note">
+      <span class="dhn-footer-ornament" aria-hidden="true">✦</span>
+      <p class="dhn-footer-text">זקוקים לסיוע בתכנון הביקור? <strong>צרו עמנו קשר ונשמח להכווין אתכם בכל שאלה</strong> — כי כל עולה לרגל ראוי לביקור מכובד ובטוח.</p>
+      <span class="dhn-footer-ornament" aria-hidden="true">✦</span>
+    </div>
+  </div>
+
+  <!-- Bottom ornamental strip -->
+  <div class="dhn-ornament-strip dhn-ornament-bottom" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" width="100%" height="18" viewBox="0 0 1200 18" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,9 Q60,2 120,9 T240,9 T360,9 T480,9 T600,9 T720,9 T840,9 T960,9 T1080,9 T1200,9" stroke="rgba(216,155,43,0.28)" stroke-width="1.5" fill="none"></path>
+      <path d="M0,5 Q60,12 120,5 T240,5 T360,5 T480,5 T600,5 T720,5 T840,5 T960,5 T1080,5 T1200,5" stroke="rgba(216,155,43,0.14)" stroke-width="1" fill="none"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="directions-faq-section" data-layout-spec="מידע והגעה לציון רבי דוד ומשה זיע&quot;א-faq" dir="rtl">
+
+  <!-- Decorative top ornamental strip -->
+  <div class="faq-ornament-strip" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 900 18" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="18">
+      <rect x="0" y="8" width="900" height="1" fill="currentColor" opacity="0.18"></rect>
+      <circle cx="450" cy="9" r="4" fill="none" stroke="currentColor" stroke-width="1" opacity="0.28"></circle>
+      <circle cx="450" cy="9" r="7" fill="none" stroke="currentColor" stroke-width="0.7" opacity="0.15"></circle>
+      <line x1="0" y1="9" x2="420" y2="9" stroke="currentColor" stroke-width="0.8" opacity="0.18"></line>
+      <line x1="480" y1="9" x2="900" y2="9" stroke="currentColor" stroke-width="0.8" opacity="0.18"></line>
+      <polygon points="435,9 440,5 445,9 440,13" fill="currentColor" opacity="0.18"></polygon>
+      <polygon points="455,9 460,5 465,9 460,13" fill="currentColor" opacity="0.18"></polygon>
+    </svg>
+  </div>
+
+  <div class="faq-container">
+
+    <!-- Section Header -->
+    <header class="faq-header">
+      <h2 class="faq-title">שאלות נפוצות על הגעה לציון</h2>
+      <p class="faq-intro">ריכזנו עבורכם את השאלות הנפוצות ביותר מפי עולי הרגל והמבקרים בציון הקדוש של רבי דוד ומשה זיע"א. אם לא מצאתם תשובה לשאלתכם, אתם מוזמנים לפנות אלינו ישירות.</p>
+    </header>
+
+    <!-- Decorative flourish -->
+    <div class="faq-flourish" aria-hidden="true">
+      <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 220 12" xmlns="http://www.w3.org/2000/svg" width="220" height="12">
+        <path d="M0,6 Q27.5,0 55,6 T110,6 T165,6 T220,6" stroke="currentColor" stroke-width="1" fill="none" opacity="0.22"></path>
+        <circle cx="110" cy="6" r="2.5" fill="currentColor" opacity="0.22"></circle>
+      </svg>
+    </div>
+
+    <!-- FAQ Items -->
+    <div class="faq-list">
+
+      <article class="faq-item">
+        <h3 class="faq-question">כיצד מגיעים לציון רבי דוד ומשה זיע"א?</h3>
+        <p class="faq-answer">הציון ממוקם בכפר אימינתנוט שבהרי האטלס במרוקו, על הציר שבין מרקש לוורززאת. ניתן להגיע ברכב פרטי או בשכירת רכב ממרקש, כשהנסיעה אורכת כשעה וחצי עד שעתיים. קיימות גם אפשרויות להסעות מאורגנות מתוך מרקש דרך חברות תיירות יהודיות המתמחות בעלייה לרגל בצפון אפריקה.</p>
+        <div class="faq-divider" aria-hidden="true"></div>
+      </article>
+
+      <article class="faq-item">
+        <h3 class="faq-question">מהן שעות הביקור בציון?</h3>
+        <p class="faq-answer">הציון פתוח לביקור לאורך כל ימות השנה, בדרך כלל משעות הבוקר המוקדמות עד לשקיעת החמה. בתקופת ההילולא השנתית, הנערכת בל"ג בעומר, נהוג לקיים תפילות ממושכות ואירועים קהילתיים המושכים אלפי עולי רגל מרחבי העולם. מומלץ לתאם ביקור מראש עם הגבאים המקומיים, בפרט בתקופות שיא.</p>
+        <div class="faq-divider" aria-hidden="true"></div>
+      </article>
+
+      <article class="faq-item">
+        <h3 class="faq-question">האם יש צורך בהכנות מיוחדות לפני הביקור?</h3>
+        <p class="faq-answer">מומלץ להגיע בלבוש צנוע ומכובד, כיאה לאתר קדוש. נשים נוהגות לכסות את ראשן בכניסה לאוהל הציון. כדאי לקחת עמכם נרות לנר נשמה, מזון לסעודה ליד הציון, וכמובן סידור תפילה. כמו כן, מומלץ להצטייד במים ובמזון מספיק לדרך, שכן הכפר קטן ושירותי המסחר בו מוגבלים.</p>
+        <div class="faq-divider" aria-hidden="true"></div>
+      </article>
+
+      <article class="faq-item">
+        <h3 class="faq-question">מי היה רבי דוד ומשה זיע"א ומדוע חשובה עלייה לרגל לציונו?</h3>
+        <p class="faq-answer">רבי דוד ומשה זיע"א היה צדיק ומקובל יהודי שחי לפני כאלף וחמישים שנה בקרב קהילות יהודי האטלס. מסורת עממית ענפה מייחסת לו נסים ופלאות, ורבים מעידים כי תפילותיהם ליד ציונו נענו. עלייה לרגל לציונו נחשבת לאחת המרכזיות ביהדות מרוקו, ומדי שנה מגיעים לכאן יהודים ממרוקו, מישראל, מצרפת ומרחבי התפוצות כדי לבקש ישועה, להדליק נרות ולהתפלל.</p>
+        <div class="faq-divider" aria-hidden="true"></div>
+      </article>
+
+      <article class="faq-item">
+        <h3 class="faq-question">האם ניתן ללון באזור הציון?</h3>
+        <p class="faq-answer">בתקופת ההילולא קיימים אוהלי אירוח זמניים שמאפשרים לינה בסמוך לציון. בשאר ימות השנה, האפשרות הנוחה ביותר ללינה היא בעיר מרקש, שם ניתן למצוא מגוון רחב של בתי מלון ורייאדים. ישנם גם כפרי נופש קטנים לאורך הציר לוורזזאת, אם כי מומלץ לתאם מראש ולבדוק זמינות.</p>
+        <div class="faq-divider" aria-hidden="true"></div>
+      </article>
+
+      <article class="faq-item">
+        <h3 class="faq-question">כיצד ניתן להשתתף בהילולא גם מרחוק?</h3>
+        <p class="faq-answer">לאלו שאינם יכולים להגיע פיזית לציון, אתר זה מציע מגוון דרכים להתחבר לקדושת המקום: הדלקת נרות נשמה וירטואליים, השארת הודעה על לוח המסרים, צפייה בסרטוני הציון ובסיור הווירטואלי, ומעקב אחר שידורים חיים בתקופת ההילולא. כך ניתן להיות שותף לאווירת הקדושה ולחיזוק הקשר לצדיק גם ממרחק אלפי קילומטרים.</p>
+      </article>
+
+    </div>
+    <!-- End FAQ List -->
+
+    <!-- Decorative bottom flourish -->
+    <div class="faq-flourish faq-flourish-bottom" aria-hidden="true">
+      <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 220 12" xmlns="http://www.w3.org/2000/svg" width="220" height="12">
+        <path d="M0,6 Q27.5,0 55,6 T110,6 T165,6 T220,6" stroke="currentColor" stroke-width="1" fill="none" opacity="0.22"></path>
+        <circle cx="110" cy="6" r="2.5" fill="currentColor" opacity="0.22"></circle>
+      </svg>
+    </div>
+
+    <!-- CTA -->
+    <div class="faq-cta">
+      <p class="faq-cta-text">לא מצאתם תשובה לשאלתכם? <a href="/contact" class="faq-cta-link">צרו קשר עמנו</a> ונשמח לסייע.</p>
+    </div>
+
+  </div>
+  <!-- End Container -->
+
+</section>
+
+</main>
+  
+  
+
+
+
+<footer class="site-footer" dir="rtl"> <div class="footer-pattern-band"></div> <div class="footer-inner"> <div class="footer-grid"> <!-- Column 1: Company Info --> <div class="footer-col footer-col--brand"> <div class="footer-logo-wrap"> </div> <h2 class="footer-brand-name"><span class="footer-brand-star">✡</span> הצדיק רבי דוד ומשה זיע"א <span class="footer-brand-star">✡</span></h2> <p class="footer-brand-desc">אתר עלייה לרגל ומורשת יהודית מרוקאית — מדריך רוחני לציון הקדושים בהרי האטלס, לשימור זיכרון הקהילה ולחיזוק הקשר בין הדורות.</p> <div class="footer-ornament"><span></span><i class="fas fa-star-of-david" data-element-type="icon" data-element-id="icon-1778780630727-8j1s2b49h" data-icon-type="fontawesome"></i><span></span></div> </div> <!-- Column 2: Quick Links --> <div class="footer-col footer-col--links"> <h3 class="footer-heading">ניווט מהיר</h3> <ul class="footer-nav"><li><a href="/gallery"><i class="fas fa-images footer-nav-icon"></i>גלריה</a></li>
+<li><a href="/candles"><i class="fas fa-fire footer-nav-icon"></i>נרות נשמה</a></li>
+<li><a href="/additional-information">מידע נוסף</a></li>
+<li><a href="/directions"><i class="fas fa-map-marker-alt footer-nav-icon"></i>הגעה</a></li></ul> </div> <!-- Column 3: Contact --> <div class="footer-col footer-col--contact"> <h3 class="footer-heading">צור קשר</h3> <ul class="footer-contact"> <li> <span class="contact-icon"><i class="fas fa-envelope"></i></span> <span class="contact-text"><a href="mailto:rabbidavidoumoshe@gmail.com">rabbidavidoumoshe@gmail.com</a></span> </li> <li> <span class="contact-icon"><i class="fas fa-phone"></i></span> <span class="contact-text"><a href="tel:+972506841740">+972506841740</a></span> </li> <li><a href="/" style="display:flex;align-items:flex-start;gap:inherit"><span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span> <span class="contact-text">8C3J5F68+X9, Timzrite, morocco</span></a></li> </ul> </div> <!-- Column 4: Social --> <div class="footer-col footer-col--social"> <h3 class="footer-heading">עקבו אחרינו</h3> <div class="footer-social"> <a href="https://facebook.com/groups/tzadikrabbidavidoumoshe" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a> <a href="https://instagram.com/rabbidavidoumoshe" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="12" height="12" viewBox="0 0 256 256" data-icon="skill-icons:instagram" data-iconify="skill-icons:instagram" data-element-type="icon" data-element-id="icon-1778780630727-b28xw71fz" data-icon-type="iconify" data-size-adjusted="true" style="display: inline-block; vertical-align: -0.125em; color: rgb(247, 241, 231); width: 12px; height: 12px;" class="iconify iconify--skill-icons"><g fill="none"><rect width="256" height="256" fill="url(#IconifyId19e2796671072c6840)" rx="60"></rect><rect width="256" height="256" fill="url(#IconifyId19e2796671072c6841)" rx="60"></rect><path fill="#fff" d="M128.009 28c-27.158 0-30.567.119-41.233.604c-10.646.488-17.913 2.173-24.271 4.646c-6.578 2.554-12.157 5.971-17.715 11.531c-5.563 5.559-8.98 11.138-11.542 17.713c-2.48 6.36-4.167 13.63-4.646 24.271c-.477 10.667-.602 14.077-.602 41.236s.12 30.557.604 41.223c.49 10.646 2.175 17.913 4.646 24.271c2.556 6.578 5.973 12.157 11.533 17.715c5.557 5.563 11.136 8.988 17.709 11.542c6.363 2.473 13.631 4.158 24.275 4.646c10.667.485 14.073.604 41.23.604c27.161 0 30.559-.119 41.225-.604c10.646-.488 17.921-2.173 24.284-4.646c6.575-2.554 12.146-5.979 17.702-11.542c5.563-5.558 8.979-11.137 11.542-17.712c2.458-6.361 4.146-13.63 4.646-24.272c.479-10.666.604-14.066.604-41.225s-.125-30.567-.604-41.234c-.5-10.646-2.188-17.912-4.646-24.27c-2.563-6.578-5.979-12.157-11.542-17.716c-5.562-5.562-11.125-8.979-17.708-11.53c-6.375-2.474-13.646-4.16-24.292-4.647c-10.667-.485-14.063-.604-41.23-.604zm-8.971 18.021c2.663-.004 5.634 0 8.971 0c26.701 0 29.865.096 40.409.575c9.75.446 15.042 2.075 18.567 3.444c4.667 1.812 7.994 3.979 11.492 7.48c3.5 3.5 5.666 6.833 7.483 11.5c1.369 3.52 3 8.812 3.444 18.562c.479 10.542.583 13.708.583 40.396s-.104 29.855-.583 40.396c-.446 9.75-2.075 15.042-3.444 18.563c-1.812 4.667-3.983 7.99-7.483 11.488c-3.5 3.5-6.823 5.666-11.492 7.479c-3.521 1.375-8.817 3-18.567 3.446c-10.542.479-13.708.583-40.409.583c-26.702 0-29.867-.104-40.408-.583c-9.75-.45-15.042-2.079-18.57-3.448c-4.666-1.813-8-3.979-11.5-7.479s-5.666-6.825-7.483-11.494c-1.369-3.521-3-8.813-3.444-18.563c-.479-10.542-.575-13.708-.575-40.413s.096-29.854.575-40.396c.446-9.75 2.075-15.042 3.444-18.567c1.813-4.667 3.983-8 7.484-11.5s6.833-5.667 11.5-7.483c3.525-1.375 8.819-3 18.569-3.448c9.225-.417 12.8-.542 31.437-.563zm62.351 16.604c-6.625 0-12 5.37-12 11.996c0 6.625 5.375 12 12 12s12-5.375 12-12s-5.375-12-12-12zm-53.38 14.021c-28.36 0-51.354 22.994-51.354 51.355s22.994 51.344 51.354 51.344c28.361 0 51.347-22.983 51.347-51.344c0-28.36-22.988-51.355-51.349-51.355zm0 18.021c18.409 0 33.334 14.923 33.334 33.334c0 18.409-14.925 33.334-33.334 33.334s-33.333-14.925-33.333-33.334c0-18.411 14.923-33.334 33.333-33.334"></path><defs><radialGradient id="IconifyId19e2796671072c6840" cx="0" cy="0" r="1" gradientTransform="matrix(0 -253.715 235.975 0 68 275.717)" gradientUnits="userSpaceOnUse"><stop stop-color="#fd5"></stop><stop offset=".1" stop-color="#fd5"></stop><stop offset=".5" stop-color="#ff543e"></stop><stop offset="1" stop-color="#c837ab"></stop></radialGradient><radialGradient id="IconifyId19e2796671072c6841" cx="0" cy="0" r="1" gradientTransform="rotate(78.68 -32.69 -16.937)scale(113.412 467.488)" gradientUnits="userSpaceOnUse"><stop stop-color="#3771c8"></stop><stop offset=".128" stop-color="#3771c8"></stop><stop offset="1" stop-color="#60f" stop-opacity="0"></stop></radialGradient></defs></g></svg></a> <a href="https://wa.me/972506841740" aria-label="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="12" height="12" viewBox="0 0 256 258" data-icon="logos:whatsapp-icon" data-iconify="logos:whatsapp-icon" data-element-type="icon" data-element-id="icon-1778780630727-1m8xcjqn2" data-icon-type="iconify" data-size-adjusted="true" style="width: 12px !important; height: 12px !important; display: inline-block; vertical-align: -0.125em; color: rgb(247, 241, 231);" class="iconify iconify--logos"><defs><linearGradient id="IconifyId19e2797701ea1b8ee0" x1="50%" x2="50%" y1="100%" y2="0%"><stop offset="0%" stop-color="#1faf38"></stop><stop offset="100%" stop-color="#60d669"></stop></linearGradient><linearGradient id="IconifyId19e2797701ea1b8ee1" x1="50%" x2="50%" y1="100%" y2="0%"><stop offset="0%" stop-color="#f9f9f9"></stop><stop offset="100%" stop-color="#fff"></stop></linearGradient></defs><path fill="url(#IconifyId19e2797701ea1b8ee0)" d="M5.463 127.456c-.006 21.677 5.658 42.843 16.428 61.499L4.433 252.697l65.232-17.104a123 123 0 0 0 58.8 14.97h.054c67.815 0 123.018-55.183 123.047-123.01c.013-32.867-12.775-63.773-36.009-87.025c-23.23-23.25-54.125-36.061-87.043-36.076c-67.823 0-123.022 55.18-123.05 123.004"></path><path fill="url(#IconifyId19e2797701ea1b8ee1)" d="M1.07 127.416c-.007 22.457 5.86 44.38 17.014 63.704L0 257.147l67.571-17.717c18.618 10.151 39.58 15.503 60.91 15.511h.055c70.248 0 127.434-57.168 127.464-127.423c.012-34.048-13.236-66.065-37.3-90.15C194.633 13.286 162.633.014 128.536 0C58.276 0 1.099 57.16 1.071 127.416m40.24 60.376l-2.523-4.005c-10.606-16.864-16.204-36.352-16.196-56.363C22.614 69.029 70.138 21.52 128.576 21.52c28.3.012 54.896 11.044 74.9 31.06c20.003 20.018 31.01 46.628 31.003 74.93c-.026 58.395-47.551 105.91-105.943 105.91h-.042c-19.013-.01-37.66-5.116-53.922-14.765l-3.87-2.295l-40.098 10.513z"></path><path fill="#fff" d="M96.678 74.148c-2.386-5.303-4.897-5.41-7.166-5.503c-1.858-.08-3.982-.074-6.104-.074c-2.124 0-5.575.799-8.492 3.984c-2.92 3.188-11.148 10.892-11.148 26.561s11.413 30.813 13.004 32.94c1.593 2.123 22.033 35.307 54.405 48.073c26.904 10.609 32.379 8.499 38.218 7.967c5.84-.53 18.844-7.702 21.497-15.139c2.655-7.436 2.655-13.81 1.859-15.142c-.796-1.327-2.92-2.124-6.105-3.716s-18.844-9.298-21.763-10.361c-2.92-1.062-5.043-1.592-7.167 1.597c-2.124 3.184-8.223 10.356-10.082 12.48c-1.857 2.129-3.716 2.394-6.9.801c-3.187-1.598-13.444-4.957-25.613-15.806c-9.468-8.442-15.86-18.867-17.718-22.056c-1.858-3.184-.199-4.91 1.398-6.497c1.431-1.427 3.186-3.719 4.78-5.578c1.588-1.86 2.118-3.187 3.18-5.311c1.063-2.126.531-3.986-.264-5.579c-.798-1.593-6.987-17.343-9.819-23.64"></path></svg></a> </div> <div class="footer-quote"> <p>"וְצַדִּיקִים יִרְאוּ וְיִשְׂמָחוּ"</p> </div> </div> </div> </div> <div class="footer-pattern-band footer-pattern-band--bottom"></div> <!-- Bottom Bar --> <div class="footer-bottom"> <div class="footer-bottom-inner"> <p class="footer-copyright">© 2026 הצדיק רבי דוד ומשה זיע"א . כל הזכויות שמורות.</p> <div class="footer-legal"> <a href="/privacy">מדיניות פרטיות</a> <span class="footer-legal-sep">·</span> <a href="/terms">תנאי שימוש</a> <span class="footer-legal-sep">·</span> <a href="/accessibility">נגישות</a> <span class="footer-legal-sep">·</span> <a href="https://zappy5.com" target="_blank" class="zappy-attribution">נוצר באמצעות Zappy</a> </div> </div> </div> </footer>
+  
+  <a href="https://wa.me/972506841740" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+
+    <script>
+    (function(){
+      var _applied=false;
+      function _isHeroBg(w){var img=w.querySelector('img');if(img&&(img.getAttribute('data-hero-bg')==='true'||img.getAttribute('data-hero-background')==='true'))return true;var p=(w.style.position||'').replace(/\s*!important\s*/g,'').trim();var ww=(w.style.width||'').replace(/\s*!important\s*/g,'').trim();var hh=(w.style.height||'').replace(/\s*!important\s*/g,'').trim();return p==='absolute'&&ww==='100%'&&hh==='100%';}
+      function fixDesktopWrappers(){
+        // No-op: desktop wrapper restoration is handled by ZAPPY_PUBLISHED_ZOOM_WRAPPER_RUNTIME
+        // in script.js (restoreWrapperDimensions). The old inflation logic here was expanding
+        // small wrappers (e.g. 139px logo wrappers) to their parent width, conflicting with
+        // the correct stored dimensions.
+      }
+      function _parsePos(s){var x=50,y=50;try{var m=(s||'').match(/(-?d+(?:.d+)?)%s+(-?d+(?:.d+)?)%/);if(m){x=parseFloat(m[1]);y=parseFloat(m[2]);}}catch(e){}if(!isFinite(x))x=50;if(!isFinite(y))y=50;return{x:Math.max(0,Math.min(100,x)),y:Math.max(0,Math.min(100,y))};}
+      function _coverPct(iA,cA){if(!isFinite(iA)||iA<=0||!isFinite(cA)||cA<=0)return{w:100,h:100};if(iA>=cA)return{w:(iA/cA)*100,h:100};return{w:100,h:(cA/iA)*100};}
+      function applyMobile(){
+        if(_applied)return;_applied=true;
+        document.querySelectorAll('[data-zappy-zoom-wrapper="true"]').forEach(function(w){
+          if(_isHeroBg(w))return;
+          var cw=w.style.getPropertyValue('width');
+          var _sW=parseFloat(w.getAttribute('data-zappy-zoom-wrapper-width'))||0;
+          var _sH=parseFloat(w.getAttribute('data-zappy-zoom-wrapper-height'))||0;
+          if(!cw&&!(_sW>0&&_sH>0))return;
+          if(!w._zappyDesktop)w._zappyDesktop={wStyle:w.getAttribute('style')};
+          var img=w.querySelector('img');
+          if(!img)return;
+          if(!img._zappyDesktop)img._zappyDesktop={src:img.getAttribute('src'),style:img.getAttribute('style')};
+          var mobileZoomStr=img.getAttribute('data-zappy-mobile-zoom');
+          var mobileZoom=parseFloat(mobileZoomStr);
+          var mobileSrc=img.getAttribute('data-zappy-mobile-src');
+          var mobilePos=img.getAttribute('data-zappy-mobile-object-position');
+          var parentOvf=w.parentElement?((w.parentElement.style.overflow||'')+(window.getComputedStyle(w.parentElement).overflow||'')).trim():'';
+          var inConstrainedParent=parentOvf.indexOf('hidden')!==-1||parentOvf.indexOf('clip')!==-1;
+          if(inConstrainedParent){
+            w.style.setProperty('max-width','100%','important');
+          }else{
+            w.style.setProperty('width','100%','important');
+            w.style.setProperty('max-width','100%','important');
+          }
+          if(mobileSrc)img.src=mobileSrc;
+          function _applyZoomCrop(_img,_w,_ePos,_eZoom){
+            var rect=_w.getBoundingClientRect();
+            if(!rect||!rect.width||!rect.height)return;
+            var nW=_img.naturalWidth||0,nH=_img.naturalHeight||0;
+            if(!(nW>0&&nH>0))return;
+            var iA=nW/nH,cA=rect.width/rect.height;
+            var cv=_coverPct(iA,cA);
+            var wP=100,hP=100;
+            if(_eZoom>=1){wP=cv.w*_eZoom;hP=cv.h*_eZoom;}
+            else{var t2=(_eZoom-0.5)/0.5;if(!isFinite(t2))t2=0;t2=Math.max(0,Math.min(1,t2));wP=100+t2*(cv.w-100);hP=100+t2*(cv.h-100);}
+            var p2=_parsePos(_ePos);
+            var lP=(100-wP)*(p2.x/100);
+            var tP=(100-hP)*(p2.y/100);
+            _img.style.setProperty('position','absolute','important');
+            _img.style.setProperty('left',lP+'%','important');
+            _img.style.setProperty('top',tP+'%','important');
+            _img.style.setProperty('width',wP+'%','important');
+            _img.style.setProperty('height',hP+'%','important');
+            _img.style.setProperty('max-width','none','important');
+            _img.style.setProperty('max-height','none','important');
+            _img.style.setProperty('display','block','important');
+            _img.style.setProperty('object-fit',_eZoom<1?'fill':'cover','important');
+            _img.style.setProperty('transform','none','important');
+            _img.style.setProperty('margin','0','important');
+          }
+          if(_sW>0&&_sH>0){
+            var effZoom=(isFinite(mobileZoom)&&mobileZoom>0)?mobileZoom:(parseFloat(img.getAttribute('data-zappy-zoom'))||1);
+            var effPos=mobilePos||img.getAttribute('data-zappy-object-position')||img.style.objectPosition||'50% 50%';
+            w.style.setProperty('overflow','hidden','important');
+            w.style.setProperty('position','relative','important');
+            w.style.setProperty('width','100%','important');
+            w.style.setProperty('max-width','100%','important');
+            if(_sW>0&&_sH>0){w.style.setProperty('padding-bottom','0','important');w.style.setProperty('aspect-ratio',_sW+'/'+_sH,'important');w.style.setProperty('height','auto','important');}
+            _applyZoomCrop(img,w,effPos,effZoom);
+            if(!(img.complete&&img.naturalWidth>0)){
+              (function(_i,_w2,_p,_z){_i.addEventListener('load',function _ol(){_i.removeEventListener('load',_ol);try{_applyZoomCrop(_i,_w2,_p,_z);}catch(e){}});
+              })(img,w,effPos,effZoom);
+            }
+          }else{
+            if(!inConstrainedParent)w.style.setProperty('height','auto','important');
+            img.style.setProperty('position','relative','important');
+            img.style.setProperty('width','100%','important');
+            img.style.setProperty('height','auto','important');
+            img.style.setProperty('max-width','100%','important');
+            img.style.setProperty('max-height',inConstrainedParent?'none':'400px','important');
+            img.style.setProperty('object-fit','cover','important');
+            img.style.setProperty('left','0','important');
+            img.style.setProperty('top','0','important');
+            img.style.setProperty('transform','none','important');
+          }
+        });
+        document.querySelectorAll('img[data-zappy-mobile-src],img[data-zappy-mobile-object-position],img[data-zappy-mobile-zoom]').forEach(function(img){
+          var zw=img.closest('[data-zappy-zoom-wrapper="true"]');
+          if(zw&&!_isHeroBg(zw))return;
+          if(!img._zappyDesktop)img._zappyDesktop={src:img.getAttribute('src'),style:img.getAttribute('style')};
+          var mobileSrc=img.getAttribute('data-zappy-mobile-src');
+          var mobilePos=img.getAttribute('data-zappy-mobile-object-position');
+          var mobileZoom=parseFloat(img.getAttribute('data-zappy-mobile-zoom'));
+          if(mobileSrc)img.src=mobileSrc;
+          if(mobilePos)img.style.setProperty('object-position',mobilePos,'important');
+          if(mobileZoom>1){
+            img.style.setProperty('transform','scale('+mobileZoom+')','important');
+            img.style.setProperty('transform-origin',mobilePos||'50% 50%','important');
+            var p=img.parentElement;
+            if(p)p.style.setProperty('overflow','hidden','important');
+          }
+        });
+      }
+      function revertDesktop(){
+        if(!_applied)return;_applied=false;
+        document.querySelectorAll('[data-zappy-zoom-wrapper="true"]').forEach(function(w){
+          if(w._zappyDesktop&&w._zappyDesktop.wStyle!=null){w.setAttribute('style',w._zappyDesktop.wStyle);}
+          var img=w.querySelector('img');
+          if(img&&img._zappyDesktop){
+            if(img._zappyDesktop.src!=null)img.setAttribute('src',img._zappyDesktop.src);
+            if(img._zappyDesktop.style!=null)img.setAttribute('style',img._zappyDesktop.style);
+            else img.removeAttribute('style');
+          }
+        });
+        document.querySelectorAll('img[data-zappy-mobile-src],img[data-zappy-mobile-object-position],img[data-zappy-mobile-zoom]').forEach(function(img){
+          var zw=img.closest('[data-zappy-zoom-wrapper="true"]');
+          if(zw&&!_isHeroBg(zw))return;
+          if(img._zappyDesktop){
+            if(img._zappyDesktop.src!=null)img.setAttribute('src',img._zappyDesktop.src);
+            if(img._zappyDesktop.style!=null)img.setAttribute('style',img._zappyDesktop.style);
+            else img.removeAttribute('style');
+          }
+        });
+        _fixHeroBgWrappers();
+        fixDesktopWrappers();
+      }
+      function _fixHeroBgWrappers(){var isMob=window.innerWidth<=768;document.querySelectorAll('[data-zappy-zoom-wrapper="true"]').forEach(function(w){if(!_isHeroBg(w))return;w.style.setProperty('position','absolute','important');w.style.setProperty('top','0','important');w.style.setProperty('left','0','important');w.style.setProperty('width','100%','important');w.style.setProperty('height','100%','important');w.style.setProperty('max-width','none','important');w.style.setProperty('overflow','hidden','important');w.setAttribute('data-zappy-zoom-wrapper-width-mode','full');var img=w.querySelector('img');if(img){img.style.setProperty('width','100%','important');img.style.setProperty('height','100%','important');img.style.setProperty('object-fit','cover','important');img.style.setProperty('position','relative','important');img.style.setProperty('top','0','important');img.style.setProperty('left','0','important');img.style.setProperty('max-width','none','important');img.style.setProperty('max-height','none','important');img.style.setProperty('display','block','important');if(isMob){var mSrc=img.getAttribute('data-zappy-mobile-src');var mPos=img.getAttribute('data-zappy-mobile-object-position');var mZoom=parseFloat(img.getAttribute('data-zappy-mobile-zoom'));if(mSrc){if(!img._zappyDesktop)img._zappyDesktop={src:img.getAttribute('src'),style:img.getAttribute('style')};img.src=mSrc;}if(mPos)img.style.setProperty('object-position',mPos,'important');if(mZoom>1){img.style.setProperty('transform','scale('+mZoom+')','important');img.style.setProperty('transform-origin',mPos||'50% 50%','important');}}}});}
+      function init(){
+        _fixHeroBgWrappers();
+        var mq=window.matchMedia('(max-width:768px)');
+        function onChange(e){if(e.matches)applyMobile();else revertDesktop();}
+        if(mq.matches)applyMobile();
+        else fixDesktopWrappers();
+        try{mq.addEventListener('change',onChange);}catch(e){mq.addListener(onChange);}
+      }
+      if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
+      else setTimeout(init,50);
+    })();
+    </script>
+</body>
+</html>

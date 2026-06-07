@@ -1,0 +1,1854 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>Generated Website</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: 'bdb690bc-9c36-4110-b9de-d9903ca6fbec',
+    apiUrl: 'https://qaapi.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <style id="zappy-cta-mobile-style">
+            /* Hide CTA list item on desktop (tablets and up) */
+            @media (min-width: 769px) {
+              .nav-cta-item-mobile {
+                display: none !important;
+              }
+            }
+            /* Show CTA list item on mobile */
+            @media (max-width: 768px) {
+              .nav-cta-item-mobile {
+                display: list-item !important;
+              }
+            }
+          </style>
+        
+          <style id="zappy-nested-menu-style">
+            /* Desktop only: vertically center nav items */
+            @media (min-width: 769px) {
+              .nav-menu,
+              #navMenu {
+                align-items: center !important;
+              }
+            }
+            
+            /* Menu Group styling (non-clickable parent) - TOP LEVEL ONLY with ultra-specific selector */
+            .nav-menu > li > .menu-group-title,
+            #navMenu > li > .menu-group-title {
+              display: inline-block !important;
+              padding: 0.5rem 1rem !important;
+              color: var(--nav-color) !important;
+              font-weight: 500 !important;
+              line-height: 1.7 !important;
+              cursor: default !important;
+              user-select: none !important;
+              vertical-align: middle !important;
+              text-decoration: none !important;
+              margin: 0 !important;
+              transition: color 0.3s ease !important;
+            }
+            
+            .nav-menu > li > .menu-group-title:hover,
+            #navMenu > li > .menu-group-title:hover {
+              color: var(--nav-hover-color) !important;
+            }
+            
+            /* Desktop: show submenu on Menu Group hover */
+            li:has(.menu-group-title):hover > .sub-menu {
+              opacity: 1 !important;
+              visibility: visible !important;
+              transform: translateY(0) !important;
+              pointer-events: auto !important; /* Enable interaction when hovering */
+            }
+            
+            /* Hide menu items marked as hidden (overrides hover states) */
+            .zappy-hidden-menu-item,
+            li:has(.menu-group-title):hover > .sub-menu .zappy-hidden-menu-item {
+              display: none !important;
+              opacity: 0 !important;
+              visibility: hidden !important;
+              pointer-events: none !important;
+            }
+            
+            /* Keep submenu visible when hovering over the submenu itself */
+            .sub-menu:hover {
+              opacity: 1 !important;
+              visibility: visible !important;
+              pointer-events: auto !important;
+            }
+            
+            /* Nested dropdown menu styles - using more specific selectors */
+            .nav-menu .sub-menu,
+            nav .sub-menu,
+            .navbar .sub-menu {
+              display: block !important; /* Ensure submenu is in the DOM */
+              position: absolute !important;
+              top: 100%;
+              left: 0;
+              right: auto;
+              min-width: 200px;
+              background: white;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+              border-radius: 8px;
+              padding: 8px 0;
+              margin-top: 0px; /* Remove gap to prevent hover loss */
+              opacity: 0 !important;
+              visibility: hidden !important;
+              transform: translateY(-10px);
+              transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+              z-index: 1000;
+              list-style: none;
+              pointer-events: none; /* Prevent interaction when hidden */
+            }
+            
+            /* RTL (Hebrew/Arabic) submenu positioning - align to right instead of left */
+            [dir="rtl"] .nav-menu .sub-menu,
+            [dir="rtl"] nav .sub-menu,
+            [dir="rtl"] .navbar .sub-menu,
+            html[lang="he"] .nav-menu .sub-menu,
+            html[lang="he"] nav .sub-menu,
+            html[lang="he"] .navbar .sub-menu,
+            html[lang="ar"] .nav-menu .sub-menu,
+            html[lang="ar"] nav .sub-menu,
+            html[lang="ar"] .navbar .sub-menu {
+              left: auto;
+              right: 0;
+            }
+            
+            /* Show submenu on parent hover - more specific selectors */
+            .nav-menu li:hover > .sub-menu,
+            nav li:hover > .sub-menu,
+            .navbar li:hover > .sub-menu {
+              opacity: 1 !important;
+              visibility: visible !important;
+              transform: translateY(0) !important;
+              pointer-events: auto !important; /* Enable interaction when visible */
+            }
+            
+            /* Parent item must be relatively positioned */
+            .nav-menu li:has(.sub-menu),
+            nav li:has(.sub-menu),
+            .navbar li:has(.sub-menu) {
+              position: relative;
+            }
+            
+            /* Style for submenu items */
+            .sub-menu li {
+              list-style: none;
+              margin: 0;
+              padding: 0;
+            }
+            
+            .sub-menu a,
+            .sub-menu .menu-group-title {
+              display: block !important;
+              padding: 10px 12px !important;
+              color: #333 !important;
+              font-weight: 600 !important;
+              text-decoration: none;
+              transition: background-color 0.2s;
+              white-space: nowrap;
+              cursor: default;
+            }
+            
+            .sub-menu a:hover {
+              background-color: #f5f5f5;
+            }
+            
+            /* CRITICAL: Override submenu styles for TOP-LEVEL Menu Groups only - must come AFTER submenu styles */
+            .nav-menu > li > .menu-group-title,
+            #navMenu > li > .menu-group-title {
+              display: inline-block !important;
+              padding: 0.5rem 1rem !important;
+              color: var(--nav-color) !important;
+              font-weight: 500 !important;
+              line-height: 1.7 !important;
+              cursor: default !important;
+              user-select: none !important;
+              vertical-align: middle !important;
+              text-decoration: none !important;
+              margin: 0 !important;
+              transition: color 0.3s ease !important;
+            }
+            
+            .nav-menu > li > .menu-group-title:hover,
+            #navMenu > li > .menu-group-title:hover {
+              color: var(--nav-hover-color) !important;
+              background-color: transparent !important;
+            }
+            
+            /* On mobile, show nested menus as expandable accordion */
+            @media (max-width: 768px) {
+              /* Mobile submenu styling */
+              .nav-menu .sub-menu,
+              nav .sub-menu,
+              .navbar .sub-menu {
+                position: static !important;
+                transform: none !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                margin-top: 0 !important;
+                max-height: 0;
+                overflow: hidden;
+                opacity: 0;
+                visibility: hidden;
+                transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, padding 0.3s ease;
+                padding: 0 !important;
+                border-radius: 0 !important;
+              }
+              
+              /* Expanded state — no internal scroll; parent navMenu scrolls */
+              .sub-menu.mobile-expanded {
+                max-height: none !important;
+                overflow-y: visible !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                padding: 8px 0 8px 16px !important;
+              }
+              
+              /* RTL padding adjustment */
+              [dir="rtl"] .sub-menu.mobile-expanded,
+              html[lang="he"] .sub-menu.mobile-expanded,
+              html[lang="ar"] .sub-menu.mobile-expanded {
+                padding: 8px 16px 8px 0 !important;
+              }
+              
+              /* Disable hover behavior on mobile */
+              .nav-menu li:hover > .sub-menu,
+              nav li:hover > .sub-menu,
+              .navbar li:hover > .sub-menu {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+              }
+              
+              /* Enable visibility for expanded submenus */
+              .nav-menu li > .sub-menu.mobile-expanded,
+              nav li > .sub-menu.mobile-expanded,
+              .navbar li > .sub-menu.mobile-expanded {
+                opacity: 1 !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
+              }
+              
+              .sub-menu a {
+                padding: 10px 0 !important;
+                display: block !important;
+                font-size: 14px !important;
+                white-space: normal !important;
+              }
+              
+              .sub-menu a:hover {
+                background-color: transparent !important;
+              }
+              
+              /* Parent item wrapper - flex layout with relative positioning for absolute toggle */
+              .nav-menu li:has(.sub-menu),
+              nav li:has(.sub-menu),
+              .navbar li:has(.sub-menu) {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                align-items: center !important;
+                position: relative !important;
+                min-height: 44px !important;
+              }
+              
+              /* Parent link - takes full width since toggle is absolute (not a flex child) */
+              .nav-menu li:has(.sub-menu) > a,
+              nav li:has(.sub-menu) > a,
+              .navbar li:has(.sub-menu) > a,
+              .nav-menu > li > .menu-group-title,
+              #navMenu > li > .menu-group-title {
+                flex: 1 !important;
+                min-width: 0 !important;
+              }
+              
+              /* Normalize menu-group-title in mobile nav to match link alignment */
+              .nav-menu > li > .menu-group-title,
+              #navMenu > li > .menu-group-title {
+                padding: 0 !important;
+                line-height: inherit !important;
+              }
+              
+              /* Submenu takes full width below parent */
+              .nav-menu li:has(.sub-menu) > .sub-menu,
+              nav li:has(.sub-menu) > .sub-menu,
+              .navbar li:has(.sub-menu) > .sub-menu {
+                flex-basis: 100% !important;
+                width: 100% !important;
+              }
+              
+              /* HIDE EXISTING CHEVRONS/ARROWS from cloned sites to prevent duplicates */
+              .nav-menu li:has(.sub-menu) > a .fa-chevron-down,
+              .nav-menu li:has(.sub-menu) > a .fa-angle-down,
+              .nav-menu li:has(.sub-menu) > a [class*="chevron"],
+              .nav-menu li:has(.sub-menu) > a [class*="arrow"],
+              nav li:has(.sub-menu) > a [class*="chevron"],
+              nav li:has(.sub-menu) > a [class*="arrow"],
+              #navMenu li:has(.sub-menu) > a [class*="chevron"],
+              #navMenu li:has(.sub-menu) > a [class*="arrow"] {
+                display: none !important;
+                visibility: hidden !important;
+              }
+              
+              /* Toggle arrow button - flex child that stretches to match nav-link height */
+              .mobile-submenu-toggle {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 44px !important;
+                height: auto !important;
+                background: transparent !important;
+                border: none !important;
+                cursor: pointer !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                position: static !important;
+                flex-shrink: 0 !important;
+                align-self: stretch !important;
+                z-index: 2 !important;
+                -webkit-tap-highlight-color: transparent;
+              }
+              
+              .mobile-submenu-toggle::after {
+                content: '' !important;
+                display: block !important;
+                width: 0 !important;
+                height: 0 !important;
+                border-left: 6px solid transparent !important;
+                border-right: 6px solid transparent !important;
+                border-top: 7px solid currentColor !important;
+                transition: transform 0.3s ease !important;
+              }
+              
+              /* Rotate arrow when expanded */
+              .mobile-submenu-toggle.expanded::after {
+                transform: rotate(180deg) !important;
+              }
+            }
+            
+            /* Hide toggle button on desktop */
+            @media (min-width: 769px) {
+              .mobile-submenu-toggle {
+                display: none !important;
+              }
+            }
+          </style>
+          
+          <script id="zappy-mobile-menu-script">
+            // Mobile menu toggle for nested submenus (including Menu Groups)
+            // Uses separate toggle button - link navigates, arrow toggles submenu
+            (function() {
+              function initMobileMenuToggles() {
+                // Only run on mobile
+                if (window.innerWidth > 768) {
+                  // Remove any toggle buttons on desktop
+                  document.querySelectorAll('.mobile-submenu-toggle').forEach(btn => btn.remove());
+                  document.querySelectorAll('.sub-menu.mobile-expanded').forEach(menu => {
+                    menu.classList.remove('mobile-expanded');
+                  });
+                  console.log('[MOBILE MENU] Desktop mode - cleanup done');
+                  return;
+                }
+                
+                console.log('[MOBILE MENU] Initializing mobile menu toggles...');
+                
+                // Find all parent menu items (items with .sub-menu)
+                const menuItemsWithSubmenus = document.querySelectorAll(
+                  '.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)'
+                );
+                
+                console.log('[MOBILE MENU] Found', menuItemsWithSubmenus.length, 'items with submenus');
+                
+                menuItemsWithSubmenus.forEach(function(li) {
+                  // Skip if already has toggle button
+                  if (li.querySelector('.mobile-submenu-toggle')) {
+                    return;
+                  }
+                  
+                  const submenu = li.querySelector('.sub-menu');
+                  const parentLink = li.querySelector(':scope > a') || li.querySelector(':scope > .menu-group-title');
+                  
+                  if (!submenu || !parentLink) return;
+                  
+                  // Create toggle button
+                  const toggleBtn = document.createElement('button');
+                  toggleBtn.className = 'mobile-submenu-toggle';
+                  toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+                  toggleBtn.setAttribute('type', 'button');
+
+                  // Insert toggle button after the link
+                  parentLink.insertAdjacentElement('afterend', toggleBtn);
+                  
+                  console.log('[MOBILE MENU] Created toggle button for:', parentLink.textContent?.trim());
+                  
+                  // Handle toggle button click - only toggles submenu
+                  toggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const isExpanded = submenu.classList.contains('mobile-expanded');
+                    
+                    // Close all other submenus first
+                    document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+                      if (menu !== submenu) {
+                        menu.classList.remove('mobile-expanded');
+                        const otherToggle = menu.parentElement.querySelector('.mobile-submenu-toggle');
+                        if (otherToggle) otherToggle.classList.remove('expanded');
+                      }
+                    });
+                    
+                    // Toggle this submenu
+                    submenu.classList.toggle('mobile-expanded');
+                    toggleBtn.classList.toggle('expanded');
+                    
+                    console.log('[MOBILE MENU] Toggled submenu:', !isExpanded ? 'expanded' : 'collapsed');
+                  });
+                  
+                  // Parent link navigates normally - no preventDefault
+                });
+              }
+              
+              // Initialize on DOM load
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initMobileMenuToggles);
+              } else {
+                initMobileMenuToggles();
+              }
+              
+              // Re-initialize on window resize (but use debounce to avoid too many calls)
+              let resizeTimer;
+              window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(initMobileMenuToggles, 250);
+              });
+              
+              // Also initialize when mobile menu becomes visible
+              // This handles cases where the mobile menu is hidden initially
+              const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                  if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const target = mutation.target;
+                    if (target.classList.contains('active') || target.style.display !== 'none') {
+                      console.log('[MOBILE MENU] Mobile menu became visible, re-initializing...');
+                      setTimeout(initMobileMenuToggles, 100);
+                    }
+                  }
+                });
+              });
+              
+              // Observe mobile menu containers
+              const mobileMenus = document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu');
+              mobileMenus.forEach(function(menu) {
+                observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+              });
+            })();
+          </script>
+        
+<style data-zappy-section-v2-css="true">
+/* V2 Regenerated Section CSS */
+.home-bulletin-section {
+  direction: rtl;
+  position: relative;
+  background-color: #f2dfb8;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='140' height='140' fill='%23f2dfb8'/%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
+  color: var(--text-dark);
+  padding: 0 0 0 0;
+  font-family: 'Noto Serif', serif;
+  overflow: hidden;
+}
+
+.home-bulletin-section .bulletin-top-border,
+.home-bulletin-section .bulletin-bottom-border {
+  width: 100%;
+  line-height: 0;
+  display: block;
+}
+
+.home-bulletin-section .bulletin-top-border svg,
+.home-bulletin-section .bulletin-bottom-border svg {
+  display: block;
+  width: 100%;
+  height: 24px;
+}
+
+/* Container */
+.home-bulletin-section .bulletin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px 52px;
+}
+
+/* Header */
+.home-bulletin-section .bulletin-header {
+  text-align: center;
+  margin-bottom: 44px;
+  position: relative;
+}
+
+.home-bulletin-section .bulletin-ornament-line {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.home-bulletin-section .bulletin-subtitle-bar {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+  margin-bottom: 10px;
+}
+
+.home-bulletin-section .bulletin-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #7A1F2B;
+  letter-spacing: 0.03em;
+  margin: 0;
+  text-align: center;
+}
+
+.home-bulletin-section .bulletin-site-name {
+  font-family: 'Noto Serif', serif;
+  font-size: 14px;
+  color: var(--text-muted);
+  text-align: center;
+  margin: 6px 0 0 0;
+  letter-spacing: 0.04em;
+}
+
+/* Grid */
+.home-bulletin-section .bulletin-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  direction: rtl;
+}
+
+/* Card */
+.home-bulletin-section .bulletin-card {
+  position: relative;
+  background: linear-gradient(180deg, #fdf6e3 0%, #f5e6c6 100%);
+  border: 1.5px solid #d4b27a;
+  box-shadow: 0 8px 20px rgba(58,32,24,0.13), 0 2px 0 #d4b27a;
+  padding: 28px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.home-bulletin-section .bulletin-card:hover {
+  box-shadow: 0 16px 36px rgba(58,32,24,0.22), 0 2px 0 #d4b27a;
+  transform: translateY(-3px);
+}
+
+/* Corner decorations */
+.home-bulletin-section .bulletin-card-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.home-bulletin-section .bulletin-card-corner--tl {
+  top: -1px;
+  right: -1px;
+  border-top: 3px solid #D89B2B;
+  border-right: 3px solid #D89B2B;
+}
+
+.home-bulletin-section .bulletin-card-corner--tr {
+  top: -1px;
+  left: -1px;
+  border-top: 3px solid #D89B2B;
+  border-left: 3px solid #D89B2B;
+}
+
+.home-bulletin-section .bulletin-card-corner--bl {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 3px solid #D89B2B;
+  border-right: 3px solid #D89B2B;
+}
+
+.home-bulletin-section .bulletin-card-corner--br {
+  bottom: -1px;
+  left: -1px;
+  border-bottom: 3px solid #D89B2B;
+  border-left: 3px solid #D89B2B;
+}
+
+/* Card header */
+.home-bulletin-section .bulletin-card-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #d4b27a;
+  text-align: right;
+}
+
+.home-bulletin-section .bulletin-card-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  background: linear-gradient(135deg, #a72d16 0%, #7a180f 100%);
+  border: 1px solid #d4b27a;
+  color: #f8e8b8;
+  font-size: 15px;
+  box-shadow: 0 2px 6px rgba(143,31,18,0.22);
+  flex-shrink: 0;
+}
+
+.home-bulletin-section .bulletin-card-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  flex: 1;
+  text-align: right;
+}
+
+.home-bulletin-section .bulletin-card-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  direction: rtl;
+  text-align: right;
+}
+
+.home-bulletin-section .bulletin-card-category {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #7A1F2B;
+  letter-spacing: 0.03em;
+  text-align: right;
+}
+
+/* Card body */
+.home-bulletin-section .bulletin-card-body {
+  flex: 1;
+  text-align: right;
+}
+
+.home-bulletin-section .bulletin-card-body p {
+  font-family: 'Noto Serif', serif;
+  font-size: 16px;
+  line-height: 1.75;
+  color: #4b2718;
+  margin: 0 0 12px 0;
+  text-align: right;
+}
+
+/* Upload area */
+.home-bulletin-section .bulletin-upload-area {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 14px 18px;
+  border: 1.5px dashed #d4b27a;
+  background: rgba(212,178,122,0.1);
+  color: #7A1F2B;
+  font-family: 'Noto Serif', serif;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-align: center;
+}
+
+.home-bulletin-section .bulletin-upload-area:hover {
+  background: rgba(212,178,122,0.22);
+}
+
+.home-bulletin-section .bulletin-upload-area i {
+  font-size: 18px;
+  color: #D89B2B;
+}
+
+/* Card footer */
+.home-bulletin-section .bulletin-card-footer {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #d4b27a;
+  text-align: right;
+}
+
+.home-bulletin-section .bulletin-share-label {
+  font-family: 'Noto Serif', serif;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  text-align: right;
+}
+
+.home-bulletin-section .bulletin-share-btns {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.home-bulletin-section .bulletin-share-btn {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-family: 'Noto Serif', serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: opacity 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+
+.home-bulletin-section .bulletin-share-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+.home-bulletin-section .bulletin-share-btn--fb {
+  background: #1877F2;
+  color: #fff;
+  border: 1px solid #1565c0;
+}
+
+.home-bulletin-section .bulletin-share-btn--wa {
+  background: #25D366;
+  color: #fff;
+  border: 1px solid #1da851;
+}
+
+.home-bulletin-section .bulletin-share-btn--yt {
+  background: #FF0000;
+  color: #fff;
+  border: 1px solid #cc0000;
+}
+
+.home-bulletin-section .bulletin-share-btn i {
+  font-size: 13px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .home-bulletin-section .bulletin-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-bulletin-section .bulletin-container {
+    padding: 32px 16px 36px;
+  }
+
+  .home-bulletin-section .bulletin-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+  }
+
+  .home-bulletin-section .bulletin-title {
+    font-size: 26px;
+  }
+
+  .home-bulletin-section .bulletin-card {
+    padding: 20px 16px 16px;
+    min-height: auto;
+  }
+
+  .home-bulletin-section .bulletin-share-btns {
+    gap: 6px;
+  }
+
+  .home-bulletin-section .bulletin-share-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+}
+</style>
+
+
+
+<style data-zappy-section-v2-css="true">
+/* V2 Regenerated Section CSS */
+.prayer-At-Tzadiks-Grave-layout-section {
+  position: relative;
+  background-color: var(--bg-light);
+  background-image: 
+    radial-gradient(ellipse at 20% 20%, rgba(216, 155, 43, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(122, 31, 43, 0.05) 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='140' height='140' fill='%23f2dfb8'/%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
+  color: var(--text-dark);
+  padding: 80px 24px;
+  overflow: visible;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prayer-At-Tzadiks-Grave-layout-section__container {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+/* Main Manuscript Card */
+.prayer-At-Tzadiks-Grave-layout-section__card {
+  position: relative;
+  background-color: #FDF8EE;
+  border: 3px solid var(--accent);
+  box-shadow: 
+    0 8px 20px rgba(58, 32, 24, 0.18),
+    inset 0 0 60px rgba(216, 155, 43, 0.06),
+    inset 0 0 20px rgba(122, 31, 43, 0.03);
+  padding: 60px 48px;
+  z-index: 2;
+}
+
+/* Inner Ornamental Frame */
+.prayer-At-Tzadiks-Grave-layout-section__inner-frame {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  border: 1px dashed rgba(216, 155, 43, 0.4);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Corner Decorations */
+.prayer-At-Tzadiks-Grave-layout-section__corner {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.prayer-At-Tzadiks-Grave-layout-section__corner--top-right {
+  top: -10px;
+  right: -10px;
+}
+
+.prayer-At-Tzadiks-Grave-layout-section__corner--top-left {
+  top: -10px;
+  left: -10px;
+}
+
+.prayer-At-Tzadiks-Grave-layout-section__corner--bottom-right {
+  bottom: -10px;
+  right: -10px;
+}
+
+.prayer-At-Tzadiks-Grave-layout-section__corner--bottom-left {
+  bottom: -10px;
+  left: -10px;
+}
+
+.prayer-At-Tzadiks-Grave-layout-section__corner svg {
+  display: block;
+  color: var(--accent);
+}
+
+/* Header */
+.prayer-At-Tzadiks-Grave-layout-section__header {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.prayer-At-Tzadiks-Grave-layout-section__star-ornament {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.prayer-At-Tzadiks-Grave-layout-section__star-ornament svg {
+  display: block;
+  opacity: 0.8;
+}
+
+.prayer-At-Tzadiks-Grave-layout-section__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.3;
+  margin: 0 0 16px 0;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.prayer-At-Tzadiks-Grave-layout-section__divider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.prayer-At-Tzadiks-Grave-layout-section__divider svg {
+  display: block;
+}
+
+/* Content Area */
+.prayer-At-Tzadiks-Grave-layout-section__content-area {
+  position: relative;
+  z-index: 2;
+  text-align: right;
+  min-height: 300px;
+  background: rgba(253, 248, 238, 0.6);
+  border-top: 1px solid rgba(216, 155, 43, 0.25);
+  padding-top: 32px;
+}
+
+.prayer-At-Tzadiks-Grave-layout-section__text-placeholder {
+  padding: 16px 0;
+}
+
+.prayer-At-Tzadiks-Grave-layout-section__prayer-text {
+  font-family: 'Noto Serif', serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 2;
+  color: var(--text-dark);
+  text-align: right;
+  margin: 0 0 24px 0;
+  white-space: pre-line;
+}
+
+.prayer-At-Tzadiks-Grave-layout-section__prayer-instruction {
+  font-family: 'Noto Serif', serif;
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.8;
+  color: var(--text-muted);
+  text-align: center;
+  margin: 0;
+  padding: 16px 0;
+  border-top: 1px dashed rgba(216, 155, 43, 0.3);
+  border-bottom: 1px dashed rgba(216, 155, 43, 0.3);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .prayer-At-Tzadiks-Grave-layout-section {
+    padding: 100px 16px 40px;
+    align-items: flex-start;
+  }
+
+  .prayer-At-Tzadiks-Grave-layout-section__card {
+    padding: 40px 20px;
+  }
+
+  .prayer-At-Tzadiks-Grave-layout-section__title {
+    font-size: 1.75rem;
+  }
+
+  .prayer-At-Tzadiks-Grave-layout-section__corner svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .prayer-At-Tzadiks-Grave-layout-section__corner--top-right {
+    top: -6px;
+    right: -6px;
+  }
+
+  .prayer-At-Tzadiks-Grave-layout-section__corner--top-left {
+    top: -6px;
+    left: -6px;
+  }
+
+  .prayer-At-Tzadiks-Grave-layout-section__corner--bottom-right {
+    bottom: -6px;
+    right: -6px;
+  }
+
+  .prayer-At-Tzadiks-Grave-layout-section__corner--bottom-left {
+    bottom: -6px;
+    left: -6px;
+  }
+
+  .prayer-At-Tzadiks-Grave-layout-section__inner-frame {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+  }
+
+  .prayer-At-Tzadiks-Grave-layout-section__content-area {
+    min-height: 200px;
+  }
+}
+</style>
+    <link rel="stylesheet" href="/styles.css">
+    <script>window.ZAPPY_WEBSITE_ID = "bdb690bc-9c36-4110-b9de-d9903ca6fbec"; window.ZAPPY_API_BASE = "https://qaapi.zappy5.com";</script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style id="zappy-widget-visibility">
+      html[dir="rtl"] .whatsapp-float { right: 20px !important; left: auto !important; }
+      html[dir="ltr"] .whatsapp-float, html:not([dir]) .whatsapp-float { left: 20px !important; right: auto !important; }
+      html[dir="rtl"] #mic-access-tool-general-button, html[dir="rtl"] .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="rtl"] ._access-icon { left: 20px !important; right: auto !important; }
+      html[dir="ltr"] #mic-access-tool-general-button, html[dir="ltr"] .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="ltr"] ._access-icon,
+      html:not([dir]) #mic-access-tool-general-button, html:not([dir]) .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool #mic-access-tool-general-button,
+      html:not([dir]) ._access-icon { right: 20px !important; left: auto !important; }
+      @media (max-width: 768px) { .whatsapp-float { display: flex !important; } }
+      @media (min-width: 769px) { .whatsapp-float { display: flex !important; } }
+      @media (max-width: 768px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+      @media (min-width: 769px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+    </style>
+</head>
+<body>
+
+<nav class="navbar" dir="rtl"> <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"> <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"> <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/> </svg> <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display: none;"> <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/> </svg> </button> <button class="phone-header-btn" data-phone="+972506841740" aria-label="Call"> <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"> <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/> </svg> </button> <div class="nav-container"> <div class="nav-right-group"> <div class="nav-brand"> <a href="/" class="logo-link" style="display:flex;align-items:center;gap:10px;text-decoration:none;"> <img src="/assets/logo-remove_background-1777198266148-moy2qd.png?v=1777198266148" alt="רבי דוד ומשה זיע&quot;א" class="logo" /> </a> </div><ul class="nav-menu" id="navMenu"><li><a href="/">בית</a></li><li><a href="/gallery">גלריה</a></li><li><a href="/candles">נרות נשמה</a></li><li><a href="/additional-information">מידע נוסף</a></li><li><a href="/directions" class="nav-link">הגעה</a></li><li><a href="/righteous-book" class="nav-link">ספר הצדיק</a></li><li><a href="/prayer-at-tzadiks-grave" class="nav-link">תפילה על ציון הצדיק</a></li></ul></div> </div> </nav>
+<script>
+
+// Navbar Mobile Menu Toggle and Contrast Fix
+(function() {
+  // Use 'load' event instead of 'DOMContentLoaded' to ensure we run AFTER all other scripts
+  window.addEventListener('load', function() {
+    
+    // FIX MOBILE BUTTON CONTRAST
+    // Detect navbar background color and apply contrasting color to mobile buttons
+    const navbar = document.querySelector('.navbar, nav, header');
+    if (!navbar) {
+      console.log('[Navbar] Navbar element not found');
+      return;
+    }
+    
+    // DECLARE VARIABLES EARLY to avoid Temporal Dead Zone errors
+    // These are used in multiple places below
+    let mobileToggle = document.getElementById('mobileToggle') ||
+                       document.querySelector('.mobile-toggle') ||
+                       document.querySelector('.hamburger') ||
+                       document.querySelector('.hamburger-menu') ||
+                       document.querySelector('.menu-toggle') ||
+                       document.querySelector('.burger-menu') ||
+                       document.querySelector('[aria-label="Menu"]') ||
+                       document.querySelector('[aria-label="תפריט"]');
+    
+    const phoneBtn = document.querySelector('.phone-header-btn');
+    
+    const computedStyle = window.getComputedStyle(navbar);
+    let bgColor = computedStyle.backgroundColor;
+    
+    console.log('[Navbar] Initial navbar background:', bgColor);
+    
+    // Check if background is transparent or rgba with 0 alpha
+    const isTransparent = bgColor === 'transparent' || 
+                         bgColor === 'rgba(0, 0, 0, 0)' ||
+                         (bgColor.startsWith('rgba') && bgColor.includes(', 0)'));
+    
+    if (isTransparent) {
+      // Check for background-image or gradient
+      const bgImage = computedStyle.backgroundImage;
+      if (bgImage && bgImage !== 'none') {
+        console.log('[Navbar] Navbar has background image/gradient, using dark text');
+        bgColor = 'rgb(240, 240, 240)'; // Assume light background
+      } else {
+        // Transparent navbar - check body background
+        const bodyBg = window.getComputedStyle(document.body).backgroundColor;
+        console.log('[Navbar] Navbar transparent, using body background:', bodyBg);
+        bgColor = bodyBg;
+      }
+    }
+    
+    // Calculate luminance to determine if background is light or dark
+    const rgb = bgColor.match(/\d+/g);
+    if (rgb && rgb.length >= 3) {
+      const r = parseInt(rgb[0]);
+      const g = parseInt(rgb[1]);
+      const b = parseInt(rgb[2]);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      
+      // Mobile button colors are set by Claude's AI-generated CSS (same as .nav-menu a)
+      // No dynamic color overrides needed - colors come from the generated navbar CSS
+      console.log('[Navbar] Mobile button colors preserved from Claude CSS (luminance:', luminance.toFixed(2) + ')');
+      
+      // FIX ICON SIZES - Ensure SVGs are properly sized and visible
+      // INJECT CRITICAL CSS TO OVERRIDE ANY CONFLICTING RULES
+      const criticalCSS = document.createElement('style');
+      criticalCSS.id = 'zappy-mobile-nav-fix';
+      const htmlLang = document.documentElement.lang || 'en';
+      const htmlDir = document.documentElement.dir || 'ltr';
+      // Check both dir attribute AND lang for RTL detection
+      // dir="rtl" is the most reliable indicator
+      const isRTL = htmlDir === 'rtl' || htmlLang === 'he' || htmlLang === 'ar';
+      
+      criticalCSS.textContent = `
+        /* Hide mobile buttons on desktop, show only on mobile */
+        @media (min-width: 769px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            display: none !important;
+          }
+        }
+        
+        /* Show and position mobile buttons correctly on mobile */
+        @media (max-width: 768px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 1001 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 50% !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 6px !important;
+            background: none !important;
+            color: var(--nav-text, var(--text-light)) !important;
+          }
+          
+          /* LTR positioning (default): hamburger LEFT, phone RIGHT */
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .mobile-toggle,
+          html[dir="ltr"] .mobile-toggle {
+            left: 12px !important;
+            right: auto !important;
+          }
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .phone-header-btn,
+          html[dir="ltr"] .phone-header-btn {
+            right: 12px !important;
+            left: auto !important;
+          }
+          
+          /* RTL positioning: hamburger RIGHT, phone LEFT */
+          html[dir="rtl"] .mobile-toggle,
+          html[lang="he"] .mobile-toggle,
+          html[lang="ar"] .mobile-toggle {
+            right: 12px !important;
+            left: auto !important;
+          }
+          html[dir="rtl"] .phone-header-btn,
+          html[lang="he"] .phone-header-btn,
+          html[lang="ar"] .phone-header-btn {
+            left: 12px !important;
+            right: auto !important;
+          }
+          
+          /* CRITICAL: Ensure nav-container has min-height on mobile */
+          /* All children are positioned absolutely/fixed on mobile, so height:auto collapses to 0 */
+          .nav-container {
+            min-height: 70px !important;
+            position: relative !important;
+          }
+          
+          /* Ensure SVG icons are properly sized and inherit color */
+          .mobile-toggle svg,
+          .phone-header-btn svg {
+            width: 24px !important;
+            height: 24px !important;
+            /* Don't force display - let JavaScript control hamburger/close toggle */
+          }
+          
+          /* Reset nav-cta-container on mobile - remove desktop box-shadow/padding */
+          /* that creates a visible ghost box when CTA button is hidden */
+          .nav-cta-container {
+            box-shadow: none !important;
+            padding: 0 !important;
+          }
+          
+          /* Hide nav-cta-container entirely on mobile when there's no lang-switcher */
+          /* (only the CTA button is inside, and it's hidden on mobile) */
+          .nav-cta-container:not(:has(.lang-switcher)) {
+            display: none !important;
+          }
+          
+          /* CRITICAL: Prevent hero image fade gradient from bleeding over headline text */
+          /* The .image-fade-gradient has bottom: -30px (extends below parent) */
+          /* On mobile stacked layout, this overlaps the h1 text below the image */
+          .hero-image-column {
+            overflow: hidden !important;
+          }
+          .image-fade-gradient {
+            bottom: 0 !important;
+          }
+          
+          /* Hide desktop language switcher on mobile - hamburger menu handles it */
+          /* High specificity to override stored CSS */
+          .lang-switcher,
+          .nav-cta-container .lang-switcher,
+          .nav-container .lang-switcher,
+          .navbar .lang-switcher,
+          .navbar .nav-cta-container .lang-switcher {
+            display: none !important;
+          }
+        }
+      `;
+      
+      // Remove existing fix if present and inject new one
+      const existing = document.getElementById('zappy-mobile-nav-fix');
+      if (existing) existing.remove();
+      document.head.appendChild(criticalCSS);
+      
+      console.log('[Navbar] Critical CSS injected for mobile nav positioning');
+      
+      // ONLY apply inline positioning styles on mobile viewport
+      // On desktop, the CSS handles hiding these buttons with display: none
+      // Inline styles were breaking desktop layout by overriding CSS
+      const isMobileViewport = window.innerWidth <= 768;
+      
+      if (mobileToggle) {
+        // Icon sizing applies to all viewports for consistency
+        const hamburgerIcon = mobileToggle.querySelector('.hamburger-icon');
+        const closeIcon = mobileToggle.querySelector('.close-icon');
+        
+        if (hamburgerIcon) {
+          hamburgerIcon.style.setProperty('width', '24px', 'important');
+          hamburgerIcon.style.setProperty('height', '24px', 'important');
+          hamburgerIcon.style.setProperty('display', 'block', 'important'); // Show hamburger by default
+        }
+        if (closeIcon) {
+          closeIcon.style.setProperty('width', '24px', 'important');
+          closeIcon.style.setProperty('height', '24px', 'important');
+          closeIcon.style.setProperty('display', 'none', 'important'); // Hide close icon by default
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          mobileToggle.style.setProperty('position', 'absolute', 'important');
+          mobileToggle.style.setProperty('top', '50%', 'important');
+          mobileToggle.style.setProperty('transform', 'translateY(-50%)', 'important');
+          mobileToggle.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          
+          console.log('[Navbar] Mobile toggle positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          mobileToggle.style.removeProperty('position');
+          mobileToggle.style.removeProperty('top');
+          mobileToggle.style.removeProperty('transform');
+          mobileToggle.style.removeProperty('z-index');
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared mobile toggle inline positioning');
+        }
+      }
+      
+      if (phoneBtn) {
+        // Icon sizing applies to all viewports
+        const phoneIcon = phoneBtn.querySelector('svg');
+        if (phoneIcon) {
+          phoneIcon.style.width = '24px';
+          phoneIcon.style.height = '24px';
+          phoneIcon.setAttribute('width', '24');
+          phoneIcon.setAttribute('height', '24');
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          phoneBtn.style.setProperty('position', 'absolute', 'important');
+          phoneBtn.style.setProperty('top', '50%', 'important');
+          phoneBtn.style.setProperty('transform', 'translateY(-50%)', 'important');
+          phoneBtn.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          
+          console.log('[Navbar] Phone button positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          phoneBtn.style.removeProperty('position');
+          phoneBtn.style.removeProperty('top');
+          phoneBtn.style.removeProperty('transform');
+          phoneBtn.style.removeProperty('z-index');
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared phone button inline positioning');
+        }
+      }
+    } else {
+      console.log('[Navbar] Could not parse background color:', bgColor);
+    }
+    
+    // MOBILE MENU TOGGLE
+    // Re-query in case DOM changed (mobileToggle already declared at top of function)
+    mobileToggle = document.getElementById('mobileToggle') ||
+                   document.querySelector('.mobile-toggle') ||
+                   document.querySelector('.hamburger') ||
+                   document.querySelector('.hamburger-menu') ||
+                   document.querySelector('.menu-toggle') ||
+                   document.querySelector('.burger-menu') ||
+                   document.querySelector('[aria-label="Menu"]') ||
+                   document.querySelector('[aria-label="תפריט"]');
+    
+    // EXPANDED SEARCH: Find nav menu by ID or class
+    const navMenu = document.getElementById('navMenu') ||
+                  document.querySelector('.nav-menu') ||
+                  document.querySelector('.nav-links') ||
+                  document.querySelector('nav ul:not(.submenu)');
+    
+    if (!mobileToggle || !navMenu) {
+      console.log('[Navbar] Mobile toggle or menu not found:', { toggle: !!mobileToggle, menu: !!navMenu });
+      return;
+    }
+    
+    // Ensure navMenu has ID for CSS targeting
+    if (!navMenu.id) {
+      navMenu.id = 'navMenu';
+    }
+    
+    console.log('[Navbar] Initializing mobile menu...');
+    
+    // Remove any existing event listeners by cloning the button
+    const newToggle = mobileToggle.cloneNode(true);
+    mobileToggle.parentNode.replaceChild(newToggle, mobileToggle);
+    
+    // Toggle menu on button click - use newToggle now
+    newToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const hamburgerIcon = this.querySelector('.hamburger-icon');
+      const closeIcon = this.querySelector('.close-icon');
+      const isActive = navMenu.classList.contains('active');
+      
+      if (isActive) {
+        // Close menu
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed');
+      } else {
+        // Open menu
+        navMenu.classList.add('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'none', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'block', 'important');
+        document.body.style.overflow = 'hidden';
+        console.log('[Navbar] Menu opened');
+      }
+    });
+    
+    // Close menu when clicking nav links (but NOT dropdown toggles)
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        // Don't close if it's a dropdown child (unless it's a real navigation link)
+        if (this.getAttribute('href') === '#') return;
+        
+        const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+        const closeIcon = newToggle.querySelector('.close-icon');
+        
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed (link clicked)');
+      });
+    });
+    
+    // DROPDOWN MENU TOGGLE (for mobile and touch devices)
+    var dropdownToggles = navMenu.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(function(toggle) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var parent = this.closest('.nav-dropdown');
+        if (!parent) return;
+        
+        // Close other open dropdowns at the same level
+        var siblings = parent.parentNode.querySelectorAll('.nav-dropdown.open');
+        siblings.forEach(function(sib) {
+          if (sib !== parent) sib.classList.remove('open');
+        });
+        
+        parent.classList.toggle('open');
+        console.log('[Navbar] Dropdown toggled:', parent.classList.contains('open') ? 'open' : 'closed');
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-dropdown')) {
+        var openDropdowns = document.querySelectorAll('.nav-dropdown.open');
+        openDropdowns.forEach(function(dd) { dd.classList.remove('open'); });
+      }
+    });
+    
+    console.log('[Navbar] Dropdown handlers initialized for ' + dropdownToggles.length + ' dropdowns');
+    
+    // Phone button functionality (phoneBtn already declared at top of function)
+    if (phoneBtn) {
+      phoneBtn.addEventListener('click', function() {
+        // Get phone number from placeholder in page or use default
+        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+        const phoneNumber = phoneLinks.length > 0 
+          ? phoneLinks[0].getAttribute('href').replace('tel:', '')
+          : '+972506841740';
+        
+        window.location.href = 'tel:' + phoneNumber;
+        console.log('[Navbar] Phone button clicked');
+      });
+    }
+    
+    console.log('[Navbar] Mobile menu initialized successfully');
+    
+    // WhatsApp visibility is now controlled via CSS (siteSettings)
+  });
+})();
+
+</script>
+  
+  <main>
+      <section class="prayer-At-Tzadiks-Grave-layout-section" data-layout-spec="Prayer-At-Tzadiks-Grave-layout" dir="rtl" data-hero-type="text-only" id="layout-1780489673055" data-element-id="zappy-hero-bg-layout-1780489673055" data-element-type="background-image" style="background-position: 0% 0% !important; background-size: cover !important;" data-zappy-bg-position="0% 0%" data-zappy-bg-zoom="1">
+  <div class="prayer-At-Tzadiks-Grave-layout-section__container">
+    <!-- Decorative background pattern layer -->
+    <div class="prayer-At-Tzadiks-Grave-layout-section__bg-pattern" aria-hidden="true"></div>
+
+    <!-- Main Manuscript Card -->
+    <article class="prayer-At-Tzadiks-Grave-layout-section__card">
+      <!-- Corner Decorations -->
+      <div class="prayer-At-Tzadiks-Grave-layout-section__corner prayer-At-Tzadiks-Grave-layout-section__corner--top-right" aria-hidden="true">
+        <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2,2 L38,2 M2,2 L2,38 M2,20 L15,20 M20,2 L20,15" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="2" cy="2" r="3" fill="var(--accent)"/>
+          <circle cx="20" cy="2" r="2" fill="var(--accent)" opacity="0.6"/>
+          <circle cx="2" cy="20" r="2" fill="var(--accent)" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="prayer-At-Tzadiks-Grave-layout-section__corner prayer-At-Tzadiks-Grave-layout-section__corner--top-left" aria-hidden="true">
+        <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M38,2 L2,2 M38,2 L38,38 M38,20 L25,20 M20,2 L20,15" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="38" cy="2" r="3" fill="var(--accent)"/>
+          <circle cx="20" cy="2" r="2" fill="var(--accent)" opacity="0.6"/>
+          <circle cx="38" cy="20" r="2" fill="var(--accent)" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="prayer-At-Tzadiks-Grave-layout-section__corner prayer-At-Tzadiks-Grave-layout-section__corner--bottom-right" aria-hidden="true">
+        <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2,38 L38,38 M2,38 L2,2 M2,20 L15,20 M20,38 L20,25" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="2" cy="38" r="3" fill="var(--accent)"/>
+          <circle cx="20" cy="38" r="2" fill="var(--accent)" opacity="0.6"/>
+          <circle cx="2" cy="20" r="2" fill="var(--accent)" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="prayer-At-Tzadiks-Grave-layout-section__corner prayer-At-Tzadiks-Grave-layout-section__corner--bottom-left" aria-hidden="true">
+        <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M38,38 L2,38 M38,38 L38,2 M38,20 L25,20 M20,38 L20,25" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="38" cy="38" r="3" fill="var(--accent)"/>
+          <circle cx="20" cy="38" r="2" fill="var(--accent)" opacity="0.6"/>
+          <circle cx="38" cy="20" r="2" fill="var(--accent)" opacity="0.6"/>
+        </svg>
+      </div>
+
+      <!-- Inner Ornamental Frame -->
+      <div class="prayer-At-Tzadiks-Grave-layout-section__inner-frame" aria-hidden="true"></div>
+
+      <!-- Header Area -->
+      <header class="bulletin-card-header">
+          <span class="bulletin-card-badge">
+            
+          </span>
+          <div class="bulletin-card-meta">
+            <span class="bulletin-card-date">חשוון תשפ"ה</span>
+            <span class="bulletin-card-category">שיר הצדיק</span>
+          </div>
+        </header>
+
+      <!-- Empty Text Area for User Prayer Content -->
+      <div class="prayer-At-Tzadiks-Grave-layout-section__content-area">
+        <div class="prayer-At-Tzadiks-Grave-layout-section__text-placeholder">
+          <p class="prayer-At-Tzadiks-Grave-layout-section__prayer-text" style="text-align: center;">שלום לך אדונינו הצדיק רבי דוד ומשה זיכרונך
+לברכה לחיי העולם הבא שלום לך ושלום על משכבך. שלום על נפשך הקדושה והטהורה אשריך
+שזכית ללכת בדרכי יוצרך ולעובדו וליראה ולאהבה אותו מסרת את עצמך לבטל גזות רבות
+מעל עם ישראל  ובפרט בעוברך כאן בהרי האטלס
+הגבוהים ראית את קהילות הקודש המפוזרים באזור זה הסובלים ממגפה קשה והגיעו עד שערי
+מוות ומרוב אהבתך אהבת ישראל הגדולה שבערה בליבך לקחת על עצמך להיות כקורבן בעד
+כופר נפשם ומסרת את עצמך למיתה בעבור ביטול הגזירות הנוראות שהיו על קבילת הקודש.<br />
+
+ועל כן עשרה הרוגי מלכות שנהרגו קודם
+זמנם אזי הם בזכות ובכוח השנים שנחסרו מחייהם, מעטירים ומבקשים עלינו רחמים בכל
+הזמנים ומידי יום ביום על ידי שאנו חושבים עליהם באומרנו את הפסוק אל נקמות ה אל
+נקמות הופיע, תעורר זכותם העצום לפני כיסא הכבוד ועל ידי כך תפילתנו עולות לשמי
+מרום, כך אתה הצדיק הקדוש רבי דוד ומשה שמסרת את עצמך למיתה בעבור עם ישראל שעלך
+נאמר יקר בעיני ה' המותה לחסידיו וכמו שלמדונו רבותינו שבאותה דרך והנהגה שצדיק
+נהג בחיים חיותו כך הוא ממשיך לנהוג ולפעול ישועות גם אחרי פטירתו ולכן מכיוון
+שאתה מסרת את עצמך למיתה בעבור הצלת עם ישראל החולים, הנאנקים והסובלים בכל מיני
+צרות וכו'.<br />
+
+אתה אחרי פטירתך ממשיך להתפלל על עמך
+בית ישראל בכל מקום שהם ובעל הזמנים. ובפרט על ידי שמזכירים את זכותך ובפרט על
+מקום קבורתך, שבמקום זה מסרת את עצמך למיתה אזי ממשיכים ומעוריים את כוחך וזכותך
+יותר ויותר עד שאתה קם ומתפלל לפני מלך מלכי המלכים הקדוש ברוך הוא ופותח שערי
+שמיים בשידוד ושינוי מערכות הטבע כאשר אבותינו ספרו לנו מדורי דורות על ניסים
+ונפלאות שנעשו במקום קדוש ונורא זה שאנו עומדים עליו אדמת קודש הקדוש בקדושת ארץ
+ישראל. וכפי שחקוק לעד על מצבת קדושתך בעל הניסים למאמיניו עונה בעת צרה לכל...<br />
+
+על כך אנו מבקשים מאת הקדוש ברוך הוא
+בעומדינו באימה ויראה מול ציונו הקדוש של הצדיק רבי דוד ומשה ע"ה שיראה בעת
+רעוא דרעוין זו את טלטול וקושי הדרך הארוכה והמפותלת שהיה לנו כדי להגיע אל מקום
+המצאות נפשו הקדושה של צדיק זה כדי לבא לצעוק ולזעוק על התרחקותנו ממך על ידי כל
+מיני עוונות, חטאים ופשעים שחטאנו, עווינו ופשענו במחשבה, דיבור ומעשה ועברנו על
+רמ"ח מצוות עשה ושס"ה לא תעשה אדם למקום ואדם לחברו בכל מיני בחינות
+בגלגול זה ובגלגולים אחרים (ובפרט כאן יפרט את עוונותיו) ואנו מתחרטים על הכל חרטה
+גמורה ושלמה ומרגישים ורוצים להרגיש יותר כמה רע ומר היה בעוזבינו את השם יתברך
+שבמקום לעובדו בשמחה ובטוב לבב נפלנו אל עוונות ואל שנאת חינם ואל גשמיות העולם
+המנסה להעלים מאתנו את התכלית הנרצה שהיא דבקות בקדוש ברוך הוא שמזה נגרמו ונמשכו
+עלינו כל מיני צרות וייסורים ובפרט כאן יפרט את צרותיו ויבקש בזכות הצדיק
+שבקב"ה יושיעו ויוציאו מצרה לרוחה.<br />
+
+אנא ה' הושיעה נא אנא ה'
+הצליחה נא<br />
+
+ הוציאה ממסגר נפשי להודות את שמך בי יכתירו
+צדיקים כי תגמול עליי, אנו מבקשים מאת הצדיק שיעמוד בתפילה לפני אל נורא עלילה
+שנזכה לשנה טובה ומבורכת, פרנסה טובה, בריאות איתנה, שנתחדש כל הזמן ברוח טובה ונצליח
+בכל מעשה ידינו וימלא ה' כל משאלות ליבנו ולב משפחתנו, חברנו וכל הנלווים והתלויים
+בנו לטובה ולברכה, שנזכה במהרה לגאולה השלימה בחסד וברחמים אמן.<br />
+
+
+
+אנא חנון ורחום אשר אין סוף רחמך הם
+מספיקים גם עליי יהמו נא רחמייך על בן אהובך וקיים בי מקרא שכתוב הבן יקיר לי אפרים
+אם ילד שעשועים כי מידי דברי בו אזכרנו עוד על כן המו מעי לו רחם ארחמנו נאם ה' ויהיו
+הרגעים והשעות אשר אני עומד כאן על ציונו של הקדוש של הצדיק שעות של רחמים לי
+ולכלל ישראל וזכיני לפי שנים מרוחו של הצדיק מעת ועד עולם כי גדולים הם צדיקים
+במיתתם יותר מאשר בחייהם<br />
+
+אמן
+
+
+
+
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+          
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+    </main>
+  
+  
+
+
+
+<footer class="site-footer" dir="rtl"> <div class="footer-pattern-band"></div> <div class="footer-inner"> <div class="footer-grid"> <!-- Column 1: Company Info --> <div class="footer-col footer-col--brand"> <div class="footer-logo-wrap"> </div> <h2 class="footer-brand-name"><span class="footer-brand-star">✡</span> הצדיק רבי דוד ומשה זיע"א <span class="footer-brand-star">✡</span></h2> <p class="footer-brand-desc">אתר עלייה לרגל ומורשת יהודית מרוקאית — מדריך רוחני לציון הקדושים בהרי האטלס, לשימור זיכרון הקהילה ולחיזוק הקשר בין הדורות.</p> <div class="footer-ornament"><span></span><i class="fas fa-star-of-david" data-element-type="icon" data-element-id="icon-1778780630727-8j1s2b49h" data-icon-type="fontawesome"></i><span></span></div> </div> <!-- Column 2: Quick Links --> <div class="footer-col footer-col--links"> <h3 class="footer-heading">ניווט מהיר</h3> <ul class="footer-nav"><li><a href="/gallery"><i class="fas fa-images footer-nav-icon"></i>גלריה</a></li>
+<li><a href="/candles"><i class="fas fa-fire footer-nav-icon"></i>נרות נשמה</a></li>
+<li><a href="/additional-information">מידע נוסף</a></li>
+<li><a href="/directions"><i class="fas fa-map-marker-alt footer-nav-icon"></i>הגעה</a></li></ul> </div> <!-- Column 3: Contact --> <div class="footer-col footer-col--contact"> <h3 class="footer-heading">צור קשר</h3> <ul class="footer-contact"> <li> <span class="contact-icon"><i class="fas fa-envelope"></i></span> <span class="contact-text"><a href="mailto:rabbidavidoumoshe@gmail.com">rabbidavidoumoshe@gmail.com</a></span> </li> <li> <span class="contact-icon"><i class="fas fa-phone"></i></span> <span class="contact-text"><a href="tel:+972506841740">+972506841740</a></span> </li> <li><a href="/" style="display:flex;align-items:flex-start;gap:inherit"><span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span> <span class="contact-text">8C3J5F68+X9, Timzrite, morocco</span></a></li> </ul> </div> <!-- Column 4: Social --> <div class="footer-col footer-col--social"> <h3 class="footer-heading">עקבו אחרינו</h3> <div class="footer-social"> <a href="https://facebook.com/groups/tzadikrabbidavidoumoshe" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a> <a href="https://instagram.com/rabbidavidoumoshe" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="12" height="12" viewBox="0 0 256 256" data-icon="skill-icons:instagram" data-iconify="skill-icons:instagram" data-element-type="icon" data-element-id="icon-1778780630727-b28xw71fz" data-icon-type="iconify" data-size-adjusted="true" style="display: inline-block; vertical-align: -0.125em; color: rgb(247, 241, 231); width: 12px; height: 12px;" class="iconify iconify--skill-icons"><g fill="none"><rect width="256" height="256" fill="url(#IconifyId19e2796671072c6840)" rx="60"/><rect width="256" height="256" fill="url(#IconifyId19e2796671072c6841)" rx="60"/><path fill="#fff" d="M128.009 28c-27.158 0-30.567.119-41.233.604c-10.646.488-17.913 2.173-24.271 4.646c-6.578 2.554-12.157 5.971-17.715 11.531c-5.563 5.559-8.98 11.138-11.542 17.713c-2.48 6.36-4.167 13.63-4.646 24.271c-.477 10.667-.602 14.077-.602 41.236s.12 30.557.604 41.223c.49 10.646 2.175 17.913 4.646 24.271c2.556 6.578 5.973 12.157 11.533 17.715c5.557 5.563 11.136 8.988 17.709 11.542c6.363 2.473 13.631 4.158 24.275 4.646c10.667.485 14.073.604 41.23.604c27.161 0 30.559-.119 41.225-.604c10.646-.488 17.921-2.173 24.284-4.646c6.575-2.554 12.146-5.979 17.702-11.542c5.563-5.558 8.979-11.137 11.542-17.712c2.458-6.361 4.146-13.63 4.646-24.272c.479-10.666.604-14.066.604-41.225s-.125-30.567-.604-41.234c-.5-10.646-2.188-17.912-4.646-24.27c-2.563-6.578-5.979-12.157-11.542-17.716c-5.562-5.562-11.125-8.979-17.708-11.53c-6.375-2.474-13.646-4.16-24.292-4.647c-10.667-.485-14.063-.604-41.23-.604zm-8.971 18.021c2.663-.004 5.634 0 8.971 0c26.701 0 29.865.096 40.409.575c9.75.446 15.042 2.075 18.567 3.444c4.667 1.812 7.994 3.979 11.492 7.48c3.5 3.5 5.666 6.833 7.483 11.5c1.369 3.52 3 8.812 3.444 18.562c.479 10.542.583 13.708.583 40.396s-.104 29.855-.583 40.396c-.446 9.75-2.075 15.042-3.444 18.563c-1.812 4.667-3.983 7.99-7.483 11.488c-3.5 3.5-6.823 5.666-11.492 7.479c-3.521 1.375-8.817 3-18.567 3.446c-10.542.479-13.708.583-40.409.583c-26.702 0-29.867-.104-40.408-.583c-9.75-.45-15.042-2.079-18.57-3.448c-4.666-1.813-8-3.979-11.5-7.479s-5.666-6.825-7.483-11.494c-1.369-3.521-3-8.813-3.444-18.563c-.479-10.542-.575-13.708-.575-40.413s.096-29.854.575-40.396c.446-9.75 2.075-15.042 3.444-18.567c1.813-4.667 3.983-8 7.484-11.5s6.833-5.667 11.5-7.483c3.525-1.375 8.819-3 18.569-3.448c9.225-.417 12.8-.542 31.437-.563zm62.351 16.604c-6.625 0-12 5.37-12 11.996c0 6.625 5.375 12 12 12s12-5.375 12-12s-5.375-12-12-12zm-53.38 14.021c-28.36 0-51.354 22.994-51.354 51.355s22.994 51.344 51.354 51.344c28.361 0 51.347-22.983 51.347-51.344c0-28.36-22.988-51.355-51.349-51.355zm0 18.021c18.409 0 33.334 14.923 33.334 33.334c0 18.409-14.925 33.334-33.334 33.334s-33.333-14.925-33.333-33.334c0-18.411 14.923-33.334 33.333-33.334"/><defs><radialGradient id="IconifyId19e2796671072c6840" cx="0" cy="0" r="1" gradientTransform="matrix(0 -253.715 235.975 0 68 275.717)" gradientUnits="userSpaceOnUse"><stop stop-color="#fd5"/><stop offset=".1" stop-color="#fd5"/><stop offset=".5" stop-color="#ff543e"/><stop offset="1" stop-color="#c837ab"/></radialGradient><radialGradient id="IconifyId19e2796671072c6841" cx="0" cy="0" r="1" gradientTransform="rotate(78.68 -32.69 -16.937)scale(113.412 467.488)" gradientUnits="userSpaceOnUse"><stop stop-color="#3771c8"/><stop offset=".128" stop-color="#3771c8"/><stop offset="1" stop-color="#60f" stop-opacity="0"/></radialGradient></defs></g></svg></a> <a href="https://wa.me/972506841740" aria-label="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="12" height="12" viewBox="0 0 256 258" data-icon="logos:whatsapp-icon" data-iconify="logos:whatsapp-icon" data-element-type="icon" data-element-id="icon-1778780630727-1m8xcjqn2" data-icon-type="iconify" data-size-adjusted="true" style="width: 12px !important; height: 12px !important; display: inline-block; vertical-align: -0.125em; color: rgb(247, 241, 231);" class="iconify iconify--logos"><defs><linearGradient id="IconifyId19e2797701ea1b8ee0" x1="50%" x2="50%" y1="100%" y2="0%"><stop offset="0%" stop-color="#1faf38"/><stop offset="100%" stop-color="#60d669"/></linearGradient><linearGradient id="IconifyId19e2797701ea1b8ee1" x1="50%" x2="50%" y1="100%" y2="0%"><stop offset="0%" stop-color="#f9f9f9"/><stop offset="100%" stop-color="#fff"/></linearGradient></defs><path fill="url(#IconifyId19e2797701ea1b8ee0)" d="M5.463 127.456c-.006 21.677 5.658 42.843 16.428 61.499L4.433 252.697l65.232-17.104a123 123 0 0 0 58.8 14.97h.054c67.815 0 123.018-55.183 123.047-123.01c.013-32.867-12.775-63.773-36.009-87.025c-23.23-23.25-54.125-36.061-87.043-36.076c-67.823 0-123.022 55.18-123.05 123.004"/><path fill="url(#IconifyId19e2797701ea1b8ee1)" d="M1.07 127.416c-.007 22.457 5.86 44.38 17.014 63.704L0 257.147l67.571-17.717c18.618 10.151 39.58 15.503 60.91 15.511h.055c70.248 0 127.434-57.168 127.464-127.423c.012-34.048-13.236-66.065-37.3-90.15C194.633 13.286 162.633.014 128.536 0C58.276 0 1.099 57.16 1.071 127.416m40.24 60.376l-2.523-4.005c-10.606-16.864-16.204-36.352-16.196-56.363C22.614 69.029 70.138 21.52 128.576 21.52c28.3.012 54.896 11.044 74.9 31.06c20.003 20.018 31.01 46.628 31.003 74.93c-.026 58.395-47.551 105.91-105.943 105.91h-.042c-19.013-.01-37.66-5.116-53.922-14.765l-3.87-2.295l-40.098 10.513z"/><path fill="#fff" d="M96.678 74.148c-2.386-5.303-4.897-5.41-7.166-5.503c-1.858-.08-3.982-.074-6.104-.074c-2.124 0-5.575.799-8.492 3.984c-2.92 3.188-11.148 10.892-11.148 26.561s11.413 30.813 13.004 32.94c1.593 2.123 22.033 35.307 54.405 48.073c26.904 10.609 32.379 8.499 38.218 7.967c5.84-.53 18.844-7.702 21.497-15.139c2.655-7.436 2.655-13.81 1.859-15.142c-.796-1.327-2.92-2.124-6.105-3.716s-18.844-9.298-21.763-10.361c-2.92-1.062-5.043-1.592-7.167 1.597c-2.124 3.184-8.223 10.356-10.082 12.48c-1.857 2.129-3.716 2.394-6.9.801c-3.187-1.598-13.444-4.957-25.613-15.806c-9.468-8.442-15.86-18.867-17.718-22.056c-1.858-3.184-.199-4.91 1.398-6.497c1.431-1.427 3.186-3.719 4.78-5.578c1.588-1.86 2.118-3.187 3.18-5.311c1.063-2.126.531-3.986-.264-5.579c-.798-1.593-6.987-17.343-9.819-23.64"/></svg></a> </div> <div class="footer-quote"> <p>"וְצַדִּיקִים יִרְאוּ וְיִשְׂמָחוּ"</p> </div> </div> </div> </div> <div class="footer-pattern-band footer-pattern-band--bottom"></div> <!-- Bottom Bar --> <div class="footer-bottom"> <div class="footer-bottom-inner"> <p class="footer-copyright">© 2026 הצדיק רבי דוד ומשה זיע"א . כל הזכויות שמורות.</p> <div class="footer-legal"> <a href="/privacy">מדיניות פרטיות</a> <span class="footer-legal-sep">·</span> <a href="/terms">תנאי שימוש</a> <span class="footer-legal-sep">·</span> <a href="/accessibility">נגישות</a> <span class="footer-legal-sep">·</span> <a href="https://zappy5.com" target="_blank" class="zappy-attribution">נוצר באמצעות Zappy</a> </div> </div> </div> </footer>
+  
+  <a href="https://wa.me/972506841740" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+</body>
+</html>

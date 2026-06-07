@@ -1,0 +1,24 @@
+# Clean URL redirects for Render static hosting
+# Generated: 2026-06-07T08:31:19.738Z
+# NOTE: Render uses render.yaml for routing, not _redirects (that is Netlify)
+# This file is kept for reference only
+
+/gallery  /gallery.html  200!
+/candles  /candles.html  200!
+/additional-information  /additional-information.html  200!
+/privacy  /privacy.html  200!
+/accessibility  /accessibility.html  200!
+/terms  /terms.html  200!
+/directions  /directions.html  200!
+/righteous-book  /righteous-book.html  200!
+/prayer-at-tzadiks-grave  /prayer-at-tzadiks-grave.html  200!
+
+# Legal pages - redirect old .html URLs to friendly URLs
+/privacy.html  /privacy  301
+/accessibility.html  /accessibility  301
+/terms.html  /terms  301
+
+/  /index.html  200!
+
+# SPA fallback - serve index.html for all unmatched routes
+/*  /index.html  200

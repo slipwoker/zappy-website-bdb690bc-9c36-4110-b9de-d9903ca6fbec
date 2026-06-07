@@ -1,0 +1,95 @@
+# הצדיק רבי דוד ומשה זיע"א  — Generative Engine Optimization Map
+
+> A sacred memorial website dedicated to Rabbi David U'Moshe (זיע"א), a revered Jewish holy figure buried in the Atlas Mountains of Morocco, near the route from Marrakech to Ouarzazate. The rabbi passed away approximately 1,050 years ago, and his tomb is a significant pilgrimage site. The website aims to honor his memory through informational content, a rich media gallery including YouTube videos and a virtual tour, virtual memorial candles, and a message board for visitors and devotees.
+
+---
+
+## Pages
+
+### רבי דוד ומשה ציון קדוש — רבי דוד ומשה זיע&quot;א
+https://example.com
+ציון רבי דוד ומשה מרוקו – מקום קדוש בן אלף שנה בהרי האטלס. מידע על ההילולה, סיור וירטואלי, גלריה ועוד. בקר עכשיו וחווה את הקדושה!
+
+### תמונות וסרטים מהציון הקדוש — רבי דוד ומשה זיע&quot;א
+https://example.com/gallery
+גלריית תמונות וסרטוני יוטיוב עשירה מציון רבי דוד ומשה בהרי האטלס. סיור וירטואלי מרהיב שיקרב אותך למקום הקדוש גם מרחוק. צפה עכשיו!
+
+### הדלק נר נשמה לעילוי הנשמה — רבי דוד ומשה זיע&quot;א
+https://example.com/candles
+הדלק נר נשמה וירטואלי לכבוד רבי דוד ומשה ציון קדוש ושלח תפילתך מכל מקום בעולם. הצטרף לאלפי מאמינים שמכבדים את זכרו של הצדיק הקדוש.
+
+### מידע נוסף
+https://example.com/additional-information
+לוח הודעות לעולי רגל, סיפורי נסים, מידע על עלייה לרגל לציון קדוש יהודי מרוקו ישראל ועוד תכנים מרתקים. שתף את חוויתך ולמד על מורשת יהודי מרוקו.
+
+### מידע והגעה לציון רבי דוד ומשה זיע"א
+https://example.com/directions
+הצדיק רבי דוד ומשה זיע"א  - מידע והגעה לציון רבי דוד ומשה זיע"א
+
+### Page
+https://example.com/righteous-book
+
+### תפילה על ציון הצדיק
+https://example.com/prayer-at-tzadiks-grave
+
+## Legal & Policy
+
+### Privacy Policy
+https://example.com/privacy
+Information about how user data is collected, stored, and protected.
+
+### Terms & Conditions
+https://example.com/terms
+Legal terms describing service usage, rights, and policies.
+
+### Accessibility Statement
+https://example.com/accessibility
+Information about WCAG compliance and accessibility features.
+
+---
+
+## How to Contact Us
+
+- Email: rabbidavidoumoshe@gmail.com
+- Phone: +972506841740
+- Phone (tel): tel:+972506841740
+- Address: 8C3J5F68+X9,  Timzrite, morocco
+
+### Contact form
+- URL: https://example.com/additional-information
+- Endpoint: https://example.com/api/email/contact-form
+- Method: POST
+- Content-Type: application/json
+- Fields:
+  - `name` (text, required)
+  - `email` (email, required)
+  - `phone` (tel)
+  - `message` (textarea)
+  - `privacy_consent` (checkbox, required)
+
+---
+
+# Business Context (for LLM understanding)
+
+## About הצדיק רבי דוד ומשה זיע"א 
+A sacred memorial website dedicated to Rabbi David U'Moshe (זיע"א), a revered Jewish holy figure buried in the Atlas Mountains of Morocco, near the route from Marrakech to Ouarzazate. The rabbi passed away approximately 1,050 years ago, and his tomb is a significant pilgrimage site. The website aims to honor his memory through informational content, a rich media gallery including YouTube videos and a virtual tour, virtual memorial candles, and a message board for visitors and devotees.
+
+## Services/Products
+- עמוד ראשי עם מידע ותמונות ותיבת הודעות
+- גלריית תמונות וסרטוני יוטיוב וסיור וירטואלי
+- נרות זיכרון וירטואליים
+- עמוד שונות
+
+## Target Audience
+מבקרי הציון, יהודים ממרוקו, עולי רגל, מחפשי מידע על האדמו"ר
+
+## Industry
+דת, מורשת יהודית, תיירות עלייה לרגל
+
+---
+
+# Machine-readable feeds
+
+- Sitemap (XML): https://example.com/sitemap.xml
+- Robots: https://example.com/robots.txt
+- Flattened page text (for LLMs): https://example.com/llms-full.txt

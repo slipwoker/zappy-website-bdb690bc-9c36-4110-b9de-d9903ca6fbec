@@ -1,0 +1,2393 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>תמונות וסרטים מהציון הקדוש — רבי דוד ומשה זיע&quot;א</title>
+    <meta name="description" content="גלריית תמונות וסרטוני יוטיוב עשירה מציון רבי דוד ומשה בהרי האטלס. סיור וירטואלי מרהיב שיקרב אותך למקום הקדוש גם מרחוק. צפה עכשיו!">
+    <meta name="keywords" content="גלריה ציון רבי דוד ומשה, סיור וירטואלי ציון קדוש, ציון רבי דוד ומשה מרוקו, תמונות הילולה רבי דוד ומשה">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: 'bdb690bc-9c36-4110-b9de-d9903ca6fbec',
+    apiUrl: 'https://qaapi.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="תמונות וסרטים מהציון הקדוש — רבי דוד ומשה זיע&quot;א">
+    <meta property="og:description" content="גלריית תמונות וסרטוני יוטיוב עשירה מציון רבי דוד ומשה בהרי האטלס. סיור וירטואלי מרהיב שיקרב אותך למקום הקדוש גם מרחוק. צפה עכשיו!">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="תמונות וסרטים מהציון הקדוש — רבי דוד ומשה זיע&quot;א">
+    <meta name="twitter:description" content="גלריית תמונות וסרטוני יוטיוב עשירה מציון רבי דוד ומשה בהרי האטלס. סיור וירטואלי מרהיב שיקרב אותך למקום הקדוש גם מרחוק. צפה עכשיו!">
+    <meta property="og:type" content="website">
+  <meta property="og:locale" content="he_IL">
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css">
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+
+          <style id="zappy-cta-mobile-style">
+            /* Hide CTA list item on desktop (tablets and up) */
+            @media (min-width: 769px) {
+              .nav-cta-item-mobile {
+                display: none !important;
+              }
+            }
+            /* Show CTA list item on mobile */
+            @media (max-width: 768px) {
+              .nav-cta-item-mobile {
+                display: list-item !important;
+              }
+            }
+          </style>
+        
+          <style id="zappy-nested-menu-style">
+            /* Desktop only: vertically center nav items */
+            @media (min-width: 769px) {
+              .nav-menu,
+              #navMenu {
+                align-items: center !important;
+              }
+            }
+            
+            /* Menu Group styling (non-clickable parent) - TOP LEVEL ONLY with ultra-specific selector */
+            .nav-menu > li > .menu-group-title,
+            #navMenu > li > .menu-group-title {
+              display: inline-block !important;
+              padding: 0.5rem 1rem !important;
+              color: var(--nav-color) !important;
+              font-weight: 500 !important;
+              line-height: 1.7 !important;
+              cursor: default !important;
+              user-select: none !important;
+              vertical-align: middle !important;
+              text-decoration: none !important;
+              margin: 0 !important;
+              transition: color 0.3s ease !important;
+            }
+            
+            .nav-menu > li > .menu-group-title:hover,
+            #navMenu > li > .menu-group-title:hover {
+              color: var(--nav-hover-color) !important;
+            }
+            
+            /* Desktop: show submenu on Menu Group hover */
+            li:has(.menu-group-title):hover > .sub-menu {
+              opacity: 1 !important;
+              visibility: visible !important;
+              transform: translateY(0) !important;
+              pointer-events: auto !important; /* Enable interaction when hovering */
+            }
+            
+            /* Hide menu items marked as hidden (overrides hover states) */
+            .zappy-hidden-menu-item,
+            li:has(.menu-group-title):hover > .sub-menu .zappy-hidden-menu-item {
+              display: none !important;
+              opacity: 0 !important;
+              visibility: hidden !important;
+              pointer-events: none !important;
+            }
+            
+            /* Keep submenu visible when hovering over the submenu itself */
+            .sub-menu:hover {
+              opacity: 1 !important;
+              visibility: visible !important;
+              pointer-events: auto !important;
+            }
+            
+            /* Nested dropdown menu styles - using more specific selectors */
+            .nav-menu .sub-menu,
+            nav .sub-menu,
+            .navbar .sub-menu {
+              display: block !important; /* Ensure submenu is in the DOM */
+              position: absolute !important;
+              top: 100%;
+              left: 0;
+              right: auto;
+              min-width: 200px;
+              background: white;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+              border-radius: 8px;
+              padding: 8px 0;
+              margin-top: 0px; /* Remove gap to prevent hover loss */
+              opacity: 0 !important;
+              visibility: hidden !important;
+              transform: translateY(-10px);
+              transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+              z-index: 1000;
+              list-style: none;
+              pointer-events: none; /* Prevent interaction when hidden */
+            }
+            
+            /* RTL (Hebrew/Arabic) submenu positioning - align to right instead of left */
+            [dir="rtl"] .nav-menu .sub-menu,
+            [dir="rtl"] nav .sub-menu,
+            [dir="rtl"] .navbar .sub-menu,
+            html[lang="he"] .nav-menu .sub-menu,
+            html[lang="he"] nav .sub-menu,
+            html[lang="he"] .navbar .sub-menu,
+            html[lang="ar"] .nav-menu .sub-menu,
+            html[lang="ar"] nav .sub-menu,
+            html[lang="ar"] .navbar .sub-menu {
+              left: auto;
+              right: 0;
+            }
+            
+            /* Show submenu on parent hover - more specific selectors */
+            .nav-menu li:hover > .sub-menu,
+            nav li:hover > .sub-menu,
+            .navbar li:hover > .sub-menu {
+              opacity: 1 !important;
+              visibility: visible !important;
+              transform: translateY(0) !important;
+              pointer-events: auto !important; /* Enable interaction when visible */
+            }
+            
+            /* Parent item must be relatively positioned */
+            .nav-menu li:has(.sub-menu),
+            nav li:has(.sub-menu),
+            .navbar li:has(.sub-menu) {
+              position: relative;
+            }
+            
+            /* Style for submenu items */
+            .sub-menu li {
+              list-style: none;
+              margin: 0;
+              padding: 0;
+            }
+            
+            .sub-menu a,
+            .sub-menu .menu-group-title {
+              display: block !important;
+              padding: 10px 12px !important;
+              color: #333 !important;
+              font-weight: 600 !important;
+              text-decoration: none;
+              transition: background-color 0.2s;
+              white-space: nowrap;
+              cursor: default;
+            }
+            
+            .sub-menu a:hover {
+              background-color: #f5f5f5;
+            }
+            
+            /* CRITICAL: Override submenu styles for TOP-LEVEL Menu Groups only - must come AFTER submenu styles */
+            .nav-menu > li > .menu-group-title,
+            #navMenu > li > .menu-group-title {
+              display: inline-block !important;
+              padding: 0.5rem 1rem !important;
+              color: var(--nav-color) !important;
+              font-weight: 500 !important;
+              line-height: 1.7 !important;
+              cursor: default !important;
+              user-select: none !important;
+              vertical-align: middle !important;
+              text-decoration: none !important;
+              margin: 0 !important;
+              transition: color 0.3s ease !important;
+            }
+            
+            .nav-menu > li > .menu-group-title:hover,
+            #navMenu > li > .menu-group-title:hover {
+              color: var(--nav-hover-color) !important;
+              background-color: transparent !important;
+            }
+            
+            /* On mobile, show nested menus as expandable accordion */
+            @media (max-width: 768px) {
+              /* Mobile submenu styling */
+              .nav-menu .sub-menu,
+              nav .sub-menu,
+              .navbar .sub-menu {
+                position: static !important;
+                transform: none !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                margin-top: 0 !important;
+                max-height: 0;
+                overflow: hidden;
+                opacity: 0;
+                visibility: hidden;
+                transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, padding 0.3s ease;
+                padding: 0 !important;
+                border-radius: 0 !important;
+              }
+              
+              /* Expanded state — no internal scroll; parent navMenu scrolls */
+              .sub-menu.mobile-expanded {
+                max-height: none !important;
+                overflow-y: visible !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                padding: 8px 0 8px 16px !important;
+              }
+              
+              /* RTL padding adjustment */
+              [dir="rtl"] .sub-menu.mobile-expanded,
+              html[lang="he"] .sub-menu.mobile-expanded,
+              html[lang="ar"] .sub-menu.mobile-expanded {
+                padding: 8px 16px 8px 0 !important;
+              }
+              
+              /* Disable hover behavior on mobile */
+              .nav-menu li:hover > .sub-menu,
+              nav li:hover > .sub-menu,
+              .navbar li:hover > .sub-menu {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+              }
+              
+              /* Enable visibility for expanded submenus */
+              .nav-menu li > .sub-menu.mobile-expanded,
+              nav li > .sub-menu.mobile-expanded,
+              .navbar li > .sub-menu.mobile-expanded {
+                opacity: 1 !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
+              }
+              
+              .sub-menu a {
+                padding: 10px 0 !important;
+                display: block !important;
+                font-size: 14px !important;
+                white-space: normal !important;
+              }
+              
+              .sub-menu a:hover {
+                background-color: transparent !important;
+              }
+              
+              /* Parent item wrapper - flex layout with relative positioning for absolute toggle */
+              .nav-menu li:has(.sub-menu),
+              nav li:has(.sub-menu),
+              .navbar li:has(.sub-menu) {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                align-items: center !important;
+                position: relative !important;
+                min-height: 44px !important;
+              }
+              
+              /* Parent link - takes full width since toggle is absolute (not a flex child) */
+              .nav-menu li:has(.sub-menu) > a,
+              nav li:has(.sub-menu) > a,
+              .navbar li:has(.sub-menu) > a,
+              .nav-menu > li > .menu-group-title,
+              #navMenu > li > .menu-group-title {
+                flex: 1 !important;
+                min-width: 0 !important;
+              }
+              
+              /* Normalize menu-group-title in mobile nav to match link alignment */
+              .nav-menu > li > .menu-group-title,
+              #navMenu > li > .menu-group-title {
+                padding: 0 !important;
+                line-height: inherit !important;
+              }
+              
+              /* Submenu takes full width below parent */
+              .nav-menu li:has(.sub-menu) > .sub-menu,
+              nav li:has(.sub-menu) > .sub-menu,
+              .navbar li:has(.sub-menu) > .sub-menu {
+                flex-basis: 100% !important;
+                width: 100% !important;
+              }
+              
+              /* HIDE EXISTING CHEVRONS/ARROWS from cloned sites to prevent duplicates */
+              .nav-menu li:has(.sub-menu) > a .fa-chevron-down,
+              .nav-menu li:has(.sub-menu) > a .fa-angle-down,
+              .nav-menu li:has(.sub-menu) > a [class*="chevron"],
+              .nav-menu li:has(.sub-menu) > a [class*="arrow"],
+              nav li:has(.sub-menu) > a [class*="chevron"],
+              nav li:has(.sub-menu) > a [class*="arrow"],
+              #navMenu li:has(.sub-menu) > a [class*="chevron"],
+              #navMenu li:has(.sub-menu) > a [class*="arrow"] {
+                display: none !important;
+                visibility: hidden !important;
+              }
+              
+              /* Toggle arrow button - flex child that stretches to match nav-link height */
+              .mobile-submenu-toggle {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 44px !important;
+                height: auto !important;
+                background: transparent !important;
+                border: none !important;
+                cursor: pointer !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                position: static !important;
+                flex-shrink: 0 !important;
+                align-self: stretch !important;
+                z-index: 2 !important;
+                -webkit-tap-highlight-color: transparent;
+              }
+              
+              .mobile-submenu-toggle::after {
+                content: '' !important;
+                display: block !important;
+                width: 0 !important;
+                height: 0 !important;
+                border-left: 6px solid transparent !important;
+                border-right: 6px solid transparent !important;
+                border-top: 7px solid currentColor !important;
+                transition: transform 0.3s ease !important;
+              }
+              
+              /* Rotate arrow when expanded */
+              .mobile-submenu-toggle.expanded::after {
+                transform: rotate(180deg) !important;
+              }
+            }
+            
+            /* Hide toggle button on desktop */
+            @media (min-width: 769px) {
+              .mobile-submenu-toggle {
+                display: none !important;
+              }
+            }
+          </style>
+          
+          <script id="zappy-mobile-menu-script">
+            // Mobile menu toggle for nested submenus (including Menu Groups)
+            // Uses separate toggle button - link navigates, arrow toggles submenu
+            (function() {
+              function initMobileMenuToggles() {
+                // Only run on mobile
+                if (window.innerWidth > 768) {
+                  // Remove any toggle buttons on desktop
+                  document.querySelectorAll('.mobile-submenu-toggle').forEach(btn => btn.remove());
+                  document.querySelectorAll('.sub-menu.mobile-expanded').forEach(menu => {
+                    menu.classList.remove('mobile-expanded');
+                  });
+                  console.log('[MOBILE MENU] Desktop mode - cleanup done');
+                  return;
+                }
+                
+                console.log('[MOBILE MENU] Initializing mobile menu toggles...');
+                
+                // Find all parent menu items (items with .sub-menu)
+                const menuItemsWithSubmenus = document.querySelectorAll(
+                  '.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)'
+                );
+                
+                console.log('[MOBILE MENU] Found', menuItemsWithSubmenus.length, 'items with submenus');
+                
+                menuItemsWithSubmenus.forEach(function(li) {
+                  // Skip if already has toggle button
+                  if (li.querySelector('.mobile-submenu-toggle')) {
+                    return;
+                  }
+                  
+                  const submenu = li.querySelector('.sub-menu');
+                  const parentLink = li.querySelector(':scope > a') || li.querySelector(':scope > .menu-group-title');
+                  
+                  if (!submenu || !parentLink) return;
+                  
+                  // Create toggle button
+                  const toggleBtn = document.createElement('button');
+                  toggleBtn.className = 'mobile-submenu-toggle';
+                  toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+                  toggleBtn.setAttribute('type', 'button');
+
+                  // Insert toggle button after the link
+                  parentLink.insertAdjacentElement('afterend', toggleBtn);
+                  
+                  console.log('[MOBILE MENU] Created toggle button for:', parentLink.textContent?.trim());
+                  
+                  // Handle toggle button click - only toggles submenu
+                  toggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const isExpanded = submenu.classList.contains('mobile-expanded');
+                    
+                    // Close all other submenus first
+                    document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+                      if (menu !== submenu) {
+                        menu.classList.remove('mobile-expanded');
+                        const otherToggle = menu.parentElement.querySelector('.mobile-submenu-toggle');
+                        if (otherToggle) otherToggle.classList.remove('expanded');
+                      }
+                    });
+                    
+                    // Toggle this submenu
+                    submenu.classList.toggle('mobile-expanded');
+                    toggleBtn.classList.toggle('expanded');
+                    
+                    console.log('[MOBILE MENU] Toggled submenu:', !isExpanded ? 'expanded' : 'collapsed');
+                  });
+                  
+                  // Parent link navigates normally - no preventDefault
+                });
+              }
+              
+              // Initialize on DOM load
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initMobileMenuToggles);
+              } else {
+                initMobileMenuToggles();
+              }
+              
+              // Re-initialize on window resize (but use debounce to avoid too many calls)
+              let resizeTimer;
+              window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(initMobileMenuToggles, 250);
+              });
+              
+              // Also initialize when mobile menu becomes visible
+              // This handles cases where the mobile menu is hidden initially
+              const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                  if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const target = mutation.target;
+                    if (target.classList.contains('active') || target.style.display !== 'none') {
+                      console.log('[MOBILE MENU] Mobile menu became visible, re-initializing...');
+                      setTimeout(initMobileMenuToggles, 100);
+                    }
+                  }
+                });
+              });
+              
+              // Observe mobile menu containers
+              const mobileMenus = document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu');
+              mobileMenus.forEach(function(menu) {
+                observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+              });
+            })();
+          </script>
+        
+<style data-zappy-section-v2-css="true">
+/* V2 Regenerated Section CSS */
+.gallery-intro-section {
+  background-color: #f2dfb8;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='140' height='140' fill='%23f2dfb8'/%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
+  color: var(--text-dark);
+  padding: 120px 24px 72px;
+  position: relative;
+  overflow: visible;
+  direction: rtl;
+  font-family: 'Noto Serif', serif;
+}
+
+.gallery-intro-section .gallery-intro-ornament-strip {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 2;
+  color: var(--accent);
+  line-height: 0;
+}
+
+.gallery-intro-section .gallery-intro-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+  direction: rtl;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── TEXT COLUMN ── */
+.gallery-intro-section .gallery-intro-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: right;
+  color: var(--text-dark);
+}
+
+.gallery-intro-section .gallery-intro-flourish {
+  margin-bottom: 18px;
+  color: var(--accent);
+  line-height: 0;
+}
+
+.gallery-intro-section .gallery-intro-eyebrow {
+  display: inline-block;
+  font-family: 'Noto Serif', serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: rgba(122, 31, 43, 0.08);
+  border: 1px solid rgba(122, 31, 43, 0.18);
+  border-radius: 2px;
+  padding: 4px 14px;
+  margin-bottom: 16px;
+}
+
+.gallery-intro-section .gallery-intro-h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--primary);
+  margin: 0 0 12px 0;
+  text-align: right;
+}
+
+.gallery-intro-section .gallery-intro-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.375rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text-muted);
+  margin: 0 0 22px 0;
+  text-align: right;
+  border-inline-end: 3px solid var(--accent);
+  padding-inline-end: 14px;
+}
+
+.gallery-intro-section .gallery-intro-body {
+  font-family: 'Noto Serif', serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-dark);
+  margin: 0 0 32px 0;
+  text-align: right;
+  max-width: 520px;
+}
+
+.gallery-intro-section .gallery-intro-ctas {
+  display: flex;
+  flex-direction: row;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.gallery-intro-section .gallery-intro-btn {
+  background: linear-gradient(180deg, #a72d16 0%, #7a180f 100%);
+  color: #f8e8b8;
+  padding: 11px 28px;
+  border-radius: 2px;
+  border: 1px solid #d4b27a;
+  box-shadow: 0 2px 0 #5f2012, 0 4px 10px rgba(58,32,24,0.2);
+  font-weight: 700;
+  font-size: 15px;
+  font-family: 'Noto Serif', serif;
+  text-decoration: none;
+  display: inline-block;
+  transition: opacity 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.gallery-intro-section .gallery-intro-btn:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 0 #5f2012, 0 6px 16px rgba(58,32,24,0.28);
+}
+
+.gallery-intro-section .gallery-intro-btn-ghost {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  padding: 10px 22px;
+  border-radius: 2px;
+  font-weight: 700;
+  font-size: 15px;
+  font-family: 'Noto Serif', serif;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+}
+
+.gallery-intro-section .gallery-intro-btn-ghost:hover {
+  background: rgba(122,31,43,0.08);
+  color: var(--primary);
+}
+
+/* ── IMAGE COLUMN ── */
+.gallery-intro-section .gallery-intro-image-col {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-intro-section .gallery-intro-image-frame {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+}
+
+.gallery-intro-section .gallery-intro-image-border {
+  position: absolute;
+  inset: -10px -10px -10px -10px;
+  border: 2px solid var(--accent);
+  border-radius: 0;
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.gallery-intro-section .gallery-intro-image-border::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid var(--accent);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.gallery-intro-section .gallery-intro-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+  display: block;
+  border-radius: 0;
+  box-shadow: 0 16px 36px rgba(58,32,24,0.28);
+  position: relative;
+  z-index: 1;
+}
+
+.gallery-intro-section .gallery-intro-image-caption {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  justify-content: flex-end;
+  margin-top: 10px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-family: 'Noto Serif', serif;
+  text-align: right;
+  position: relative;
+  z-index: 1;
+}
+
+.gallery-intro-section .gallery-intro-image-caption svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .gallery-intro-section {
+    padding: 100px 16px 48px;
+  }
+
+  .gallery-intro-section .gallery-intro-container {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .gallery-intro-section .gallery-intro-text {
+    order: 1;
+  }
+
+  .gallery-intro-section .gallery-intro-image-col {
+    order: 2;
+  }
+
+  .gallery-intro-section .gallery-intro-h1 {
+    font-size: 2rem;
+  }
+
+  .gallery-intro-section .gallery-intro-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .gallery-intro-section .gallery-intro-ctas {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .gallery-intro-section .gallery-intro-btn,
+  .gallery-intro-section .gallery-intro-btn-ghost {
+    text-align: center;
+    width: 100%;
+  }
+
+  .gallery-intro-section .gallery-intro-image-border {
+    inset: -6px;
+  }
+
+  .gallery-intro-section .gallery-intro-flourish {
+    display: none;
+  }
+}
+</style>
+
+
+
+
+
+<style data-zappy-section-v2-css="true">
+/* V2 Regenerated Section CSS */
+.gallery-zion-section {
+  direction: rtl;
+  background-color: #201816;
+  background-image:
+    radial-gradient(ellipse at 15% 50%, rgba(122,31,43,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 20%, rgba(216,155,43,0.10) 0%, transparent 50%),
+    linear-gradient(180deg, #2a160f 0%, #201816 60%, #1a1008 100%);
+  color: var(--text-light);
+  padding: 0 0 80px;
+  position: relative;
+  overflow: visible;
+  font-family: 'Noto Serif', serif;
+}
+
+/* Top ornamental border */
+.gallery-zion-section .gzs-border-strip {
+  position: relative;
+  width: 100%;
+  height: 18px;
+  margin-bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  color: var(--accent);
+}
+.gallery-zion-section .gzs-border-strip svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Container */
+.gallery-zion-section .gzs-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px 0;
+  position: relative;
+  z-index: 2;
+}
+
+/* Header */
+.gallery-zion-section .gzs-header {
+  text-align: center;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.gallery-zion-section .gzs-ornament {
+  color: var(--accent);
+  pointer-events: none;
+  display: block;
+}
+.gallery-zion-section .gzs-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  margin: 0;
+  text-align: center;
+}
+.gallery-zion-section .gzs-subtitle {
+  font-family: 'Noto Serif', serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-light);
+  opacity: 0.72;
+  margin: 0;
+  text-align: center;
+}
+
+/* Category Nav */
+.gallery-zion-section .gzs-categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 36px;
+  direction: rtl;
+}
+.gallery-zion-section .gzs-cat-btn {
+  font-family: 'Noto Serif', serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--text-light);
+  background: transparent;
+  border: 1px solid var(--border-dark);
+  border-radius: 2px;
+  padding: 7px 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  opacity: 0.65;
+  white-space: nowrap;
+}
+.gallery-zion-section .gzs-cat-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  opacity: 1;
+}
+.gallery-zion-section .gzs-cat-btn.gzs-cat-active {
+  background: linear-gradient(180deg, #a72d16 0%, #7a180f 100%);
+  color: #f8e8b8;
+  border-color: #d4b27a;
+  box-shadow: 0 2px 0 #5f2012, 0 4px 10px rgba(58,32,24,0.2);
+  opacity: 1;
+  font-weight: 700;
+}
+
+/* Carousel Wrapper */
+.gallery-zion-section .gzs-carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+/* Track outer (clips slides) */
+.gallery-zion-section .gzs-track-outer {
+  flex: 1;
+  overflow: hidden;
+  border: 1px solid var(--border-dark);
+  box-shadow: 0 16px 36px rgba(58,32,24,0.28), 0 0 22px rgba(240,181,45,0.10);
+  position: relative;
+}
+
+/* Track (translates to show active slide) */
+.gallery-zion-section .gzs-track {
+  display: flex;
+  flex-direction: row-reverse;
+  transition: transform 0.55s cubic-bezier(0.77,0,0.175,1);
+  will-change: transform;
+  transform: translateX(0%);
+}
+
+/* Individual Slide */
+.gallery-zion-section .gzs-slide {
+  min-width: 100%;
+  width: 100%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: #1a0e0a;
+}
+
+/* Image Frame: shows primary + secondary side by side on desktop */
+.gallery-zion-section .gzs-img-frame {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  aspect-ratio: 16/7;
+  overflow: hidden;
+  position: relative;
+}
+.gallery-zion-section .gzs-img-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+.gallery-zion-section .gzs-img-frame img:hover {
+  transform: scale(1.03);
+}
+.gallery-zion-section .gzs-img-frame img:first-child {
+  border-inline-end: 1px solid rgba(216,155,43,0.25);
+}
+
+/* Caption Bar */
+.gallery-zion-section .gzs-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 28px;
+  background: linear-gradient(180deg, rgba(26,14,10,0.96) 0%, rgba(32,24,22,1) 100%);
+  border-top: 1px solid rgba(216,155,43,0.22);
+  direction: rtl;
+}
+.gallery-zion-section .gzs-counter {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.875rem;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  opacity: 0.8;
+  direction: ltr;
+  display: inline-block;
+}
+.gallery-zion-section .gzs-caption-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--text-light);
+  letter-spacing: 0.03em;
+  line-height: 1.4;
+}
+
+/* Arrows */
+.gallery-zion-section .gzs-arrow {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(180deg, #a72d16 0%, #7a180f 100%);
+  border: 1px solid #d4b27a;
+  box-shadow: 0 2px 0 #5f2012, 0 4px 10px rgba(58,32,24,0.2);
+  color: #f8e8b8;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  user-select: none;
+  padding: 0;
+}
+.gallery-zion-section .gzs-arrow:hover {
+  background: linear-gradient(180deg, #c23518 0%, #8f1f12 100%);
+  box-shadow: 0 4px 16px rgba(143,31,18,0.45), 0 0 22px rgba(240,181,45,0.18);
+  transform: scale(1.06);
+}
+.gallery-zion-section .gzs-arrow-prev {
+  margin-inline-end: 0;
+  margin-inline-start: 12px;
+}
+.gallery-zion-section .gzs-arrow-next {
+  margin-inline-start: 0;
+  margin-inline-end: 12px;
+}
+
+/* Progress Dots */
+.gallery-zion-section .gzs-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 28px;
+  direction: rtl;
+}
+.gallery-zion-section .gzs-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border-dark);
+  border: 1px solid rgba(216,155,43,0.3);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.25s ease, transform 0.2s ease, border-color 0.25s ease;
+}
+.gallery-zion-section .gzs-dot:hover {
+  background: rgba(216,155,43,0.5);
+  border-color: var(--accent);
+}
+.gallery-zion-section .gzs-dot.gzs-dot-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.3);
+  box-shadow: 0 0 8px rgba(216,155,43,0.55);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .gallery-zion-section .gzs-img-frame {
+    grid-template-columns: 1fr;
+    aspect-ratio: 4/3;
+  }
+  .gallery-zion-section .gzs-img-frame img.gzs-img-secondary {
+    display: none;
+  }
+  .gallery-zion-section .gzs-img-frame img:first-child {
+    border-inline-end: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .gallery-zion-section {
+    padding-bottom: 56px;
+  }
+  .gallery-zion-section .gzs-container {
+    padding: 40px 0 0;
+  }
+  .gallery-zion-section .gzs-header {
+    padding: 0 16px;
+    margin-bottom: 24px;
+    gap: 8px;
+  }
+  .gallery-zion-section .gzs-title {
+    font-size: 1.6rem;
+  }
+  .gallery-zion-section .gzs-categories {
+    padding: 0 12px;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+  .gallery-zion-section .gzs-cat-btn {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+  .gallery-zion-section .gzs-carousel-wrapper {
+    gap: 0;
+  }
+  .gallery-zion-section .gzs-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+  .gallery-zion-section .gzs-arrow-prev {
+    margin-inline-start: 6px;
+  }
+  .gallery-zion-section .gzs-arrow-next {
+    margin-inline-end: 6px;
+  }
+  .gallery-zion-section .gzs-img-frame {
+    aspect-ratio: 3/2;
+  }
+  .gallery-zion-section .gzs-caption {
+    padding: 12px 16px;
+  }
+  .gallery-zion-section .gzs-caption-title {
+    font-size: 1.1rem;
+  }
+  .gallery-zion-section .gzs-dots {
+    margin-top: 18px;
+    gap: 8px;
+  }
+  .gallery-zion-section .gzs-dot {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-zion-section .gzs-img-frame {
+    aspect-ratio: 1/1;
+  }
+  .gallery-zion-section .gzs-title {
+    font-size: 1.35rem;
+  }
+}
+</style>
+    <link rel="stylesheet" href="/styles.css">
+    <script>window.ZAPPY_WEBSITE_ID = "bdb690bc-9c36-4110-b9de-d9903ca6fbec"; window.ZAPPY_API_BASE = "https://qaapi.zappy5.com";</script>
+
+    <style id="zappy-widget-visibility">
+      html[dir="rtl"] .whatsapp-float { right: 20px !important; left: auto !important; }
+      html[dir="ltr"] .whatsapp-float, html:not([dir]) .whatsapp-float { left: 20px !important; right: auto !important; }
+      html[dir="rtl"] #mic-access-tool-general-button, html[dir="rtl"] .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="rtl"] ._access-icon { left: 20px !important; right: auto !important; }
+      html[dir="ltr"] #mic-access-tool-general-button, html[dir="ltr"] .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="ltr"] ._access-icon,
+      html:not([dir]) #mic-access-tool-general-button, html:not([dir]) .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool #mic-access-tool-general-button,
+      html:not([dir]) ._access-icon { right: 20px !important; left: auto !important; }
+      @media (max-width: 768px) { .whatsapp-float { display: flex !important; } }
+      @media (min-width: 769px) { .whatsapp-float { display: flex !important; } }
+      @media (max-width: 768px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+      @media (min-width: 769px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+    </style>
+</head>
+<body>
+
+  <nav class="navbar" dir="rtl"> <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"> <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none"> <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path> </svg> <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display: none;"> <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path> </svg> </button> <button class="phone-header-btn" data-phone="+972506841740" aria-label="Call"> <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"> <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path> </svg> </button> <div class="nav-container"> <div class="nav-right-group"> <div class="nav-brand"> <a href="/" class="logo-link" style="display:flex;align-items:center;gap:10px;text-decoration:none;"> <img src="/assets/logo-remove_background-1777198266148-moy2qd.png?v=1777198266148" alt="רבי דוד ומשה זיע&quot;א" class="logo"> </a> </div><ul class="nav-menu" id="navMenu"><li><a href="/">בית</a></li><li><a href="/gallery">גלריה</a></li><li><a href="/candles">נרות נשמה</a></li><li><a href="/additional-information">מידע נוסף</a></li><li><a href="/directions" class="nav-link">הגעה</a></li><li><a href="/righteous-book" class="nav-link">ספר הצדיק</a></li><li><a href="/prayer-at-tzadiks-grave" class="nav-link">תפילה על ציון הצדיק</a></li></ul></div> </div> </nav>
+<script>
+
+// Navbar Mobile Menu Toggle and Contrast Fix
+(function() {
+  // Use 'load' event instead of 'DOMContentLoaded' to ensure we run AFTER all other scripts
+  window.addEventListener('load', function() {
+    
+    // FIX MOBILE BUTTON CONTRAST
+    // Detect navbar background color and apply contrasting color to mobile buttons
+    const navbar = document.querySelector('.navbar, nav, header');
+    if (!navbar) {
+      console.log('[Navbar] Navbar element not found');
+      return;
+    }
+    
+    // DECLARE VARIABLES EARLY to avoid Temporal Dead Zone errors
+    // These are used in multiple places below
+    let mobileToggle = document.getElementById('mobileToggle') ||
+                       document.querySelector('.mobile-toggle') ||
+                       document.querySelector('.hamburger') ||
+                       document.querySelector('.hamburger-menu') ||
+                       document.querySelector('.menu-toggle') ||
+                       document.querySelector('.burger-menu') ||
+                       document.querySelector('[aria-label="Menu"]') ||
+                       document.querySelector('[aria-label="תפריט"]');
+    
+    const phoneBtn = document.querySelector('.phone-header-btn');
+    
+    const computedStyle = window.getComputedStyle(navbar);
+    let bgColor = computedStyle.backgroundColor;
+    
+    console.log('[Navbar] Initial navbar background:', bgColor);
+    
+    // Check if background is transparent or rgba with 0 alpha
+    const isTransparent = bgColor === 'transparent' || 
+                         bgColor === 'rgba(0, 0, 0, 0)' ||
+                         (bgColor.startsWith('rgba') && bgColor.includes(', 0)'));
+    
+    if (isTransparent) {
+      // Check for background-image or gradient
+      const bgImage = computedStyle.backgroundImage;
+      if (bgImage && bgImage !== 'none') {
+        console.log('[Navbar] Navbar has background image/gradient, using dark text');
+        bgColor = 'rgb(240, 240, 240)'; // Assume light background
+      } else {
+        // Transparent navbar - check body background
+        const bodyBg = window.getComputedStyle(document.body).backgroundColor;
+        console.log('[Navbar] Navbar transparent, using body background:', bodyBg);
+        bgColor = bodyBg;
+      }
+    }
+    
+    // Calculate luminance to determine if background is light or dark
+    const rgb = bgColor.match(/\d+/g);
+    if (rgb && rgb.length >= 3) {
+      const r = parseInt(rgb[0]);
+      const g = parseInt(rgb[1]);
+      const b = parseInt(rgb[2]);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      
+      // Mobile button colors are set by Claude's AI-generated CSS (same as .nav-menu a)
+      // No dynamic color overrides needed - colors come from the generated navbar CSS
+      console.log('[Navbar] Mobile button colors preserved from Claude CSS (luminance:', luminance.toFixed(2) + ')');
+      
+      // FIX ICON SIZES - Ensure SVGs are properly sized and visible
+      // INJECT CRITICAL CSS TO OVERRIDE ANY CONFLICTING RULES
+      const criticalCSS = document.createElement('style');
+      criticalCSS.id = 'zappy-mobile-nav-fix';
+      const htmlLang = document.documentElement.lang || 'en';
+      const htmlDir = document.documentElement.dir || 'ltr';
+      // Check both dir attribute AND lang for RTL detection
+      // dir="rtl" is the most reliable indicator
+      const isRTL = htmlDir === 'rtl' || htmlLang === 'he' || htmlLang === 'ar';
+      
+      criticalCSS.textContent = `
+        /* Hide mobile buttons on desktop, show only on mobile */
+        @media (min-width: 769px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            display: none !important;
+          }
+        }
+        
+        /* Show and position mobile buttons correctly on mobile */
+        @media (max-width: 768px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 1001 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 50% !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 6px !important;
+            background: none !important;
+            color: var(--nav-text, var(--text-light)) !important;
+          }
+          
+          /* LTR positioning (default): hamburger LEFT, phone RIGHT */
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .mobile-toggle,
+          html[dir="ltr"] .mobile-toggle {
+            left: 12px !important;
+            right: auto !important;
+          }
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .phone-header-btn,
+          html[dir="ltr"] .phone-header-btn {
+            right: 12px !important;
+            left: auto !important;
+          }
+          
+          /* RTL positioning: hamburger RIGHT, phone LEFT */
+          html[dir="rtl"] .mobile-toggle,
+          html[lang="he"] .mobile-toggle,
+          html[lang="ar"] .mobile-toggle {
+            right: 12px !important;
+            left: auto !important;
+          }
+          html[dir="rtl"] .phone-header-btn,
+          html[lang="he"] .phone-header-btn,
+          html[lang="ar"] .phone-header-btn {
+            left: 12px !important;
+            right: auto !important;
+          }
+          
+          /* CRITICAL: Ensure nav-container has min-height on mobile */
+          /* All children are positioned absolutely/fixed on mobile, so height:auto collapses to 0 */
+          .nav-container {
+            min-height: 70px !important;
+            position: relative !important;
+          }
+          
+          /* Ensure SVG icons are properly sized and inherit color */
+          .mobile-toggle svg,
+          .phone-header-btn svg {
+            width: 24px !important;
+            height: 24px !important;
+            /* Don't force display - let JavaScript control hamburger/close toggle */
+          }
+          
+          /* Reset nav-cta-container on mobile - remove desktop box-shadow/padding */
+          /* that creates a visible ghost box when CTA button is hidden */
+          .nav-cta-container {
+            box-shadow: none !important;
+            padding: 0 !important;
+          }
+          
+          /* Hide nav-cta-container entirely on mobile when there's no lang-switcher */
+          /* (only the CTA button is inside, and it's hidden on mobile) */
+          .nav-cta-container:not(:has(.lang-switcher)) {
+            display: none !important;
+          }
+          
+          /* CRITICAL: Prevent hero image fade gradient from bleeding over headline text */
+          /* The .image-fade-gradient has bottom: -30px (extends below parent) */
+          /* On mobile stacked layout, this overlaps the h1 text below the image */
+          .hero-image-column {
+            overflow: hidden !important;
+          }
+          .image-fade-gradient {
+            bottom: 0 !important;
+          }
+          
+          /* Hide desktop language switcher on mobile - hamburger menu handles it */
+          /* High specificity to override stored CSS */
+          .lang-switcher,
+          .nav-cta-container .lang-switcher,
+          .nav-container .lang-switcher,
+          .navbar .lang-switcher,
+          .navbar .nav-cta-container .lang-switcher {
+            display: none !important;
+          }
+        }
+      `;
+      
+      // Remove existing fix if present and inject new one
+      const existing = document.getElementById('zappy-mobile-nav-fix');
+      if (existing) existing.remove();
+      document.head.appendChild(criticalCSS);
+      
+      console.log('[Navbar] Critical CSS injected for mobile nav positioning');
+      
+      // ONLY apply inline positioning styles on mobile viewport
+      // On desktop, the CSS handles hiding these buttons with display: none
+      // Inline styles were breaking desktop layout by overriding CSS
+      const isMobileViewport = window.innerWidth <= 768;
+      
+      if (mobileToggle) {
+        // Icon sizing applies to all viewports for consistency
+        const hamburgerIcon = mobileToggle.querySelector('.hamburger-icon');
+        const closeIcon = mobileToggle.querySelector('.close-icon');
+        
+        if (hamburgerIcon) {
+          hamburgerIcon.style.setProperty('width', '24px', 'important');
+          hamburgerIcon.style.setProperty('height', '24px', 'important');
+          hamburgerIcon.style.setProperty('display', 'block', 'important'); // Show hamburger by default
+        }
+        if (closeIcon) {
+          closeIcon.style.setProperty('width', '24px', 'important');
+          closeIcon.style.setProperty('height', '24px', 'important');
+          closeIcon.style.setProperty('display', 'none', 'important'); // Hide close icon by default
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          mobileToggle.style.setProperty('position', 'absolute', 'important');
+          mobileToggle.style.setProperty('top', '50%', 'important');
+          mobileToggle.style.setProperty('transform', 'translateY(-50%)', 'important');
+          mobileToggle.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          
+          console.log('[Navbar] Mobile toggle positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          mobileToggle.style.removeProperty('position');
+          mobileToggle.style.removeProperty('top');
+          mobileToggle.style.removeProperty('transform');
+          mobileToggle.style.removeProperty('z-index');
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared mobile toggle inline positioning');
+        }
+      }
+      
+      if (phoneBtn) {
+        // Icon sizing applies to all viewports
+        const phoneIcon = phoneBtn.querySelector('svg');
+        if (phoneIcon) {
+          phoneIcon.style.width = '24px';
+          phoneIcon.style.height = '24px';
+          phoneIcon.setAttribute('width', '24');
+          phoneIcon.setAttribute('height', '24');
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          phoneBtn.style.setProperty('position', 'absolute', 'important');
+          phoneBtn.style.setProperty('top', '50%', 'important');
+          phoneBtn.style.setProperty('transform', 'translateY(-50%)', 'important');
+          phoneBtn.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          
+          console.log('[Navbar] Phone button positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          phoneBtn.style.removeProperty('position');
+          phoneBtn.style.removeProperty('top');
+          phoneBtn.style.removeProperty('transform');
+          phoneBtn.style.removeProperty('z-index');
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared phone button inline positioning');
+        }
+      }
+    } else {
+      console.log('[Navbar] Could not parse background color:', bgColor);
+    }
+    
+    // MOBILE MENU TOGGLE
+    // Re-query in case DOM changed (mobileToggle already declared at top of function)
+    mobileToggle = document.getElementById('mobileToggle') ||
+                   document.querySelector('.mobile-toggle') ||
+                   document.querySelector('.hamburger') ||
+                   document.querySelector('.hamburger-menu') ||
+                   document.querySelector('.menu-toggle') ||
+                   document.querySelector('.burger-menu') ||
+                   document.querySelector('[aria-label="Menu"]') ||
+                   document.querySelector('[aria-label="תפריט"]');
+    
+    // EXPANDED SEARCH: Find nav menu by ID or class
+    const navMenu = document.getElementById('navMenu') ||
+                  document.querySelector('.nav-menu') ||
+                  document.querySelector('.nav-links') ||
+                  document.querySelector('nav ul:not(.submenu)');
+    
+    if (!mobileToggle || !navMenu) {
+      console.log('[Navbar] Mobile toggle or menu not found:', { toggle: !!mobileToggle, menu: !!navMenu });
+      return;
+    }
+    
+    // Ensure navMenu has ID for CSS targeting
+    if (!navMenu.id) {
+      navMenu.id = 'navMenu';
+    }
+    
+    console.log('[Navbar] Initializing mobile menu...');
+    
+    // Remove any existing event listeners by cloning the button
+    const newToggle = mobileToggle.cloneNode(true);
+    mobileToggle.parentNode.replaceChild(newToggle, mobileToggle);
+    
+    // Toggle menu on button click - use newToggle now
+    newToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const hamburgerIcon = this.querySelector('.hamburger-icon');
+      const closeIcon = this.querySelector('.close-icon');
+      const isActive = navMenu.classList.contains('active');
+      
+      if (isActive) {
+        // Close menu
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed');
+      } else {
+        // Open menu
+        navMenu.classList.add('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'none', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'block', 'important');
+        document.body.style.overflow = 'hidden';
+        console.log('[Navbar] Menu opened');
+      }
+    });
+    
+    // Close menu when clicking nav links (but NOT dropdown toggles)
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        // Don't close if it's a dropdown child (unless it's a real navigation link)
+        if (this.getAttribute('href') === '#') return;
+        
+        const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+        const closeIcon = newToggle.querySelector('.close-icon');
+        
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed (link clicked)');
+      });
+    });
+    
+    // DROPDOWN MENU TOGGLE (for mobile and touch devices)
+    var dropdownToggles = navMenu.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(function(toggle) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var parent = this.closest('.nav-dropdown');
+        if (!parent) return;
+        
+        // Close other open dropdowns at the same level
+        var siblings = parent.parentNode.querySelectorAll('.nav-dropdown.open');
+        siblings.forEach(function(sib) {
+          if (sib !== parent) sib.classList.remove('open');
+        });
+        
+        parent.classList.toggle('open');
+        console.log('[Navbar] Dropdown toggled:', parent.classList.contains('open') ? 'open' : 'closed');
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-dropdown')) {
+        var openDropdowns = document.querySelectorAll('.nav-dropdown.open');
+        openDropdowns.forEach(function(dd) { dd.classList.remove('open'); });
+      }
+    });
+    
+    console.log('[Navbar] Dropdown handlers initialized for ' + dropdownToggles.length + ' dropdowns');
+    
+    // Phone button functionality (phoneBtn already declared at top of function)
+    if (phoneBtn) {
+      phoneBtn.addEventListener('click', function() {
+        // Get phone number from placeholder in page or use default
+        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+        const phoneNumber = phoneLinks.length > 0 
+          ? phoneLinks[0].getAttribute('href').replace('tel:', '')
+          : '+972506841740';
+        
+        window.location.href = 'tel:' + phoneNumber;
+        console.log('[Navbar] Phone button clicked');
+      });
+    }
+    
+    console.log('[Navbar] Mobile menu initialized successfully');
+    
+    // WhatsApp visibility is now controlled via CSS (siteSettings)
+  });
+})();
+
+</script>
+  
+  <main>
+    <section class="gallery-intro-section" data-layout-spec="גלריה-intro" dir="rtl" data-hero-type="side-by-side" id="gallery-intro-section">
+  <!-- Ornamental top border strip -->
+  <div class="gallery-intro-ornament-strip" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 18" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="18">
+      <rect width="1200" height="2" y="8" fill="currentColor" opacity="0.18"></rect>
+      <g fill="currentColor" opacity="0.22">
+        <polygon points="600,2 606,9 600,16 594,9"></polygon>
+        <polygon points="560,4 564,9 560,14 556,9"></polygon>
+        <polygon points="640,4 644,9 640,14 636,9"></polygon>
+        <polygon points="520,5 523,9 520,13 517,9"></polygon>
+        <polygon points="680,5 683,9 680,13 677,9"></polygon>
+        <polygon points="480,6 482,9 480,12 478,9"></polygon>
+        <polygon points="720,6 722,9 720,12 718,9"></polygon>
+        <rect x="0" y="7" width="420" height="2"></rect>
+        <rect x="780" y="7" width="420" height="2"></rect>
+      </g>
+    </svg>
+  </div>
+
+  <div class="gallery-intro-container">
+    <!-- Text Column (Right) -->
+    <div class="gallery-intro-text">
+      <!-- Horizontal ornamental flourish -->
+      <div class="gallery-intro-flourish" aria-hidden="true">
+        <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 220 16" width="220" height="16" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="8" x2="80" y2="8" stroke="currentColor" stroke-width="1" opacity="0.35"></line>
+          <circle cx="90" cy="8" r="3" fill="currentColor" opacity="0.45"></circle>
+          <circle cx="110" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.45"></circle>
+          <circle cx="130" cy="8" r="3" fill="currentColor" opacity="0.45"></circle>
+          <line x1="140" y1="8" x2="220" y2="8" stroke="currentColor" stroke-width="1" opacity="0.35"></line>
+        </svg>
+      </div>
+
+      <p><span class="gallery-intro-eyebrow">גלריית הציון הקדוש</span>
+      </p><h1 class="gallery-intro-h1">גלריית תמונות ומדיה</h1>
+      <h3 class="gallery-intro-subtitle">ציון רבי דוד ומשה זיע"א — הרי האטלס, מרוקו</h3>
+      <p class="gallery-intro-body" >לפניכם אוסף תמונות ומדיה נדיר מציון הצדיק רבי דוד ומשה זיע"א, השוכן בלב הרי האטלס במרוקו. הגלריה מביאה בפניכם תצלומים מרגשים מהילולות ועליות לרגל, נופי ההרים המקיפים את הציון הקדוש, ותיעוד חי של מסורת בת אלף שנה. כל תמונה מספרת סיפור של אמונה, מסירות ואהבת הצדיק.</p>
+      <div class="gallery-intro-ctas">
+        
+        
+      </div>
+
+      
+    </div>
+
+    <!-- Image Column (Left) -->
+    <div class="gallery-intro-image-col">
+      <div class="gallery-intro-image-frame">
+        <div class="gallery-intro-image-border" aria-hidden="true"></div>
+        <div data-zappy-zoom-wrapper="true" data-element-id="img-1779090170085-5067l7tm8" data-element-type="image" data-zappy-zoom-wrapper-width="560px" data-zappy-zoom-wrapper-height="480px" data-zappy-zoom-wrapper-width-mode="px" data-zappy-zoom-wrapper-align="center" style="position: relative !important; overflow: hidden !important; width: 560px !important; max-width: 100% !important; margin-left: auto !important; margin-right: auto !important; height: 480px !important; display: block !important;" data-zappy-zoom-clip="true" data-zappy-wrapper-margins-applied="true"><img data-context="Sacred Jewish pilgrimage site in the Atlas Mountains of Morocco: the tomb of Rabbi David U" moshe,="" a="" whitewashed="" domed="" shrine="" surrounded="" by="" dramatic="" mountain="" landscape,="" with="" candles,="" colorful="" moroccan="" lanterns,="" and="" devotees="" in="" traditional="" dress="" gathered="" prayer.="" warm="" golden="" light,="" atmosphere="" of="" reverence="" ancient="" heritage.'="" width="600" height="480" src="/assets/image-1779093557978-m36gb5.webp?v=1779093560131" alt="ציון רבי דוד ומשה זיע&quot;א בהרי האטלס, מרוקו" class="gallery-intro-img" data-element-type="image" data-element-id="img-1779090170085-5067l7tm8" style="border-radius: 0px; object-position: 50% 50% !important; display: block !important; object-fit: cover !important; width: 100% !important; height: 100% !important; max-width: none !important; margin: 0px !important; position: absolute !important; left: 0% !important; top: 0% !important; max-height: none !important" data-zappy-object-position="50% 50%" data-zappy-zoom="1" data-zappy-original-width="560" data-zappy-original-height="480"></div>
+        <div class="gallery-intro-image-caption">
+          <svg data-element-type="icon" data-icon-type="svg" aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>
+          <span>ציון הצדיק, הרי האטלס, מרוקו</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="yt-featured-video-section" aria-label="שיר הצדיק - סרטון מוטמע" id="zappy-section-1">
+  <div class="yt-featured-inner">
+
+    <!-- Decorative top ornament -->
+    <div class="yt-ornament yt-ornament-top" aria-hidden="true">
+      <span class="yt-ornament-line"></span>
+      <span class="yt-ornament-star">✦</span>
+      <span class="yt-ornament-line"></span>
+    </div>
+
+    <!-- Section header -->
+    <header class="bulletin-card-header">
+          <span class="bulletin-card-badge">
+            <i class="fas fa-music" aria-hidden="true" data-element-type="icon" data-element-id="icon-1779690599473-zxewprn8b" data-icon-type="fontawesome"></i>
+          </span>
+          <div class="bulletin-card-meta">
+            <span class="bulletin-card-date">חשוון תשפ"ה</span>
+            <span class="bulletin-card-category">שיר הצדיק</span>
+          </div>
+        </header>
+
+    <!-- Video wrapper -->
+    <div class="yt-video-outer">
+      <div class="yt-video-gold-border" aria-hidden="true">
+        <span class="yt-gold-corner yt-gold-corner--tl"></span>
+        <span class="yt-gold-corner yt-gold-corner--tr"></span>
+        <span class="yt-gold-corner yt-gold-corner--bl"></span>
+        <span class="yt-gold-corner yt-gold-corner--br"></span>
+      </div>
+      <div class="yt-video-wrapper" data-element-type="video" >
+        <iframe class="yt-iframe" src="https://www.youtube.com/embed/2422npUcvSw" title="שיר הצדיק רבי דוד ומשה זיע״א - ניגון קדוש" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" loading="lazy" style=""></iframe>
+      </div>
+    </div>
+
+    <!-- Decorative bottom ornament -->
+        <div class="yt-ornament yt-ornament-bottom" aria-hidden="true">
+      <span class="yt-ornament-line"></span>
+      <span class="yt-ornament-star">✦</span>
+      <span class="yt-ornament-line"></span>
+    </div>
+
+    <!-- YouTube channel CTA button -->
+    <div style="text-align: center; margin-top: 28px;">
+      <a href="https://youtube.com/@rabbidavidmoshe?si=Enp4ok7Bs8DrIc2m" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 10px; background: #FF0000; color: #fff; font-family: 'Noto Serif', serif; font-size: 15px; font-weight: 700; padding: 12px 28px; border-radius: 2px; text-decoration: none; border: 1px solid #cc0000; box-shadow: 0 2px 8px rgba(200,0,0,0.25); transition: opacity 0.2s;">
+        <i class="fab fa-youtube" aria-hidden="true" style="font-size: 18px;"></i>
+        לערוץ היוטיוב שלנו
+      </a>
+    </div>
+
+    <!-- Tagline -->
+    
+
+  </div>
+</section>
+
+
+
+
+
+
+
+<section class="gallery-zion-section" data-layout-spec="Gallery-zion" dir="rtl" data-zappy-section="true" id="gallery-zion-section">
+
+  <!-- Ornamental top border strip -->
+  <div class="gzs-border-strip" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 18" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="2" y="0" fill="rgba(216,155,43,0.35)"></rect>
+      <g fill="rgba(216,155,43,0.22)">
+        <rect x="0" y="5" width="40" height="1"></rect><rect x="50" y="5" width="40" height="1"></rect><rect x="100" y="5" width="40" height="1"></rect><rect x="150" y="5" width="40" height="1"></rect><rect x="200" y="5" width="40" height="1"></rect><rect x="250" y="5" width="40" height="1"></rect><rect x="300" y="5" width="40" height="1"></rect><rect x="350" y="5" width="40" height="1"></rect><rect x="400" y="5" width="40" height="1"></rect><rect x="450" y="5" width="40" height="1"></rect><rect x="500" y="5" width="40" height="1"></rect><rect x="550" y="5" width="40" height="1"></rect><rect x="600" y="5" width="40" height="1"></rect><rect x="650" y="5" width="40" height="1"></rect><rect x="700" y="5" width="40" height="1"></rect><rect x="750" y="5" width="40" height="1"></rect><rect x="800" y="5" width="40" height="1"></rect><rect x="850" y="5" width="40" height="1"></rect><rect x="900" y="5" width="40" height="1"></rect><rect x="950" y="5" width="40" height="1"></rect><rect x="1000" y="5" width="40" height="1"></rect><rect x="1050" y="5" width="40" height="1"></rect><rect x="1100" y="5" width="40" height="1"></rect><rect x="1150" y="5" width="40" height="1"></rect>
+      </g>
+      <rect width="1200" height="2" y="10" fill="rgba(216,155,43,0.18)"></rect>
+    </svg>
+  </div>
+
+  <div class="gzs-container">
+
+    <!-- Section Header -->
+    <header class="gzs-header">
+      <div class="gzs-ornament" aria-hidden="true">
+        <svg data-no-icon-edit="true" aria-hidden="true" width="220" height="14" viewBox="0 0 220 14" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="7" x2="80" y2="7" stroke="currentColor" stroke-width="1" opacity="0.35"></line>
+          <circle cx="90" cy="7" r="2.5" fill="currentColor" opacity="0.45"></circle>
+          <circle cx="110" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"></circle>
+          <circle cx="110" cy="7" r="1.5" fill="currentColor" opacity="0.55"></circle>
+          <circle cx="130" cy="7" r="2.5" fill="currentColor" opacity="0.45"></circle>
+          <line x1="140" y1="7" x2="220" y2="7" stroke="currentColor" stroke-width="1" opacity="0.35"></line>
+        </svg>
+      </div>
+      <h2 class="gzs-title">גלריית הציון הקדוש</h2>
+      <p class="gzs-subtitle">ציון רבי דוד ומשה זיע"א — הרי האטלס, מרוקו</p>
+      <div class="gzs-ornament" aria-hidden="true">
+        <svg data-no-icon-edit="true" aria-hidden="true" width="220" height="14" viewBox="0 0 220 14" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="7" x2="80" y2="7" stroke="currentColor" stroke-width="1" opacity="0.35"></line>
+          <circle cx="90" cy="7" r="2.5" fill="currentColor" opacity="0.45"></circle>
+          <circle cx="110" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"></circle>
+          <circle cx="110" cy="7" r="1.5" fill="currentColor" opacity="0.55"></circle>
+          <circle cx="130" cy="7" r="2.5" fill="currentColor" opacity="0.45"></circle>
+          <line x1="140" y1="7" x2="220" y2="7" stroke="currentColor" stroke-width="1" opacity="0.35"></line>
+        </svg>
+      </div>
+    </header>
+
+    <!-- Category Filter Buttons -->
+    <nav class="gzs-categories" aria-label="קטגוריות גלריה">
+      <button class="gzs-cat-btn gzs-cat-active" data-slide="0">הציון הקדוש</button>
+      <button class="gzs-cat-btn" data-slide="1">ליל ההילולה</button>
+      <button class="gzs-cat-btn" data-slide="2">נופי האטלס</button>
+      <button class="gzs-cat-btn" data-slide="3">עולי הרגל</button>
+      <button class="gzs-cat-btn" data-slide="4">פנים הציון</button>
+      <button class="gzs-cat-btn" data-slide="5">שירה וריקוד</button>
+      <button class="gzs-cat-btn" data-slide="6">כפר הציון</button>
+      <button class="gzs-cat-btn" data-slide="7">הדלקת נרות</button>
+      <button class="gzs-cat-btn" data-slide="8">שיירת עולי הרגל</button>
+    </nav>
+
+    <!-- Main Carousel -->
+    <div class="gzs-carousel-wrapper">
+
+      <!-- Prev Arrow -->
+      <button class="gzs-arrow gzs-arrow-prev" aria-label="תמונה קודמת">‹</button>
+
+      <!-- Slides Track -->
+      <div class="gzs-track-outer">
+        <div class="gzs-track" id="gzsTrack">
+
+          <!-- Slide 0 -->
+          <div class="gzs-slide">
+            <div class="gzs-img-frame">
+              <img alt="ציון רבי דוד ומשה — מבט חיצוני על המבנה הקדוש בהרי האטלס" src="/assets/image-1779093557978-m36gb5.webp?v=1779093560131" data-placeholder="gallery-zion-1" data-context="Sacred Jewish shrine of Rabbi David u-Moshe in the Atlas Mountains of Morocco, exterior view of the white domed tomb building surrounded by mountains, golden light, pilgrimage site" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+              <img alt="ציון רבי דוד ומשה — מבט חיצוני על המבנה הקדוש בהרי האטלס" class="gzs-img-secondary" src="/assets/image-1779093557978-m36gb5.webp?v=1779093560131" data-placeholder="gallery-zion-1" data-context="Sacred Jewish shrine of Rabbi David u-Moshe in the Atlas Mountains of Morocco, exterior view of the white domed tomb building surrounded by mountains, golden light, pilgrimage site" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+            </div>
+            <div class="gzs-caption">
+              <span class="gzs-counter">01 / 09</span>
+              <span class="gzs-caption-title">הציון הקדוש</span>
+            </div>
+          </div>
+
+          <!-- Slide 1 -->
+          <div class="gzs-slide">
+            <div class="gzs-img-frame">
+              <img alt="הילולת רבי דוד ומשה — אלפי עולי רגל סביב הציון בלילה עם נרות" src="/assets/image-1779093589849-dubq5h.webp?v=1779093591923" data-placeholder="gallery-zion-2" data-context="Hillula celebration at Rabbi David u-Moshe shrine Morocco, thousands of Jewish pilgrims gathered around the tomb at night with candles and torches, festive atmosphere, Atlas Mountains" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+              <img alt="הילולת רבי דוד ומשה — אלפי עולי רגל סביב הציון בלילה עם נרות" class="gzs-img-secondary" src="/assets/image-1779093589849-dubq5h.webp?v=1779093591923" data-placeholder="gallery-zion-2" data-context="Hillula celebration at Rabbi David u-Moshe shrine Morocco, thousands of Jewish pilgrims gathered around the tomb at night with candles and torches, festive atmosphere, Atlas Mountains" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+            </div>
+            <div class="gzs-caption">
+              <span class="gzs-counter">02 / 09</span>
+              <span class="gzs-caption-title">ליל ההילולה</span>
+            </div>
+          </div>
+
+          <!-- Slide 2 -->
+          <div class="gzs-slide">
+            <div class="gzs-img-frame">
+              <img alt="נוף הרי האטלס — הדרך לציון, שלג על פסגות ההרים" src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27300%27%3E%3Cdefs%3E%3ClinearGradient id=%27grad%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FF0083;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23FF008320;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27url(%23grad)%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-family=%27Arial, sans-serif%27 font-size=%2716%27 fill=%27white%27 text-anchor=%27middle%27 dy=%27.3em%27 font-weight=%27500%27%3EClick%20to%20add%20image%3C/text%3E%3C/svg%3E" data-placeholder="gallery-zion-3" data-context="Breathtaking panoramic view of the Atlas Mountains in Morocco, snow-capped peaks, winding mountain road leading to a Jewish pilgrimage site, dramatic landscape at sunset" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+              <img alt="נוף הרי האטלס — הדרך לציון, שלג על פסגות ההרים" class="gzs-img-secondary" src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27300%27%3E%3Cdefs%3E%3ClinearGradient id=%27grad%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FF0083;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23FF008320;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27url(%23grad)%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-family=%27Arial, sans-serif%27 font-size=%2716%27 fill=%27white%27 text-anchor=%27middle%27 dy=%27.3em%27 font-weight=%27500%27%3EClick%20to%20add%20image%3C/text%3E%3C/svg%3E" data-placeholder="gallery-zion-3" data-context="Breathtaking panoramic view of the Atlas Mountains in Morocco, snow-capped peaks, winding mountain road leading to a Jewish pilgrimage site, dramatic landscape at sunset" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+            </div>
+            <div class="gzs-caption">
+              <span class="gzs-counter">03 / 09</span>
+              <span class="gzs-caption-title">נופי הרי האטלס</span>
+            </div>
+          </div>
+
+          <!-- Slide 3 -->
+          <div class="gzs-slide">
+            <div class="gzs-img-frame">
+              <img alt="עולי רגל יהודים בתפילה ליד הציון הקדוש" src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27300%27%3E%3Cdefs%3E%3ClinearGradient id=%27grad%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FF0083;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23FF008320;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27url(%23grad)%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-family=%27Arial, sans-serif%27 font-size=%2716%27 fill=%27white%27 text-anchor=%27middle%27 dy=%27.3em%27 font-weight=%27500%27%3EClick%20to%20add%20image%3C/text%3E%3C/svg%3E" data-placeholder="gallery-zion-4" data-context="Jewish pilgrims praying devoutly at the shrine of Rabbi David u-Moshe in Morocco, men and women in traditional Moroccan Jewish clothing, candles lit, emotional prayer scene" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+              <img alt="עולי רגל יהודים בתפילה ליד הציון הקדוש" class="gzs-img-secondary" src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27300%27%3E%3Cdefs%3E%3ClinearGradient id=%27grad%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FF0083;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23FF008320;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27url(%23grad)%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-family=%27Arial, sans-serif%27 font-size=%2716%27 fill=%27white%27 text-anchor=%27middle%27 dy=%27.3em%27 font-weight=%27500%27%3EClick%20to%20add%20image%3C/text%3E%3C/svg%3E" data-placeholder="gallery-zion-4" data-context="Jewish pilgrims praying devoutly at the shrine of Rabbi David u-Moshe in Morocco, men and women in traditional Moroccan Jewish clothing, candles lit, emotional prayer scene" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+            </div>
+            <div class="gzs-caption">
+              <span class="gzs-counter">04 / 09</span>
+              <span class="gzs-caption-title">עולי הרגל בתפילה</span>
+            </div>
+          </div>
+
+          <!-- Slide 4 -->
+          <div class="gzs-slide">
+            <div class="gzs-img-frame">
+              <img alt="פנים הציון — קברו של רבי דוד ומשה מוקף בנרות ופרחים" src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27300%27%3E%3Cdefs%3E%3ClinearGradient id=%27grad%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FF0083;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23FF008320;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27url(%23grad)%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-family=%27Arial, sans-serif%27 font-size=%2716%27 fill=%27white%27 text-anchor=%27middle%27 dy=%27.3em%27 font-weight=%27500%27%3EClick%20to%20add%20image%3C/text%3E%3C/svg%3E" data-placeholder="gallery-zion-5" data-context="Interior of the holy tomb of Rabbi David u-Moshe in Morocco, ornate burial chamber surrounded by hundreds of lit candles, colorful fabric coverings, Jewish religious artifacts, intimate sacred space" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+              <img alt="פנים הציון — קברו של רבי דוד ומשה מוקף בנרות ופרחים" class="gzs-img-secondary" src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27300%27%3E%3Cdefs%3E%3ClinearGradient id=%27grad%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FF0083;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23FF008320;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27url(%23grad)%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-family=%27Arial, sans-serif%27 font-size=%2716%27 fill=%27white%27 text-anchor=%27middle%27 dy=%27.3em%27 font-weight=%27500%27%3EClick%20to%20add%20image%3C/text%3E%3C/svg%3E" data-placeholder="gallery-zion-5" data-context="Interior of the holy tomb of Rabbi David u-Moshe in Morocco, ornate burial chamber surrounded by hundreds of lit candles, colorful fabric coverings, Jewish religious artifacts, intimate sacred space" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+            </div>
+            <div class="gzs-caption">
+              <span class="gzs-counter">05 / 09</span>
+              <span class="gzs-caption-title">פנים הציון</span>
+            </div>
+          </div>
+
+          <!-- Slide 5 -->
+          <div class="gzs-slide">
+            <div class="gzs-img-frame">
+              <img alt="שירה וריקוד בהילולה — חגיגות ההילולה המסורתית" src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27300%27%3E%3Cdefs%3E%3ClinearGradient id=%27grad%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FF0083;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23FF008320;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27url(%23grad)%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-family=%27Arial, sans-serif%27 font-size=%2716%27 fill=%27white%27 text-anchor=%27middle%27 dy=%27.3em%27 font-weight=%27500%27%3EClick%20to%20add%20image%3C/text%3E%3C/svg%3E" data-placeholder="gallery-zion-6" data-context="Traditional Moroccan Jewish Hillula celebration with singing and dancing, colorful traditional clothing, musicians playing, joyful festive atmosphere at the shrine in Atlas Mountains Morocco" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+              <img alt="שירה וריקוד בהילולה — חגיגות ההילולה המסורתית" class="gzs-img-secondary" src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27300%27%3E%3Cdefs%3E%3ClinearGradient id=%27grad%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FF0083;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23FF008320;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27url(%23grad)%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-family=%27Arial, sans-serif%27 font-size=%2716%27 fill=%27white%27 text-anchor=%27middle%27 dy=%27.3em%27 font-weight=%27500%27%3EClick%20to%20add%20image%3C/text%3E%3C/svg%3E" data-placeholder="gallery-zion-6" data-context="Traditional Moroccan Jewish Hillula celebration with singing and dancing, colorful traditional clothing, musicians playing, joyful festive atmosphere at the shrine in Atlas Mountains Morocco" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+            </div>
+            <div class="gzs-caption">
+              <span class="gzs-counter">06 / 09</span>
+              <span class="gzs-caption-title">שירה וריקוד בהילולה</span>
+            </div>
+          </div>
+
+          <!-- Slide 6 -->
+          <div class="gzs-slide">
+            <div class="gzs-img-frame">
+              <img alt="כפר אימינ-תנוות — הכפר הברברי שבו שוכן הציון" src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27300%27%3E%3Cdefs%3E%3ClinearGradient id=%27grad%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FF0083;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23FF008320;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27url(%23grad)%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-family=%27Arial, sans-serif%27 font-size=%2716%27 fill=%27white%27 text-anchor=%27middle%27 dy=%27.3em%27 font-weight=%27500%27%3EClick%20to%20add%20image%3C/text%3E%3C/svg%3E" data-placeholder="gallery-zion-7" data-context="Imin-Tanoute Berber village in the Atlas Mountains Morocco, traditional mud-brick buildings on hillside, where the Jewish shrine of Rabbi David u-Moshe is located, rural mountain village scenery" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+              <img alt="כפר אימינ-תנוות — הכפר הברברי שבו שוכן הציון" class="gzs-img-secondary" src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27300%27%3E%3Cdefs%3E%3ClinearGradient id=%27grad%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FF0083;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23FF008320;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27url(%23grad)%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-family=%27Arial, sans-serif%27 font-size=%2716%27 fill=%27white%27 text-anchor=%27middle%27 dy=%27.3em%27 font-weight=%27500%27%3EClick%20to%20add%20image%3C/text%3E%3C/svg%3E" data-placeholder="gallery-zion-7" data-context="Imin-Tanoute Berber village in the Atlas Mountains Morocco, traditional mud-brick buildings on hillside, where the Jewish shrine of Rabbi David u-Moshe is located, rural mountain village scenery" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+            </div>
+            <div class="gzs-caption">
+              <span class="gzs-counter">07 / 09</span>
+              <span class="gzs-caption-title">כפר הציון</span>
+            </div>
+          </div>
+
+          <!-- Slide 7 -->
+          <div class="gzs-slide">
+            <div class="gzs-img-frame">
+              <img alt="הדלקת נרות ביום ההילולה — אלפי נרות בוערים לכבוד הצדיק" src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27300%27%3E%3Cdefs%3E%3ClinearGradient id=%27grad%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FF0083;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23FF008320;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27url(%23grad)%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-family=%27Arial, sans-serif%27 font-size=%2716%27 fill=%27white%27 text-anchor=%27middle%27 dy=%27.3em%27 font-weight=%27500%27%3EClick%20to%20add%20image%3C/text%3E%3C/svg%3E" data-placeholder="gallery-zion-8" data-context="Thousands of candles lit during the Hillula of Rabbi David u-Moshe in Morocco, golden candlelight illuminating the shrine area, devotees lighting candles in honor of the holy Rabbi, spiritual atmosphere" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+              <img alt="הדלקת נרות ביום ההילולה — אלפי נרות בוערים לכבוד הצדיק" class="gzs-img-secondary" src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27300%27%3E%3Cdefs%3E%3ClinearGradient id=%27grad%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FF0083;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23FF008320;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27url(%23grad)%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-family=%27Arial, sans-serif%27 font-size=%2716%27 fill=%27white%27 text-anchor=%27middle%27 dy=%27.3em%27 font-weight=%27500%27%3EClick%20to%20add%20image%3C/text%3E%3C/svg%3E" data-placeholder="gallery-zion-8" data-context="Thousands of candles lit during the Hillula of Rabbi David u-Moshe in Morocco, golden candlelight illuminating the shrine area, devotees lighting candles in honor of the holy Rabbi, spiritual atmosphere" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+            </div>
+            <div class="gzs-caption">
+              <span class="gzs-counter">08 / 09</span>
+              <span class="gzs-caption-title">הדלקת נרות הצדיק</span>
+            </div>
+          </div>
+
+          <!-- Slide 8 -->
+          <div class="gzs-slide">
+            <div class="gzs-img-frame">
+              <img alt="שיירת עולי הרגל בדרך לציון — אנשים עולים להר לכבוד הצדיק" src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27300%27%3E%3Cdefs%3E%3ClinearGradient id=%27grad%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FF0083;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23FF008320;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27url(%23grad)%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-family=%27Arial, sans-serif%27 font-size=%2716%27 fill=%27white%27 text-anchor=%27middle%27 dy=%27.3em%27 font-weight=%27500%27%3EClick%20to%20add%20image%3C/text%3E%3C/svg%3E" data-placeholder="gallery-zion-9" data-context="Procession of Jewish pilgrims walking up the mountain path to the shrine of Rabbi David u-Moshe in Atlas Mountains Morocco, colorful crowd carrying flags and Torah scrolls, spiritual pilgrimage journey" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+              <img alt="שיירת עולי הרגל בדרך לציון — אנשים עולים להר לכבוד הצדיק" class="gzs-img-secondary" src="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27400%27 height=%27300%27%3E%3Cdefs%3E%3ClinearGradient id=%27grad%27 x1=%270%25%27 y1=%270%25%27 x2=%27100%25%27 y2=%27100%25%27%3E%3Cstop offset=%270%25%27 style=%27stop-color:%23FF0083;stop-opacity:1%27 /%3E%3Cstop offset=%27100%25%27 style=%27stop-color:%23FF008320;stop-opacity:1%27 /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27url(%23grad)%27/%3E%3Ctext x=%2750%25%27 y=%2750%25%27 font-family=%27Arial, sans-serif%27 font-size=%2716%27 fill=%27white%27 text-anchor=%27middle%27 dy=%27.3em%27 font-weight=%27500%27%3EClick%20to%20add%20image%3C/text%3E%3C/svg%3E" data-placeholder="gallery-zion-9" data-context="Procession of Jewish pilgrims walking up the mountain path to the shrine of Rabbi David u-Moshe in Atlas Mountains Morocco, colorful crowd carrying flags and Torah scrolls, spiritual pilgrimage journey" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
+            </div>
+            <div class="gzs-caption">
+              <span class="gzs-counter">09 / 09</span>
+              <span class="gzs-caption-title">שיירת עולי הרגל</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Next Arrow -->
+      <button class="gzs-arrow gzs-arrow-next" aria-label="תמונה הבאה">›</button>
+
+    </div>
+
+    <!-- Progress dots -->
+    <div class="gzs-dots" role="tablist" aria-label="ניווט גלריה">
+      <button class="gzs-dot gzs-dot-active" role="tab" aria-label="תמונה 1"></button>
+      <button class="gzs-dot" role="tab" aria-label="תמונה 2"></button>
+      <button class="gzs-dot" role="tab" aria-label="תמונה 3"></button>
+      <button class="gzs-dot" role="tab" aria-label="תמונה 4"></button>
+      <button class="gzs-dot" role="tab" aria-label="תמונה 5"></button>
+      <button class="gzs-dot" role="tab" aria-label="תמונה 6"></button>
+      <button class="gzs-dot" role="tab" aria-label="תמונה 7"></button>
+      <button class="gzs-dot" role="tab" aria-label="תמונה 8"></button>
+      <button class="gzs-dot" role="tab" aria-label="תמונה 9"></button>
+    </div>
+
+  </div>
+
+  <script>
+  (function(){
+    var track = document.getElementById('gzsTrack');
+    if(!track) return;
+    var slides = track.querySelectorAll('.gzs-slide');
+    var dots = document.querySelectorAll('.gallery-zion-section .gzs-dot');
+    var cats = document.querySelectorAll('.gallery-zion-section .gzs-cat-btn');
+    var current = 0;
+    var total = slides.length;
+
+    function goTo(n){
+      if(n < 0) n = total - 1;
+      if(n >= total) n = 0;
+      current = n;
+      track.style.transform = 'translateX(' + (current * 100) + '%)';
+      dots.forEach(function(d,i){ d.classList.toggle('gzs-dot-active', i===current); });
+      cats.forEach(function(c,i){ c.classList.toggle('gzs-cat-active', i===current); });
+    }
+
+    document.querySelector('.gallery-zion-section .gzs-arrow-next').addEventListener('click', function(){ goTo(current - 1); });
+    document.querySelector('.gallery-zion-section .gzs-arrow-prev').addEventListener('click', function(){ goTo(current + 1); });
+
+    dots.forEach(function(d,i){ d.addEventListener('click', function(){ goTo(i); }); });
+    cats.forEach(function(c,i){ c.addEventListener('click', function(){ goTo(i); }); });
+
+    var startX = null;
+    track.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, {passive:true});
+    track.addEventListener('touchend', function(e){
+      if(startX === null) return;
+      var diff = e.changedTouches[0].clientX - startX;
+      if(Math.abs(diff) > 40){
+        if(diff > 0) goTo(current + 1); else goTo(current - 1);
+      }
+      startX = null;
+    }, {passive:true});
+  })();
+  </script>
+
+</section>
+
+
+
+
+
+
+
+<section class="gallery-virtual-tour-section" data-layout-spec="גלריה-virtual-tour" dir="rtl" id="gallery-virtual-tour-section">
+  <!-- Parchment texture overlay -->
+  <div class="gvt-texture-overlay" aria-hidden="true"></div>
+
+  <div class="gvt-container">
+    <!-- Content Side (START = RIGHT in RTL) -->
+    <div class="gvt-content-side">
+      <!-- Decorative accent line -->
+      <div class="gvt-accent-line" aria-hidden="true"></div>
+
+      <p><span class="gvt-eyebrow">סיור וירטואלי</span>
+
+      </p><h2 class="gvt-heading">צאו לדרך — גם מרחוק</h2>
+
+      <p class="gvt-lead">ציון רבי דוד ומשה מרוקו שוכן בלב הרי האטלס, לאורך הדרך הקדושה שבין מרקש לווארזאזאת. הסיור הווירטואלי מזמין אתכם לצעוד בעקבות עולי הרגל, לחוש את האוויר הצח של ההרים, לראות את הנוף הפנורמי הנשקף מסביב לציון הקדוש, ולחוות את האווירה הרוחנית העוטפת את המקום — כולו מהמסך שלכם.</p>
+
+      <div class="gvt-divider-accent" aria-hidden="true"></div>
+
+      <h3 class="gvt-subheading">מה מגלים בסיור?</h3>
+
+      <p class="gvt-body-text">הסיור הווירטואלי מיועד לצאצאי יהודי מרוקו, לעולי רגל עתידיים, ולכל מי שלבו נמשך אל ציון קדוש יהודי מרוקו ישראל. הוא מאפשר להתחבר למקום לפני ההגעה, להבין את מסלול הגישה, ולהיערך לחוויה הרוחנית שמחכה שם. מי שכבר ביקר — ימצא כאן אפשרות לשוב ולהתרגש.</p>
+
+      <ul class="gvt-features-list">
+        <li class="gvt-feature-item" data-grid-item-index="0">
+          <span class="gvt-feature-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg>
+          </span>
+          <span>צפייה פנורמית ב-360° סביב הציון הקדוש</span>
+        </li>
+        <li class="gvt-feature-item" data-grid-item-index="1">
+          <span class="gvt-feature-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+          </span>
+          <span>הכרת נתיב הגישה ומסלול העלייה לרגל</span>
+        </li>
+        <li class="gvt-feature-item" data-grid-item-index="2">
+          <span class="gvt-feature-icon" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"></path></svg>
+          </span>
+          <span>חיבור לזכרון קהילתי של עולי הרגל לדורותיהם</span>
+        </li>
+      </ul>
+
+      </div>
+
+    <!-- Tour Portal Side (END = LEFT in RTL) -->
+    <div class="gvt-portal-side">
+      <!-- Route sketch decorative element -->
+      <div class="gvt-route-sketch" aria-hidden="true">
+        <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 340 480" fill="none" xmlns="http://www.w3.org/2000/svg" class="gvt-route-svg">
+          <path d="M280 20 Q260 80 240 120 Q220 160 200 200 Q180 240 160 280 Q140 320 120 360 Q100 400 80 440 Q60 460 40 470" stroke="#D89B2B" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.45" fill="none"></path>
+          <circle cx="280" cy="20" r="5" fill="#D89B2B" opacity="0.55"></circle>
+          <circle cx="40" cy="470" r="7" fill="#7A1F2B" opacity="0.6"></circle>
+          <path d="M30 462 L40 470 L50 462" stroke="#7A1F2B" stroke-width="1.5" fill="none" opacity="0.6"></path>
+          <text x="290" y="24" font-size="10" fill="#7A1F2B" opacity="0.5" font-family="Noto Serif, serif">מרקש</text>
+          <text x="50" y="474" font-size="10" fill="#7A1F2B" opacity="0.5" font-family="Noto Serif, serif">הציון</text>
+        </svg>
+      </div>
+
+      <!-- Main tour frame -->
+      <div class="gvt-tour-frame">
+        <div class="gvt-frame-header">
+          <span class="gvt-frame-dot gvt-dot-red"></span>
+          <span class="gvt-frame-dot gvt-dot-amber"></span>
+          <span class="gvt-frame-dot gvt-dot-green"></span>
+          <span class="gvt-frame-label">סיור וירטואלי — ציון הצדיק רבי דוד ומשה זיע"א </span>
+        </div>
+
+        <div class="zappy-inserted-element" id="zappy-element-1780490790027-oyppsiqv7" data-element-id="zappy-element-1780490790027-oyppsiqv7" data-element-type="iframe" style="max-width: 600px; margin: 20px auto; display: flex; justify-content: center;"><div style="width: 100%; max-width: 600px; display: block;" data-full-width=""><div style="position: relative; width: 100%; height: 0px; padding-bottom: 56.25%; background: rgb(243, 244, 246); border-radius: 8px; overflow: hidden;" data-element-type="iframe" data-element-id="zappy-element-1780490790027-oyppsiqv7" id="zappy-element-1780490790027-oyppsiqv7"><iframe src="https://my.matterport.com/show/?m=CXKEEpNCsQA" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; " allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen="" loading="lazy" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe></div></div></div>
+
+        <!-- Frame footer -->
+        <div class="gvt-frame-footer" style="display: flex !important; justify-content: center !important; padding: 12px 16px; text-align: center !important; align-items: flex-start !important; width: 100% !important;">
+  
+</div>
+      </div>
+
+      <!-- Secondary thumbnail image -->
+      <div class="gvt-thumbnail-row">
+        
+        <div class="gvt-thumbnail-caption">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  </main>
+  
+  <footer class="site-footer" dir="rtl"> <div class="footer-pattern-band"></div> <div class="footer-inner"> <div class="footer-grid"> <!-- Column 1: Company Info --> <div class="footer-col footer-col--brand"> <div class="footer-logo-wrap"> </div> <h2 class="footer-brand-name"><span class="footer-brand-star">✡</span> הצדיק רבי דוד ומשה זיע"א <span class="footer-brand-star">✡</span></h2> <p class="footer-brand-desc">אתר עלייה לרגל ומורשת יהודית מרוקאית — מדריך רוחני לציון הקדושים בהרי האטלס, לשימור זיכרון הקהילה ולחיזוק הקשר בין הדורות.</p> <div class="footer-ornament"><span></span><i class="fas fa-star-of-david" data-element-type="icon" data-element-id="icon-1778780630727-8j1s2b49h" data-icon-type="fontawesome"></i><span></span></div> </div> <!-- Column 2: Quick Links --> <div class="footer-col footer-col--links"> <h3 class="footer-heading">ניווט מהיר</h3> <ul class="footer-nav"><li><a href="/gallery"><i class="fas fa-images footer-nav-icon"></i>גלריה</a></li>
+<li><a href="/candles"><i class="fas fa-fire footer-nav-icon"></i>נרות נשמה</a></li>
+<li><a href="/additional-information">מידע נוסף</a></li>
+<li><a href="/directions"><i class="fas fa-map-marker-alt footer-nav-icon"></i>הגעה</a></li></ul> </div> <!-- Column 3: Contact --> <div class="footer-col footer-col--contact"> <h3 class="footer-heading">צור קשר</h3> <ul class="footer-contact"> <li> <span class="contact-icon"><i class="fas fa-envelope"></i></span> <span class="contact-text"><a href="mailto:rabbidavidoumoshe@gmail.com">rabbidavidoumoshe@gmail.com</a></span> </li> <li> <span class="contact-icon"><i class="fas fa-phone"></i></span> <span class="contact-text"><a href="tel:+972506841740">+972506841740</a></span> </li> <li><a href="/" style="display:flex;align-items:flex-start;gap:inherit"><span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span> <span class="contact-text">8C3J5F68+X9, Timzrite, morocco</span></a></li> </ul> </div> <!-- Column 4: Social --> <div class="footer-col footer-col--social"> <h3 class="footer-heading">עקבו אחרינו</h3> <div class="footer-social"> <a href="https://facebook.com/groups/tzadikrabbidavidoumoshe" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a> <a href="https://instagram.com/rabbidavidoumoshe" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="12" height="12" viewBox="0 0 256 256" data-icon="skill-icons:instagram" data-iconify="skill-icons:instagram" data-element-type="icon" data-element-id="icon-1778780630727-b28xw71fz" data-icon-type="iconify" data-size-adjusted="true" style="display: inline-block; vertical-align: -0.125em; color: rgb(247, 241, 231); width: 12px; height: 12px;" class="iconify iconify--skill-icons"><g fill="none"><rect width="256" height="256" fill="url(#IconifyId19e2796671072c6840)" rx="60"></rect><rect width="256" height="256" fill="url(#IconifyId19e2796671072c6841)" rx="60"></rect><path fill="#fff" d="M128.009 28c-27.158 0-30.567.119-41.233.604c-10.646.488-17.913 2.173-24.271 4.646c-6.578 2.554-12.157 5.971-17.715 11.531c-5.563 5.559-8.98 11.138-11.542 17.713c-2.48 6.36-4.167 13.63-4.646 24.271c-.477 10.667-.602 14.077-.602 41.236s.12 30.557.604 41.223c.49 10.646 2.175 17.913 4.646 24.271c2.556 6.578 5.973 12.157 11.533 17.715c5.557 5.563 11.136 8.988 17.709 11.542c6.363 2.473 13.631 4.158 24.275 4.646c10.667.485 14.073.604 41.23.604c27.161 0 30.559-.119 41.225-.604c10.646-.488 17.921-2.173 24.284-4.646c6.575-2.554 12.146-5.979 17.702-11.542c5.563-5.558 8.979-11.137 11.542-17.712c2.458-6.361 4.146-13.63 4.646-24.272c.479-10.666.604-14.066.604-41.225s-.125-30.567-.604-41.234c-.5-10.646-2.188-17.912-4.646-24.27c-2.563-6.578-5.979-12.157-11.542-17.716c-5.562-5.562-11.125-8.979-17.708-11.53c-6.375-2.474-13.646-4.16-24.292-4.647c-10.667-.485-14.063-.604-41.23-.604zm-8.971 18.021c2.663-.004 5.634 0 8.971 0c26.701 0 29.865.096 40.409.575c9.75.446 15.042 2.075 18.567 3.444c4.667 1.812 7.994 3.979 11.492 7.48c3.5 3.5 5.666 6.833 7.483 11.5c1.369 3.52 3 8.812 3.444 18.562c.479 10.542.583 13.708.583 40.396s-.104 29.855-.583 40.396c-.446 9.75-2.075 15.042-3.444 18.563c-1.812 4.667-3.983 7.99-7.483 11.488c-3.5 3.5-6.823 5.666-11.492 7.479c-3.521 1.375-8.817 3-18.567 3.446c-10.542.479-13.708.583-40.409.583c-26.702 0-29.867-.104-40.408-.583c-9.75-.45-15.042-2.079-18.57-3.448c-4.666-1.813-8-3.979-11.5-7.479s-5.666-6.825-7.483-11.494c-1.369-3.521-3-8.813-3.444-18.563c-.479-10.542-.575-13.708-.575-40.413s.096-29.854.575-40.396c.446-9.75 2.075-15.042 3.444-18.567c1.813-4.667 3.983-8 7.484-11.5s6.833-5.667 11.5-7.483c3.525-1.375 8.819-3 18.569-3.448c9.225-.417 12.8-.542 31.437-.563zm62.351 16.604c-6.625 0-12 5.37-12 11.996c0 6.625 5.375 12 12 12s12-5.375 12-12s-5.375-12-12-12zm-53.38 14.021c-28.36 0-51.354 22.994-51.354 51.355s22.994 51.344 51.354 51.344c28.361 0 51.347-22.983 51.347-51.344c0-28.36-22.988-51.355-51.349-51.355zm0 18.021c18.409 0 33.334 14.923 33.334 33.334c0 18.409-14.925 33.334-33.334 33.334s-33.333-14.925-33.333-33.334c0-18.411 14.923-33.334 33.333-33.334"></path><defs><radialGradient id="IconifyId19e2796671072c6840" cx="0" cy="0" r="1" gradientTransform="matrix(0 -253.715 235.975 0 68 275.717)" gradientUnits="userSpaceOnUse"><stop stop-color="#fd5"></stop><stop offset=".1" stop-color="#fd5"></stop><stop offset=".5" stop-color="#ff543e"></stop><stop offset="1" stop-color="#c837ab"></stop></radialGradient><radialGradient id="IconifyId19e2796671072c6841" cx="0" cy="0" r="1" gradientTransform="rotate(78.68 -32.69 -16.937)scale(113.412 467.488)" gradientUnits="userSpaceOnUse"><stop stop-color="#3771c8"></stop><stop offset=".128" stop-color="#3771c8"></stop><stop offset="1" stop-color="#60f" stop-opacity="0"></stop></radialGradient></defs></g></svg></a> <a href="https://wa.me/972506841740" aria-label="WhatsApp"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="12" height="12" viewBox="0 0 256 258" data-icon="logos:whatsapp-icon" data-iconify="logos:whatsapp-icon" data-element-type="icon" data-element-id="icon-1778780630727-1m8xcjqn2" data-icon-type="iconify" data-size-adjusted="true" style="width: 12px !important; height: 12px !important; display: inline-block; vertical-align: -0.125em; color: rgb(247, 241, 231);" class="iconify iconify--logos"><defs><linearGradient id="IconifyId19e2797701ea1b8ee0" x1="50%" x2="50%" y1="100%" y2="0%"><stop offset="0%" stop-color="#1faf38"></stop><stop offset="100%" stop-color="#60d669"></stop></linearGradient><linearGradient id="IconifyId19e2797701ea1b8ee1" x1="50%" x2="50%" y1="100%" y2="0%"><stop offset="0%" stop-color="#f9f9f9"></stop><stop offset="100%" stop-color="#fff"></stop></linearGradient></defs><path fill="url(#IconifyId19e2797701ea1b8ee0)" d="M5.463 127.456c-.006 21.677 5.658 42.843 16.428 61.499L4.433 252.697l65.232-17.104a123 123 0 0 0 58.8 14.97h.054c67.815 0 123.018-55.183 123.047-123.01c.013-32.867-12.775-63.773-36.009-87.025c-23.23-23.25-54.125-36.061-87.043-36.076c-67.823 0-123.022 55.18-123.05 123.004"></path><path fill="url(#IconifyId19e2797701ea1b8ee1)" d="M1.07 127.416c-.007 22.457 5.86 44.38 17.014 63.704L0 257.147l67.571-17.717c18.618 10.151 39.58 15.503 60.91 15.511h.055c70.248 0 127.434-57.168 127.464-127.423c.012-34.048-13.236-66.065-37.3-90.15C194.633 13.286 162.633.014 128.536 0C58.276 0 1.099 57.16 1.071 127.416m40.24 60.376l-2.523-4.005c-10.606-16.864-16.204-36.352-16.196-56.363C22.614 69.029 70.138 21.52 128.576 21.52c28.3.012 54.896 11.044 74.9 31.06c20.003 20.018 31.01 46.628 31.003 74.93c-.026 58.395-47.551 105.91-105.943 105.91h-.042c-19.013-.01-37.66-5.116-53.922-14.765l-3.87-2.295l-40.098 10.513z"></path><path fill="#fff" d="M96.678 74.148c-2.386-5.303-4.897-5.41-7.166-5.503c-1.858-.08-3.982-.074-6.104-.074c-2.124 0-5.575.799-8.492 3.984c-2.92 3.188-11.148 10.892-11.148 26.561s11.413 30.813 13.004 32.94c1.593 2.123 22.033 35.307 54.405 48.073c26.904 10.609 32.379 8.499 38.218 7.967c5.84-.53 18.844-7.702 21.497-15.139c2.655-7.436 2.655-13.81 1.859-15.142c-.796-1.327-2.92-2.124-6.105-3.716s-18.844-9.298-21.763-10.361c-2.92-1.062-5.043-1.592-7.167 1.597c-2.124 3.184-8.223 10.356-10.082 12.48c-1.857 2.129-3.716 2.394-6.9.801c-3.187-1.598-13.444-4.957-25.613-15.806c-9.468-8.442-15.86-18.867-17.718-22.056c-1.858-3.184-.199-4.91 1.398-6.497c1.431-1.427 3.186-3.719 4.78-5.578c1.588-1.86 2.118-3.187 3.18-5.311c1.063-2.126.531-3.986-.264-5.579c-.798-1.593-6.987-17.343-9.819-23.64"></path></svg></a> </div> <div class="footer-quote"> <p>"וְצַדִּיקִים יִרְאוּ וְיִשְׂמָחוּ"</p> </div> </div> </div> </div> <div class="footer-pattern-band footer-pattern-band--bottom"></div> <!-- Bottom Bar --> <div class="footer-bottom"> <div class="footer-bottom-inner"> <p class="footer-copyright">© 2026 הצדיק רבי דוד ומשה זיע"א . כל הזכויות שמורות.</p> <div class="footer-legal"> <a href="/privacy">מדיניות פרטיות</a> <span class="footer-legal-sep">·</span> <a href="/terms">תנאי שימוש</a> <span class="footer-legal-sep">·</span> <a href="/accessibility">נגישות</a> <span class="footer-legal-sep">·</span> <a href="https://zappy5.com" target="_blank" class="zappy-attribution">נוצר באמצעות Zappy</a> </div> </div> </div> </footer>
+  
+  <a href="https://wa.me/972506841740" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+
+    <script>
+    (function(){
+      var _applied=false;
+      function _isHeroBg(w){var img=w.querySelector('img');if(img&&(img.getAttribute('data-hero-bg')==='true'||img.getAttribute('data-hero-background')==='true'))return true;var p=(w.style.position||'').replace(/\s*!important\s*/g,'').trim();var ww=(w.style.width||'').replace(/\s*!important\s*/g,'').trim();var hh=(w.style.height||'').replace(/\s*!important\s*/g,'').trim();return p==='absolute'&&ww==='100%'&&hh==='100%';}
+      function fixDesktopWrappers(){
+        // No-op: desktop wrapper restoration is handled by ZAPPY_PUBLISHED_ZOOM_WRAPPER_RUNTIME
+        // in script.js (restoreWrapperDimensions). The old inflation logic here was expanding
+        // small wrappers (e.g. 139px logo wrappers) to their parent width, conflicting with
+        // the correct stored dimensions.
+      }
+      function _parsePos(s){var x=50,y=50;try{var m=(s||'').match(/(-?d+(?:.d+)?)%s+(-?d+(?:.d+)?)%/);if(m){x=parseFloat(m[1]);y=parseFloat(m[2]);}}catch(e){}if(!isFinite(x))x=50;if(!isFinite(y))y=50;return{x:Math.max(0,Math.min(100,x)),y:Math.max(0,Math.min(100,y))};}
+      function _coverPct(iA,cA){if(!isFinite(iA)||iA<=0||!isFinite(cA)||cA<=0)return{w:100,h:100};if(iA>=cA)return{w:(iA/cA)*100,h:100};return{w:100,h:(cA/iA)*100};}
+      function applyMobile(){
+        if(_applied)return;_applied=true;
+        document.querySelectorAll('[data-zappy-zoom-wrapper="true"]').forEach(function(w){
+          if(_isHeroBg(w))return;
+          var cw=w.style.getPropertyValue('width');
+          var _sW=parseFloat(w.getAttribute('data-zappy-zoom-wrapper-width'))||0;
+          var _sH=parseFloat(w.getAttribute('data-zappy-zoom-wrapper-height'))||0;
+          if(!cw&&!(_sW>0&&_sH>0))return;
+          if(!w._zappyDesktop)w._zappyDesktop={wStyle:w.getAttribute('style')};
+          var img=w.querySelector('img');
+          if(!img)return;
+          if(!img._zappyDesktop)img._zappyDesktop={src:img.getAttribute('src'),style:img.getAttribute('style')};
+          var mobileZoomStr=img.getAttribute('data-zappy-mobile-zoom');
+          var mobileZoom=parseFloat(mobileZoomStr);
+          var mobileSrc=img.getAttribute('data-zappy-mobile-src');
+          var mobilePos=img.getAttribute('data-zappy-mobile-object-position');
+          var parentOvf=w.parentElement?((w.parentElement.style.overflow||'')+(window.getComputedStyle(w.parentElement).overflow||'')).trim():'';
+          var inConstrainedParent=parentOvf.indexOf('hidden')!==-1||parentOvf.indexOf('clip')!==-1;
+          if(inConstrainedParent){
+            w.style.setProperty('max-width','100%','important');
+          }else{
+            w.style.setProperty('width','100%','important');
+            w.style.setProperty('max-width','100%','important');
+          }
+          if(mobileSrc)img.src=mobileSrc;
+          function _applyZoomCrop(_img,_w,_ePos,_eZoom){
+            var rect=_w.getBoundingClientRect();
+            if(!rect||!rect.width||!rect.height)return;
+            var nW=_img.naturalWidth||0,nH=_img.naturalHeight||0;
+            if(!(nW>0&&nH>0))return;
+            var iA=nW/nH,cA=rect.width/rect.height;
+            var cv=_coverPct(iA,cA);
+            var wP=100,hP=100;
+            if(_eZoom>=1){wP=cv.w*_eZoom;hP=cv.h*_eZoom;}
+            else{var t2=(_eZoom-0.5)/0.5;if(!isFinite(t2))t2=0;t2=Math.max(0,Math.min(1,t2));wP=100+t2*(cv.w-100);hP=100+t2*(cv.h-100);}
+            var p2=_parsePos(_ePos);
+            var lP=(100-wP)*(p2.x/100);
+            var tP=(100-hP)*(p2.y/100);
+            _img.style.setProperty('position','absolute','important');
+            _img.style.setProperty('left',lP+'%','important');
+            _img.style.setProperty('top',tP+'%','important');
+            _img.style.setProperty('width',wP+'%','important');
+            _img.style.setProperty('height',hP+'%','important');
+            _img.style.setProperty('max-width','none','important');
+            _img.style.setProperty('max-height','none','important');
+            _img.style.setProperty('display','block','important');
+            _img.style.setProperty('object-fit',_eZoom<1?'fill':'cover','important');
+            _img.style.setProperty('transform','none','important');
+            _img.style.setProperty('margin','0','important');
+          }
+          if(_sW>0&&_sH>0){
+            var effZoom=(isFinite(mobileZoom)&&mobileZoom>0)?mobileZoom:(parseFloat(img.getAttribute('data-zappy-zoom'))||1);
+            var effPos=mobilePos||img.getAttribute('data-zappy-object-position')||img.style.objectPosition||'50% 50%';
+            w.style.setProperty('overflow','hidden','important');
+            w.style.setProperty('position','relative','important');
+            w.style.setProperty('width','100%','important');
+            w.style.setProperty('max-width','100%','important');
+            if(_sW>0&&_sH>0){w.style.setProperty('padding-bottom','0','important');w.style.setProperty('aspect-ratio',_sW+'/'+_sH,'important');w.style.setProperty('height','auto','important');}
+            _applyZoomCrop(img,w,effPos,effZoom);
+            if(!(img.complete&&img.naturalWidth>0)){
+              (function(_i,_w2,_p,_z){_i.addEventListener('load',function _ol(){_i.removeEventListener('load',_ol);try{_applyZoomCrop(_i,_w2,_p,_z);}catch(e){}});
+              })(img,w,effPos,effZoom);
+            }
+          }else{
+            if(!inConstrainedParent)w.style.setProperty('height','auto','important');
+            img.style.setProperty('position','relative','important');
+            img.style.setProperty('width','100%','important');
+            img.style.setProperty('height','auto','important');
+            img.style.setProperty('max-width','100%','important');
+            img.style.setProperty('max-height',inConstrainedParent?'none':'400px','important');
+            img.style.setProperty('object-fit','cover','important');
+            img.style.setProperty('left','0','important');
+            img.style.setProperty('top','0','important');
+            img.style.setProperty('transform','none','important');
+          }
+        });
+        document.querySelectorAll('img[data-zappy-mobile-src],img[data-zappy-mobile-object-position],img[data-zappy-mobile-zoom]').forEach(function(img){
+          var zw=img.closest('[data-zappy-zoom-wrapper="true"]');
+          if(zw&&!_isHeroBg(zw))return;
+          if(!img._zappyDesktop)img._zappyDesktop={src:img.getAttribute('src'),style:img.getAttribute('style')};
+          var mobileSrc=img.getAttribute('data-zappy-mobile-src');
+          var mobilePos=img.getAttribute('data-zappy-mobile-object-position');
+          var mobileZoom=parseFloat(img.getAttribute('data-zappy-mobile-zoom'));
+          if(mobileSrc)img.src=mobileSrc;
+          if(mobilePos)img.style.setProperty('object-position',mobilePos,'important');
+          if(mobileZoom>1){
+            img.style.setProperty('transform','scale('+mobileZoom+')','important');
+            img.style.setProperty('transform-origin',mobilePos||'50% 50%','important');
+            var p=img.parentElement;
+            if(p)p.style.setProperty('overflow','hidden','important');
+          }
+        });
+      }
+      function revertDesktop(){
+        if(!_applied)return;_applied=false;
+        document.querySelectorAll('[data-zappy-zoom-wrapper="true"]').forEach(function(w){
+          if(w._zappyDesktop&&w._zappyDesktop.wStyle!=null){w.setAttribute('style',w._zappyDesktop.wStyle);}
+          var img=w.querySelector('img');
+          if(img&&img._zappyDesktop){
+            if(img._zappyDesktop.src!=null)img.setAttribute('src',img._zappyDesktop.src);
+            if(img._zappyDesktop.style!=null)img.setAttribute('style',img._zappyDesktop.style);
+            else img.removeAttribute('style');
+          }
+        });
+        document.querySelectorAll('img[data-zappy-mobile-src],img[data-zappy-mobile-object-position],img[data-zappy-mobile-zoom]').forEach(function(img){
+          var zw=img.closest('[data-zappy-zoom-wrapper="true"]');
+          if(zw&&!_isHeroBg(zw))return;
+          if(img._zappyDesktop){
+            if(img._zappyDesktop.src!=null)img.setAttribute('src',img._zappyDesktop.src);
+            if(img._zappyDesktop.style!=null)img.setAttribute('style',img._zappyDesktop.style);
+            else img.removeAttribute('style');
+          }
+        });
+        _fixHeroBgWrappers();
+        fixDesktopWrappers();
+      }
+      function _fixHeroBgWrappers(){var isMob=window.innerWidth<=768;document.querySelectorAll('[data-zappy-zoom-wrapper="true"]').forEach(function(w){if(!_isHeroBg(w))return;w.style.setProperty('position','absolute','important');w.style.setProperty('top','0','important');w.style.setProperty('left','0','important');w.style.setProperty('width','100%','important');w.style.setProperty('height','100%','important');w.style.setProperty('max-width','none','important');w.style.setProperty('overflow','hidden','important');w.setAttribute('data-zappy-zoom-wrapper-width-mode','full');var img=w.querySelector('img');if(img){img.style.setProperty('width','100%','important');img.style.setProperty('height','100%','important');img.style.setProperty('object-fit','cover','important');img.style.setProperty('position','relative','important');img.style.setProperty('top','0','important');img.style.setProperty('left','0','important');img.style.setProperty('max-width','none','important');img.style.setProperty('max-height','none','important');img.style.setProperty('display','block','important');if(isMob){var mSrc=img.getAttribute('data-zappy-mobile-src');var mPos=img.getAttribute('data-zappy-mobile-object-position');var mZoom=parseFloat(img.getAttribute('data-zappy-mobile-zoom'));if(mSrc){if(!img._zappyDesktop)img._zappyDesktop={src:img.getAttribute('src'),style:img.getAttribute('style')};img.src=mSrc;}if(mPos)img.style.setProperty('object-position',mPos,'important');if(mZoom>1){img.style.setProperty('transform','scale('+mZoom+')','important');img.style.setProperty('transform-origin',mPos||'50% 50%','important');}}}});}
+      function init(){
+        _fixHeroBgWrappers();
+        var mq=window.matchMedia('(max-width:768px)');
+        function onChange(e){if(e.matches)applyMobile();else revertDesktop();}
+        if(mq.matches)applyMobile();
+        else fixDesktopWrappers();
+        try{mq.addEventListener('change',onChange);}catch(e){mq.addListener(onChange);}
+      }
+      if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
+      else setTimeout(init,50);
+    })();
+    </script>
+</body>
+</html>
